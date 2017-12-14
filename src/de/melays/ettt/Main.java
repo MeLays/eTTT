@@ -3,6 +3,8 @@ package de.melays.ettt;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.melays.ettt.commands.MainCommand;
+import de.melays.ettt.game.ArenaManager;
 import de.melays.ettt.tools.MessageFetcher;
 
 public class Main extends JavaPlugin{
@@ -13,6 +15,10 @@ public class Main extends JavaPlugin{
 	MessageFetcher messageFetcher;
 	public MessageFetcher getMessageFetcher() {
 		return this.messageFetcher;
+	}
+	ArenaManager arenaManager;
+	public ArenaManager getArenaManager() {
+		return this.arenaManager;
 	}
 	
 	public void onEnable() {
@@ -25,6 +31,10 @@ public class Main extends JavaPlugin{
 		//Initialize Managers
 		this.messageFetcher = new MessageFetcher(this);
 		this.prefix = this.getMessageFetcher().getMessage("prefix", false);
+		this.arenaManager = new ArenaManager(this);
+		
+		//Register Commands
+		getCommand("ttt").setExecutor(new MainCommand(this));
 		
 	}
 	

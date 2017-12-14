@@ -13,3 +13,5 @@ list:
   command: "    %entry%"
   hover_body_color: "&e"
   footer: "&e&m--------------------"
+command_usage: "%prefix% Use: %command%"
+unknown_arena: "%prefix% Unknown arena!"

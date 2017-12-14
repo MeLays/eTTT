@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import de.melays.ettt.Main;
+import net.md_5.bungee.api.ChatColor;
 
 public class MainCommand implements CommandExecutor {
 
@@ -17,25 +18,15 @@ public class MainCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
 		HelpSender helpSender = new HelpSender (main , alias);
 		
-		helpSender.addAlias("help [page]", "Show this overview", "Use 'help <page>' to get to the next help pages" , "/bw help");
-		helpSender.addAlias("cluster [...]", "Get to the cluster management overview", "Shows commands to manage the clusters.\nUse 'cluster <page>' to get to the next help pages" , "/bw cluster");
-		helpSender.addAlias("setup [...]", "Get to the cluster-setup management overview", "Shows commands to manage the clusters locations.\nUse 'setup <page>' to get to the next help pages" , "/bw setup");
-		helpSender.addAlias("arenas [...]", "Get to the arena management overview", "Shows commands to manage the arenas.\nManage the running arenas.\nUse 'arenas <page>' to get to the next help pages" , "/bw arenas");
-		helpSender.addAlias("teams [...]", "Get to the team management overview", "Shows commands to manage the teams.\nUse 'teams <page>' to get to the next help pages" , "/bw teams");
-		helpSender.addAlias("lobby [...]", "Get to the lobby management overview", "Shows commands to manage the lobby.\nUse 'lobby <page>' to get to the next help pages" , "/bw lobby");
-		helpSender.addAlias("reload", "Reload the configuration files", "Reloades all configuration files.\nThis can cause issues in running arenas!" , "/bw reload");
-		helpSender.addAlias("worldtp <game , presets , world>", "Teleport to a world", "You can teleport to those worlds:\n - 'GAME', here are the arenas generated to\n - 'PRESETS', here you can create presets\\n - 'WORLD', the specified default world" , "/bw worldtp <game , presets , world>");
-		helpSender.addAlias("colorlist", "List all colors", "Lists all available Colors to create teams" , "/bw colorlist");
-		helpSender.addAlias("showsettings", "Lists the settings of a player", "Lists all settings from this player" , "/bw showsettings <player>");
-
+		helpSender.addAlias("help [page]", "Shows this overview", "Use 'help <page>' to get to the next help pages" , "/ttt help");
 		
 		if (args.length == 0) {
-			if (!main.getMessageFetcher().checkPermission(sender, "bwunlimited.help"))return true;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;
 			helpSender.sendHelp(sender, 1);
 		}
 		
 		else if (args[0].equalsIgnoreCase("help")) {
-			if (!main.getMessageFetcher().checkPermission(sender, "bwunlimited.help"))return true;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;
 			if (args.length == 1) {
 				helpSender.sendHelp(sender, 1);
 			}
@@ -49,14 +40,69 @@ public class MainCommand implements CommandExecutor {
 			}
 		}
 		
+		//Create Arena
+		else if (args[0].equalsIgnoreCase("create")) {
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 4) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt create <name> <minimal players> <maximal players>"));
+				return true;
+			}
+			int min = 0;
+			try {
+				min = Integer.parseInt(args[2]);
+			} catch (NumberFormatException e) {
+				sender.sendMessage(main.prefix + "'"+args[2]+"' is not a valid number!");
+			}
+			int max = 0;
+			try {
+				max = Integer.parseInt(args[3]);
+			} catch (NumberFormatException e) {
+				sender.sendMessage(main.prefix + "'"+args[3]+"' is not a valid number!");
+			}
+			String name = args[1].replaceAll(".", "");
+			if (name.length() == 0) name = "empty";
+			String result = main.getArenaManager().createArena(name, min, max);
+			if (result == null) {
+				sender.sendMessage(main.prefix + "Arena '"+name+"' has been created. Use '/ttt check "+name+"' to see how to continue setting up your arena.");
+			}
+			else {
+				sender.sendMessage(main.prefix + "Error: " + ChatColor.RED + result);
+			}
+		}
+		
+		//Check Arena
+		else if (args[0].equalsIgnoreCase("check")) {
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 2) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt check <name>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			sender.sendMessage(main.prefix + " Arena '"+args[1].toLowerCase()+"' setup process:");
+			
+			String done = ChatColor.GREEN + "DONE";
+			String missing = ChatColor.RED + "MISSING";
+			String optional = ChatColor.YELLOW + "OPTIONAL";
+			
+			String globallobby = missing;
+			//TODO
+			sender.sendMessage(Main.c("   &8["+globallobby+"&8] &7Set the global lobby (/ttt setgloballobby)"));
+			
+			sender.sendMessage(Main.c("   &8["+done+"&8] &7Create the arena (/ttt create)"));
+			
+		}
+		
 		else if (args[0].equalsIgnoreCase("reload")) {
-			if (!main.getMessageFetcher().checkPermission(sender, "bwunlimited.reload"))return true;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.reload"))return true;
 			main.reloadAll();
 			sender.sendMessage(main.prefix + "Reloaded all configuration files.");
 		}
 		
 		else {
-			sender.sendMessage(main.getMessageFetcher().getMessage("help.unknown", true).replaceAll("%help%", "/bw help"));
+			sender.sendMessage(main.getMessageFetcher().getMessage("help.unknown", true).replaceAll("%help%", "/ttt help"));
 		}
 		
 		return true;

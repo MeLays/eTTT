@@ -1,0 +1,12 @@
+name: eTTT
+version: 0.0.1 indev
+description: eTTT Plugin by melays.de
+author: melays
+website: http://melays.de/
+main: de.melays.ettt.Main
+softdepend: [StatsAPI]
+commands:
+  ttt:
+    description: Manage the eTTT Plugin
+    aliases: [ettt , troubleinterroristtown]
+    usage: /ttt help
