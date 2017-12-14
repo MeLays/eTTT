@@ -1,0 +1,15 @@
+prefix: "&c-&6eTTT &8-&e"
+no_permission: "%prefix% You don't have the permission to use this command!"
+not_ingame: "%prefix% You are not ingame!"
+help:
+  header: "%prefix% &e%command%-help: (&a%page%&7e/&a%max_pages%&e)"
+  command: "    &a%alias% &7- &e%short_descr%"
+  hover_top: "&8/%command% &e%alias%:"
+  hover_body_color: "&e"
+  footer: "&e&m--------------------"
+  unknown: "%prefix% &cUnknown Command! Get help using '%help%'"
+list:
+  header: "%prefix% &e%list%: (&a%page%&e/&a%max_pages%&e)"
+  command: "    %entry%"
+  hover_body_color: "&e"
+  footer: "&e&m--------------------"
