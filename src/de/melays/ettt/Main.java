@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.melays.ettt.commands.MainCommand;
 import de.melays.ettt.game.ArenaManager;
 import de.melays.ettt.tools.MessageFetcher;
+import de.melays.ettt.tools.SettingsFile;
 
 public class Main extends JavaPlugin{
 	
@@ -20,13 +21,18 @@ public class Main extends JavaPlugin{
 	public ArenaManager getArenaManager() {
 		return this.arenaManager;
 	}
+	SettingsFile settingsFile;
+	public SettingsFile getSettingsFile() {
+		return settingsFile;
+	}
 	
 	public void onEnable() {
 		
-		//Initialize Config
+		//Initialize Config & Files
 		this.getConfig().options().copyDefaults(true);
 		this.getConfig().options().copyHeader(true);
 		this.saveConfig();
+		settingsFile = new SettingsFile(this);
 		
 		//Initialize Managers
 		this.messageFetcher = new MessageFetcher(this);
@@ -47,5 +53,7 @@ public class Main extends JavaPlugin{
 		this.reloadConfig();
 		//MessageFetcher
 		this.getMessageFetcher().reloadFile();
+		//SettingsFile
+		this.getSettingsFile().reloadFile();
 	}
 }

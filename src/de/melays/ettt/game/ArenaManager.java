@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.Utf8YamlConfiguration;
 import de.melays.ettt.log.Logger;
+import de.melays.ettt.tools.Tools;
 
 public class ArenaManager {
 	
@@ -32,7 +34,7 @@ public class ArenaManager {
 		
 		this.getConfiguration().set(name+".display", display);
 		this.getConfiguration().set(name+".players.min", min);
-		this.getConfiguration().set(name+".players.min", max);
+		this.getConfiguration().set(name+".players.max", max);
 		this.saveFile();
 		
 		Logger.log(main.prefix + " [ArenaManager] Created arena '"+name+"'");
@@ -46,6 +48,21 @@ public class ArenaManager {
 	
 	public boolean isLoaded (String arena) {
 		return false;
+	}
+	
+	
+	//globallobby
+	public void setGlobalLobby(Location loc) {
+		Tools.saveLocation(main.getSettingsFile().getConfiguration(), "global_lobby", loc);
+		main.getSettingsFile().saveFile();
+	}
+	
+	public boolean isGlobalLobbySet () {
+		return Tools.isLocationSet(main.getSettingsFile().getConfiguration(), "global_lobby");
+	}
+	
+	public Location getGlobalLobby () {
+		return Tools.getLocation(main.getSettingsFile().getConfiguration(), "global_lobby");
 	}
 	
 	//Arena File Management
