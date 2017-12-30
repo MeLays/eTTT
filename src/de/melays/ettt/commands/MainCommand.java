@@ -2,6 +2,7 @@ package de.melays.ettt.commands;
 
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,7 +30,9 @@ public class MainCommand implements CommandExecutor {
 		helpSender.addAlias("create ...", "Create an arena", "Use this command to create a new arena" , "/ttt create <name> <minimal players> <maximal players>");
 		helpSender.addAlias("check [arena]", "Checks the setup progress", "Checks the setup progress of an arena" , "/ttt check <arena>");
 		helpSender.addAlias("setgloballobby", "Sets the lobby location", "Sets the location where you will be teleported after the game" , "/ttt setgloballobby");
-		helpSender.addAlias("addspawn", "Add a player spawn", "Add a player spawn where players will spawn ingame" , "/ttt addspawn");
+		helpSender.addAlias("addspawn", "Add a player spawn", "Add a player spawn where players will spawn ingame" , "/ttt addspawn <name>");
+		helpSender.addAlias("getmarkertool", "Gets the location marker tool", "Gives you an location marker tool" , "/ttt getmarkertool");
+		helpSender.addAlias("savearenaarea", "Saves the selected area", "Saves the selected area of the arena" , "/ttt getmarkertool");
 
 		
 		if (args.length == 0) {
@@ -119,6 +122,13 @@ public class MainCommand implements CommandExecutor {
 			}
 			sender.sendMessage(Main.c("   &8["+spawnpoints+"&8] &eAdd more spawnpoints than maximal players ["+Tools.getLocationsCounting(main.getArenaManager().getConfiguration() , args[1].toLowerCase()+".spawns").size()+" set] (/ttt addpspawn)"));
 			
+			String arenaarea = done;
+			if (!Tools.isLocationSet(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.min") || !Tools.isLocationSet(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.max")) {
+				arenaarea = missing;
+				canLoad = false;
+			}
+			sender.sendMessage(Main.c("   &8["+arenaarea+"&8] &eSet the arena arena (/ttt savearenaarea)"));
+			
 			if (canLoad) {
 				sender.sendMessage(Main.c("   &aThe arena is set up and is ready to be loaded!"));
 			}
@@ -167,7 +177,6 @@ public class MainCommand implements CommandExecutor {
 		
 		else if (args[0].equalsIgnoreCase("removespawn")) {
 			if (!(sender instanceof Player)) return true;
-			Player p = (Player) sender;
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
 			if (args.length != 3) {
 				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt addspawn <name> <id>"));
@@ -181,12 +190,45 @@ public class MainCommand implements CommandExecutor {
 			try {
 				id = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(main.prefix + "'"+args[2]+"' is not a valid number!");
+				sender.sendMessage(main.prefix + " '"+args[2]+"' is not a valid number!");
 				return true;
 			}
 			Tools.removeLocationCounting(main.getArenaManager().getConfiguration(), args[1].toLowerCase()+".spawns", id);
 			main.getArenaManager().saveFile();
 			sender.sendMessage(main.prefix + " If this spawnpoint existed it has been removed");
+		}
+		
+		else if (args[0].equalsIgnoreCase("getmarkertool")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 1) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt getmarkertool"));
+				return true;
+			}
+			main.getMarkerTool().givePlayer(p);
+		}
+		
+		else if (args[0].equalsIgnoreCase("savearenaarea")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 2) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt savearenaarea <name>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			if (!main.getMarkerTool().isReady(p)) {
+				p.sendMessage(main.prefix + " Please select the area using '/ttt getmarkertool'");
+				return true;
+			}
+			Location[] locs = Tools.generateMaxMinPositions(main.getMarkerTool().get1(p), main.getMarkerTool().get2(p));
+			Tools.saveLiteLocation(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.min", locs[0]);
+			Tools.saveLiteLocation(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.max", locs[1]);
+			main.getArenaManager().saveFile();
 		}
 		
 		else if (args[0].equalsIgnoreCase("reload")) {

@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.melays.ettt.commands.MainCommand;
 import de.melays.ettt.game.ArenaManager;
+import de.melays.ettt.marker.MarkerTool;
 import de.melays.ettt.tools.MessageFetcher;
 import de.melays.ettt.tools.SettingsFile;
 
@@ -26,9 +27,15 @@ public class Main extends JavaPlugin{
 		return settingsFile;
 	}
 	
+	//Tools
+	MarkerTool markerTool;
+	public MarkerTool getMarkerTool() {
+		return markerTool;
+	}
+	
 	public void onEnable() {
 		
-		//Initialize Config & Files
+		//Initialize Configuration & Files
 		this.getConfig().options().copyDefaults(true);
 		this.getConfig().options().copyHeader(true);
 		this.saveConfig();
@@ -38,6 +45,9 @@ public class Main extends JavaPlugin{
 		this.messageFetcher = new MessageFetcher(this);
 		this.prefix = this.getMessageFetcher().getMessage("prefix", false);
 		this.arenaManager = new ArenaManager(this);
+		
+		//Initialize Tools
+		this.markerTool = new MarkerTool(this);
 		
 		//Register Commands
 		getCommand("ttt").setExecutor(new MainCommand(this));
@@ -49,7 +59,7 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void reloadAll() {
-		//Config
+		//Configuration
 		this.reloadConfig();
 		//MessageFetcher
 		this.getMessageFetcher().reloadFile();
