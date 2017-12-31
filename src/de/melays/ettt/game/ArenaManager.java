@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashMap;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.Utf8YamlConfiguration;
@@ -17,6 +19,9 @@ import de.melays.ettt.tools.Tools;
 public class ArenaManager {
 	
 	Main main;
+	
+	//Arena Hashmap
+	HashMap<String , Arena> arenas = new HashMap<String , Arena>();
 	
 	public ArenaManager (Main main) {
 		this.main = main;
@@ -42,16 +47,86 @@ public class ArenaManager {
 		return null;
 	}
 	
+	//Player Methods
+	
+	public boolean isInGame(Player p) {
+		for (Arena a : arenas.values()) {
+			if (a.contains(p)) return true;
+		}
+		return false;
+	}
+	
+	public Arena searchPlayer(Player p) {
+		for (Arena a : arenas.values()) {
+			if (a.contains(p)) return a;
+		}
+		return null;
+	}
+	
+	//LOAD/RELOAD/STOP Methods
+	
+	public void loadAll() {
+		Logger.log(main.prefix + " [ArenaManager] (Re)loading all Arenas ...");
+		int c = 0;
+		for (String s : this.getConfiguration().getKeys(false)) {
+			if (load(s)) c++;
+		}
+		Logger.log(main.prefix + " [ArenaManager] Loaded " + c + " arenas.");
+	}
+	
+	public boolean load(String arena) {
+		if (isLoaded(arena)) {
+			return false;
+		}
+		if (!canLoad(arena)) {
+			return false;
+		}
+		arenas.put(arena.toLowerCase(), new Arena(main , arena));
+		return true;
+	}
+	
+	public boolean unload (String arena) {
+		if (!isLoaded(arena)) {
+			return false;
+		}
+		arenas.remove(arena.toLowerCase());
+		return true;
+	}
+	
+	public boolean reload (String arena) {
+		unload(arena);
+		return load(arena);
+	}
+	
+	public boolean isLoaded(String arena) {
+		return arenas.containsKey(arena.toLowerCase());
+	}
+	
+	public boolean canLoad (String arena) {
+		boolean canLoad = true;
+		if (!main.isBungeeMode()) {
+			if (!Tools.isLocationSet(main.getArenaManager().getConfiguration(), arena.toLowerCase()+".lobby")) {
+				canLoad = false;
+			}
+		}
+		if (!this.isGlobalLobbySet()) {
+			canLoad = false;
+		}
+		if (!(Tools.getLocationsCounting(this.getConfiguration() , arena.toLowerCase()+".spawns").size() >= this.getConfiguration().getInt(arena.toLowerCase()+".players.max"))) {
+			canLoad = false;
+		}
+		if (!Tools.isLocationSet(this.getConfiguration(), arena.toLowerCase() + ".arena.min") || !Tools.isLocationSet(this.getConfiguration(), arena.toLowerCase() + ".arena.max")) {
+			canLoad = false;
+		}
+		return canLoad;
+	}
+	//--------
+	
 	public boolean isCreated (String arena) {
 		return this.getConfiguration().getKeys(false).contains(arena);
 	}
 	
-	public boolean isLoaded (String arena) {
-		return false;
-	}
-	
-	
-	//globallobby
+	//Global Lobby
 	public void setGlobalLobby(Location loc) {
 		Tools.saveLocation(main.getSettingsFile().getConfiguration(), "global_lobby", loc);
 		main.getSettingsFile().saveFile();

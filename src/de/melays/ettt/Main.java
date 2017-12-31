@@ -3,8 +3,10 @@ package de.melays.ettt;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.melays.ettt.commands.MainCommand;
+import de.melays.ettt.commands.SetupCommand;
 import de.melays.ettt.game.ArenaManager;
+import de.melays.ettt.game.lobby.Lobby;
+import de.melays.ettt.game.lobby.LobbyMode;
 import de.melays.ettt.marker.MarkerTool;
 import de.melays.ettt.tools.MessageFetcher;
 import de.melays.ettt.tools.SettingsFile;
@@ -33,6 +35,12 @@ public class Main extends JavaPlugin{
 		return markerTool;
 	}
 	
+	//BungeeCord Lobby Object
+	Lobby bungeeCordLobby;
+	public Lobby getBungeeCordLobby() {
+		return this.bungeeCordLobby;
+	}
+	
 	public void onEnable() {
 		
 		//Initialize Configuration & Files
@@ -45,17 +53,28 @@ public class Main extends JavaPlugin{
 		this.messageFetcher = new MessageFetcher(this);
 		this.prefix = this.getMessageFetcher().getMessage("prefix", false);
 		this.arenaManager = new ArenaManager(this);
+		this.arenaManager.loadAll();
 		
 		//Initialize Tools
 		this.markerTool = new MarkerTool(this);
 		
+		//Create BungeeCord Lobby
+		this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
+		this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
+		if (this.getConfig().getBoolean("bungeecord.voting"))
+			this.bungeeCordLobby.setMode(LobbyMode.VOTING);
+		
 		//Register Commands
-		getCommand("ttt").setExecutor(new MainCommand(this));
+		getCommand("tttsetup").setExecutor(new SetupCommand(this));
 		
 	}
 	
 	public static String c (String msg) {
 		return (ChatColor.translateAlternateColorCodes('&', msg));
+	}
+	
+	public boolean isBungeeMode() {
+		return this.getConfig().getBoolean("bungeecord.enabled");
 	}
 	
 	public void reloadAll() {

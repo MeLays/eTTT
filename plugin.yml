@@ -10,3 +10,7 @@ commands:
     description: Manage the eTTT Plugin
     aliases: [ettt , troubleinterroristtown]
     usage: /ttt help
+  tttsetup:
+    description: Manage the eTTT Plugin
+    aliases: [etttsetup , ttt-setup , ett-setup]
+    usage: /ttt help
