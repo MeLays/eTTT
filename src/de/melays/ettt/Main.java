@@ -1,13 +1,25 @@
 package de.melays.ettt;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.melays.ettt.commands.MainCommand;
 import de.melays.ettt.commands.SetupCommand;
 import de.melays.ettt.game.ArenaManager;
 import de.melays.ettt.game.lobby.Lobby;
 import de.melays.ettt.game.lobby.LobbyMode;
+import de.melays.ettt.listeners.BlockBreakEventListener;
+import de.melays.ettt.listeners.BlockPlaceEventListener;
+import de.melays.ettt.listeners.EntityDamageEventListener;
+import de.melays.ettt.listeners.FoodLevelChangeEventListener;
+import de.melays.ettt.listeners.InventoryClickEventListener;
+import de.melays.ettt.listeners.InventoryDragEventListener;
+import de.melays.ettt.listeners.PlayerDropItemEventListener;
+import de.melays.ettt.listeners.PlayerPickupItemEventListener;
+import de.melays.ettt.listeners.PlayerQuitEventListener;
 import de.melays.ettt.marker.MarkerTool;
+import de.melays.ettt.tools.ItemManager;
 import de.melays.ettt.tools.MessageFetcher;
 import de.melays.ettt.tools.SettingsFile;
 
@@ -27,6 +39,10 @@ public class Main extends JavaPlugin{
 	SettingsFile settingsFile;
 	public SettingsFile getSettingsFile() {
 		return settingsFile;
+	}
+	ItemManager itemManager;
+	public ItemManager getItemManager() {
+		return itemManager;
 	}
 	
 	//Tools
@@ -54,6 +70,7 @@ public class Main extends JavaPlugin{
 		this.prefix = this.getMessageFetcher().getMessage("prefix", false);
 		this.arenaManager = new ArenaManager(this);
 		this.arenaManager.loadAll();
+		this.itemManager = new ItemManager(this);
 		
 		//Initialize Tools
 		this.markerTool = new MarkerTool(this);
@@ -66,7 +83,26 @@ public class Main extends JavaPlugin{
 		
 		//Register Commands
 		getCommand("tttsetup").setExecutor(new SetupCommand(this));
+		getCommand("ttt").setExecutor(new MainCommand(this));
 		
+		//Register Events
+		Bukkit.getPluginManager().registerEvents(new BlockBreakEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new BlockPlaceEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new InventoryClickEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new InventoryDragEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerDropItemEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerPickupItemEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new EntityDamageEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new FoodLevelChangeEventListener(this), this);
+		
+		//BungeeCord Channel
+		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+	}
+	
+	public void onDisable() {
+		this.getArenaManager().stopAll();
 	}
 	
 	public static String c (String msg) {

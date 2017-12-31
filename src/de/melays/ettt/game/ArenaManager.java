@@ -47,6 +47,12 @@ public class ArenaManager {
 		return null;
 	}
 	
+	public void stopAll() {
+		for (Arena a : this.arenas.values()) {
+			a.stop();
+		}
+	}
+	
 	//Player Methods
 	
 	public boolean isInGame(Player p) {
@@ -121,6 +127,13 @@ public class ArenaManager {
 		return canLoad;
 	}
 	//--------
+	
+	public Arena getArena(String arena) {
+		if (this.isLoaded(arena)) {
+			return arenas.get(arena.toLowerCase());
+		}
+		return null;
+	}
 	
 	public boolean isCreated (String arena) {
 		return this.getConfiguration().getKeys(false).contains(arena);

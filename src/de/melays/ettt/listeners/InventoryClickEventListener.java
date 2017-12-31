@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright (C) Philipp Seelos - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Philipp Seelos <seelos@outlook.com>, December 2017
+ ******************************************************************************/
+package de.melays.ettt.listeners;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import de.melays.ettt.Main;
+
+public class InventoryClickEventListener implements Listener{
+
+	Main main;
+	
+	public InventoryClickEventListener (Main main) {
+		this.main = main;
+	}
+	
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent e) {
+		Player p = (Player) e.getWhoClicked();
+		if (main.getArenaManager().isInGame(p)) {
+			e.setCancelled(true);
+		}
+	}
+	
+}

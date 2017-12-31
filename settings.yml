@@ -1,0 +1,11 @@
+game:
+  items:
+    roleselector:
+      enabled: true
+      slot: 0
+    leave:
+      enabled: true
+      slot: 8
+    vote:
+      enabled: true
+      slot: 4

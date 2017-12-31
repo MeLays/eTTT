@@ -8,6 +8,10 @@ help:
   hover_body_color: "&e"
   footer: "&e&m--------------------"
   unknown: "%prefix% &cUnknown Command! Get help using '%help%'"
+user-help:
+- "%prefix% TTT Plugin - Help-Overview:"
+- "    &8- &a/ttt join <Arena> &8- &7Join an Arena"
+- "    &8- &a/ttt leave &8- &7Leave an Arena"
 list:
   header: "%prefix% &e%list%: (&a%page%&e/&a%max_pages%&e)"
   command: "    %entry%"
@@ -15,3 +19,9 @@ list:
   footer: "&e&m--------------------"
 command_usage: "%prefix% Use: %command%"
 unknown_arena: "%prefix% Unknown arena!"
+already_ingame: "%prefix% You are already ingame!"
+join_error: "%prefix% An error occured while joining this arena!"
+game:
+  join: "%prefix% &a%player% &ejoined the game"
+  leave: "%prefix% &c%player% &eleft the game"
+  leave-ingame: "%prefix% &c%player% &eleft the game. %remaining% players left."

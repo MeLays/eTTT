@@ -1,0 +1,24 @@
+spacer:
+  material: STAINED_GLASS_PANE
+  byte: 15
+  displayname: " "
+  lore: []     
+lobby:
+  roleselector:
+    material: BOOK
+    byte: 0
+    displayname: "&6Role selector"
+    lore:
+      - "&eRightclick to open the role select menu"
+  leave:
+    material: SLIME_BALL
+    byte: 0
+    displayname: "&4Leave"
+    lore:
+      - "&cRightclick to leave this arena"
+  vote:
+    material: EMPTY_MAP
+    byte: 0
+    displayname: "&aVote"
+    lore:
+      - "&2Vote for an map to play on"
