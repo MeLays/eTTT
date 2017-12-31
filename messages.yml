@@ -20,8 +20,15 @@ list:
 command_usage: "%prefix% Use: %command%"
 unknown_arena: "%prefix% Unknown arena!"
 already_ingame: "%prefix% You are already ingame!"
+full: "%prefix% The arena you are trying to join is full!"
 join_error: "%prefix% An error occured while joining this arena!"
 game:
   join: "%prefix% &a%player% &ejoined the game"
   leave: "%prefix% &c%player% &eleft the game"
   leave-ingame: "%prefix% &c%player% &eleft the game. %remaining% players left."
+  countdown:
+    lobby:
+      shortend: "%prefix% The arena is full. The countdown has been shortened!"
+      lobby: "%prefix% The game starts in &a%seconds% &eseconds"
+      start: "%prefix% The game starts ..."
+    

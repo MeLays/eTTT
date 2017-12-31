@@ -2,6 +2,9 @@ bungeecord:
    enabled: false
    voting: true
    lobbyserver: Lobby-1
+   players:
+     min: 4
+     max: 24
 gamemodes:
    lobby: ADVENTURE
    game: SURVIVAL
@@ -10,3 +13,7 @@ gamemodes:
 game:
    hunger: false
    itemdrop: false
+   countdowns:
+     lobby:
+       start: 60
+       full: 15

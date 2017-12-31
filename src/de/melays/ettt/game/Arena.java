@@ -2,7 +2,9 @@ package de.melays.ettt.game;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import de.melays.ettt.Main;
@@ -19,7 +21,9 @@ public class Arena {
 	
 	//Data
 	String name;
-	String display;
+	public String display;
+	public int min;
+	public int max;
 	
 	//Lobby
 	Lobby lobby;
@@ -38,9 +42,12 @@ public class Arena {
 		
 		this.name = name;
 		this.display = main.getArenaManager().getConfiguration().getString(name+".display");
+		this.min = main.getArenaManager().getConfiguration().getInt(name+".players.min");
+		this.max = main.getArenaManager().getConfiguration().getInt(name+".players.max");
 		this.lobby = new Lobby(main , Tools.getLocation(main.getArenaManager().getConfiguration(), name + ".lobby"));
 		this.lobby.setMode(LobbyMode.FIXED);
 		this.lobby.setArena(this);
+		this.lobby.startLoop();
 	}
 	
 	public void stop() {
@@ -48,11 +55,17 @@ public class Arena {
 		lobby.players = null;
 		this.players = null;
 		this.spectators = null;
+		main.getArenaManager().unregister(this);
 		for (Player p : all) {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 			p.teleport(main.getArenaManager().getGlobalLobby());
 			PlayerTools.resetPlayer(p);
 		}
+	}
+	
+	public void restart() {
+		stop();
+		main.getArenaManager().load(name);
 	}
 	
 	public void broadcast (String msg) {
@@ -82,6 +95,7 @@ public class Arena {
 	//Player methods
 	public boolean join (Player p) {
 		if (main.getArenaManager().isInGame(p)) return false;
+		if (this.getAllPlaying().size() >= max) return false;
 		if (state == ArenaState.LOBBY) {
 			lobby.join(p);
 		}
@@ -92,6 +106,10 @@ public class Arena {
 	}
 	
 	public void addSpectator(Player p) {
+		//TODO
+	}
+	
+	public void checkWin() {
 		//TODO
 	}
 	
@@ -112,7 +130,32 @@ public class Arena {
 		PlayerTools.resetPlayer(p);
 		p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 		p.teleport(main.getArenaManager().getGlobalLobby());
+		if (state != ArenaState.LOBBY) {
+			if (this.getAllPlaying().size() <= 1) {
+				restart();
+			}
+			else {
+				checkWin();
+			}
+		}
+		if (state == ArenaState.END && this.getAllPlaying().size() == 0) {
+			restart();
+		}
 	}
 	
+	public void receiveFromLobby(ArrayList<Player> players) {
+		this.players.addAll(players);
+		this.state = ArenaState.WARMUP;
+		ArrayList<Location> spawns = Tools.getLocationsCounting(main.getArenaManager().getConfiguration(), name.toLowerCase()+".spawns");
+		int i = 0;
+		for (Player p : players) {
+			if (i >= spawns.size()) i = 0;
+			p.teleport(spawns.get(i));
+			PlayerTools.resetPlayer(p);
+			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.game").toUpperCase()));
+			i++;
+		}
+	}
 	
 }

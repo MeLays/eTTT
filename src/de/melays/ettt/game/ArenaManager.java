@@ -53,6 +53,10 @@ public class ArenaManager {
 		}
 	}
 	
+	void unregister(Arena a) {
+		arenas.remove(a.name.toLowerCase());
+	}
+	
 	//Player Methods
 	
 	public boolean isInGame(Player p) {
@@ -95,6 +99,7 @@ public class ArenaManager {
 		if (!isLoaded(arena)) {
 			return false;
 		}
+		this.getArena(arena).stop();
 		arenas.remove(arena.toLowerCase());
 		return true;
 	}

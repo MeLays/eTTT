@@ -76,10 +76,14 @@ public class Main extends JavaPlugin{
 		this.markerTool = new MarkerTool(this);
 		
 		//Create BungeeCord Lobby
-		this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
-		this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
-		if (this.getConfig().getBoolean("bungeecord.voting"))
-			this.bungeeCordLobby.setMode(LobbyMode.VOTING);
+		try {
+			this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
+			this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
+			if (this.getConfig().getBoolean("bungeecord.voting"))
+				this.bungeeCordLobby.setMode(LobbyMode.VOTING);
+		} catch (Exception e) {
+			
+		}
 		
 		//Register Commands
 		getCommand("tttsetup").setExecutor(new SetupCommand(this));

@@ -46,7 +46,7 @@ public class MainCommand implements CommandExecutor {
 				return true;		
 			}
 			if (!main.getArenaManager().getArena(args[1].toLowerCase()).join(p)) {
-				sender.sendMessage(main.getMessageFetcher().getMessage("join_error", true));
+				sender.sendMessage(main.getMessageFetcher().getMessage("full", true));
 				return true;		
 			}
 		}

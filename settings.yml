@@ -9,3 +9,18 @@ game:
     vote:
       enabled: true
       slot: 4
+  scoreboard:
+    lobby:
+      title: "&c- &e&leTTT &c-"
+      timer:
+        divider: "&8:"
+        minutes: "&c- &7%minutes%"
+        seconds: "&7%seconds%"
+      content:
+      - ""
+      - "&eArena:"
+      - "&c- &a%arena%"
+      - "  "
+      - "&eTimer:"
+      - time-line
+      - "   "
