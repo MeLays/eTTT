@@ -8,9 +8,13 @@ package de.melays.ettt;
 
 import java.util.ArrayList;
 
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
+
+import io.github.theluca98.textapi.Title;
 
 public class PlayerTools {
 	
@@ -38,6 +42,21 @@ public class PlayerTools {
 			p.setExp(0);
 			p.setLevel(lvl);
 		}
+	}
+	
+	public static void sendTitle (ArrayList<Player> players , String title , String subtitle, int fadeInTime, int showTime, int fadeOutTime) {
+		for (Player p : players) {
+			new Title(title , subtitle , fadeInTime , showTime , fadeOutTime).send(p);
+		}
+	}
+	
+	public static void sendTitle (Player player , String title , String subtitle, int fadeInTime, int showTime, int fadeOutTime) {
+		new Title(title , subtitle , fadeInTime , showTime , fadeOutTime).send(player);
+	}
+	
+	public static void sendTitle (Configuration config , String path ,Player p) {
+		ConfigurationSection section = config.getConfigurationSection(path);
+		new Title(Main.c(section.getString("title")) , Main.c(section.getString("subtitle")) , section.getInt("fadein") , section.getInt("show") , section.getInt("fadeout")).send(p);
 	}
 	
 }

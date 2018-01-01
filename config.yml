@@ -17,6 +17,10 @@ game:
      lobby:
        start: 60
        full: 15
+     game:
+       warmup: 45
+       game: 900
+       end: 30
    ratio:
      innocent: 50
      traitor: 30

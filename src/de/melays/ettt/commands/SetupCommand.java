@@ -31,6 +31,7 @@ public class SetupCommand implements CommandExecutor {
 		helpSender.addAlias("check [arena]", "Checks the setup progress", "Checks the setup progress of an arena" , "/ttt-setup check <arena>");
 		helpSender.addAlias("setgloballobby", "Sets the lobby location", "Sets the location where you will be teleported after the game" , "/ttt-setup setgloballobby");
 		helpSender.addAlias("setlobby", "Sets the arena lobby", "Sets the arena lobby\n&cNot neccessarry in BungeeCord-mode" , "/ttt-setup setlobby <name>");
+		helpSender.addAlias("setspectatorspawn", "Sets the spectator spawn", "Sets the arena spectator spawn" , "/ttt-setup setspectatorspawn <name>");
 		helpSender.addAlias("addspawn", "Add a player spawn", "Add a player spawn where players will spawn ingame" , "/ttt-setup addspawn <name>");
 		helpSender.addAlias("getmarkertool", "Gets the location marker tool", "Gives you an location marker tool" , "/ttt-setup getmarkertool");
 		helpSender.addAlias("savearenaarea", "Saves the selected area", "Saves the selected area of the arena" , "/ttt-setup savearenaarea <name>");
@@ -127,6 +128,15 @@ public class SetupCommand implements CommandExecutor {
 				}
 			}
 			
+			String spectatorspawn = done;
+			if (!main.isBungeeMode()) {
+				if (!Tools.isLocationSet(main.getArenaManager().getConfiguration(), args[1].toLowerCase()+".spectator")) {
+					canLoad = false;
+					spectatorspawn = missing;
+				}
+				sender.sendMessage(Main.c("   &8["+spectatorspawn+"&8] &eSet the spectatorspawn (/ttt-setup setspectatorspawn)"));
+			}
+			
 			String spawnpoints = done;
 			if (!(Tools.getLocationsCounting(main.getArenaManager().getConfiguration() , args[1].toLowerCase()+".spawns").size() >= main.getArenaManager().getConfiguration().getInt(args[1].toLowerCase()+".players.max"))) {
 				spawnpoints = missing;
@@ -187,6 +197,23 @@ public class SetupCommand implements CommandExecutor {
 			sender.sendMessage(main.prefix + " The lobby location has been saved");
 			if (main.isBungeeMode())
 				sender.sendMessage(main.prefix + " TIP: In BungeeCord-mode the lobby location is not neccessary");
+		}
+		
+		else if (args[0].equalsIgnoreCase("setspectatorspawn")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 2) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup setspectatorspawn <name>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			Tools.saveLocation(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".spectator", p.getLocation());
+			main.getArenaManager().saveFile();
+			sender.sendMessage(main.prefix + " The spectator location has been saved");
 		}
 		
 		else if (args[0].equalsIgnoreCase("addspawn")) {

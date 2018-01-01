@@ -120,6 +120,9 @@ public class ArenaManager {
 				canLoad = false;
 			}
 		}
+		if (!Tools.isLocationSet(main.getArenaManager().getConfiguration(), arena.toLowerCase()+".spectator")) {
+			canLoad = false;
+		}
 		if (!this.isGlobalLobbySet()) {
 			canLoad = false;
 		}

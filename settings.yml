@@ -1,5 +1,6 @@
 roles:
-  none: "None"
+  none: "&7None"
+  spectator: "&7Spectator"
   innocent:
     display: "&aInnocent"
   traitor:
@@ -17,6 +18,47 @@ game:
     vote:
       enabled: true
       slot: 4
+  actionbar:
+    game: "&c- &eRole: %role% &c-"
+  tab:
+    spectators:
+      prefix: "&8&o"
+      suffix: ""    
+    none:
+      prefix: "&e&o"
+      suffix: ""
+    innocent:
+      prefix: "&e"
+      suffix: ""
+    innocent_traitor_view:
+      prefix: "&a"
+      suffix: ""    
+    traitor:
+      prefix: "&8[&4T&8] &c"
+      suffix: ""
+    detective:
+      prefix: "&9"
+      suffix: ""
+  titles:
+    roles:
+      traitor:
+        title: "&c&lTRAITOR"
+        subtitle: "&eTry to kill as much Innocents as possible!"
+        fadein: 0
+        show: 60
+        fadeout: 20
+      detective:
+        title: "&9&lDETECTIVE"
+        subtitle: "&eFind out who is are the Traitors!"
+        fadein: 0
+        show: 60
+        fadeout: 20
+      innocent:
+        title: "&a&lINNOCENT"
+        subtitle: "&eFind out who is are the Traitors!"
+        fadein: 0
+        show: 60
+        fadeout: 20
   scoreboard:
     lobby:
       title: "&c- &e&leTTT &c-"
@@ -32,6 +74,47 @@ game:
       - "&eTimer:"
       - time-line
       - "   "
+    game:
+      playing:
+        title: "&c- &e&leTTT &c-"
+        timer:
+          divider: "&8:"
+          minutes: "&c- &7%minutes%"
+          seconds: "&7%seconds%"
+        content:
+        - ""
+        - "&eRole:"
+        - "&c- &a%role%"        
+        - " "
+        - "&ePlayers:"
+        - "&c- &a%alive% alive"        
+        - "  "        
+        - "&eArena:"
+        - "&c- &a%arena%"
+        - "   "
+        - "&eTimer:"
+        - time-line
+        - "    "
+      spectating:
+        title: "&c- &e&leTTT &c-"
+        timer:
+          divider: "&8:"
+          minutes: "&c- &7%minutes%"
+          seconds: "&7%seconds%"
+        content:
+        - ""
+        - "&eSpectating:"
+        - "&c- &a%specs% Players"        
+        - " "
+        - "&ePlayers:"
+        - "&c- &a%alive% alive"        
+        - "  "
+        - "&eArena:"
+        - "&c- &a%arena%"
+        - "   "
+        - "&eTimer:"
+        - time-line
+        - "    "
   inventory:
     roleselection:
       title: "&eRole selection"

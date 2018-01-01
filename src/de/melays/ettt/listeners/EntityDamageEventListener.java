@@ -31,7 +31,7 @@ public class EntityDamageEventListener implements Listener{
 				Arena arena = main.getArenaManager().searchPlayer(p);
 				
 				//Arena relevant Event stuff
-				if (arena.state == ArenaState.LOBBY) {
+				if (arena.state != ArenaState.GAME || arena.spectators.contains(p)) {
 					e.setCancelled(true);
 				}
 

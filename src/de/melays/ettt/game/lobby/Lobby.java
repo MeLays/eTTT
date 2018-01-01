@@ -109,6 +109,9 @@ public class Lobby {
 		List<String> lines = main.getSettingsFile().getConfiguration().getStringList("game.scoreboard.lobby.content");
 		int value = lines.size();
 		String arenaplz = "Voting";
+		if (this.mode == LobbyMode.RANDOM) {
+			arenaplz = "Random";
+		}
 		if (arena != null) {
 			arenaplz = arena.display;
 		}

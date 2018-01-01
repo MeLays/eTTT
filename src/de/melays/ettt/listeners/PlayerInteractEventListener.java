@@ -34,6 +34,9 @@ public class PlayerInteractEventListener implements Listener{
 			
 			try {
 				//Arena relevant Event stuff
+				if (arena.spectators.contains(p)) {
+					e.setCancelled(true);
+				}
 				if (arena.state == ArenaState.LOBBY) {
 					e.setCancelled(true);
 					//Item Interact Check

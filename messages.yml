@@ -31,4 +31,26 @@ game:
       shortend: "%prefix% The arena is full. The countdown has been shortened!"
       lobby: "%prefix% The game starts in &a%seconds% &eseconds"
       start: "%prefix% The game starts ..."
-    
+    warmup: "%prefix% The game starts in &a%seconds% &eseconds"
+    end: "%prefix% The game ends in &a%seconds% &eseconds"
+  role:
+    traitor_spacer: "&7, &c"
+    traitor:
+    - "%prefix% You are a &cTRAITOR&e!"
+    - "%prefix% Try to kill as many Innocents as possible without"
+    - "%prefix% them knowing you beeing a Traitor!"
+    - "%prefix% The detectives are: &9%detectives%"
+    - "%prefix% Your fellow Traitors: &c%traitors%"
+    innocent:
+    - "%prefix% You are a &aINNOCENT&e!"
+    - "%prefix% Try to find out who is a Traitor"
+    - "%prefix% by using the Tester and watching their behaviour!"
+    - "%prefix% &cBut don't randomly kill other Innocents!"
+    - "%prefix% The detectives are: &9%detectives%"
+    detective_spacer: "&7, &9"
+    detective:
+    - "%prefix% You are a &9DETECTIVE&e!"
+    - "%prefix% Everybody knows that you are not a Traitor!"
+    - "%prefix% The Innocents trust you."
+    - "%prefix% Help them finding the Traitors!"
+    - "%prefix% Your fellow detectives: &9%detectives%"
