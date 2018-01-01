@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import de.melays.ettt.Main;
 import de.melays.ettt.PlayerTools;
 import de.melays.ettt.game.Arena;
+import de.melays.ettt.game.RolePackage;
 import de.melays.ettt.tools.ScoreBoardTools;
 
 public class Lobby {
@@ -31,6 +32,8 @@ public class Lobby {
 	//Players
 	public ArrayList<Player> players = new ArrayList<Player>();
 	HashMap<Player , ScoreBoardTools> scoreboard = new HashMap<Player , ScoreBoardTools>();
+	public HashMap<Player , RoleChooseMenu> roleMenus = new HashMap<Player , RoleChooseMenu>();
+	RolePackage rolePackage = new RolePackage();
 	
 	public Lobby (Main main , Location loc) {
 		this.main = main;
@@ -143,6 +146,7 @@ public class Lobby {
 	public void join (Player p) {
 		if (!this.contains(p)) {
 			players.add(p);
+			roleMenus.put(p, new RoleChooseMenu(main , this , p));
 			PlayerTools.resetPlayer(p);
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.lobby").toUpperCase()));
 			p.teleport(lobby);
@@ -176,7 +180,7 @@ public class Lobby {
 		@SuppressWarnings("unchecked")
 		ArrayList<Player> all = (ArrayList<Player>) players.clone();
 		players.clear();
-		arena.receiveFromLobby(all);
+		arena.receiveFromLobby(all , this.rolePackage);
 	}
 	
 }

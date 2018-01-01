@@ -17,3 +17,7 @@ game:
      lobby:
        start: 60
        full: 15
+   ratio:
+     innocent: 50
+     traitor: 30
+     detective: 20

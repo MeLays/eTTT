@@ -1,3 +1,11 @@
+roles:
+  none: "None"
+  innocent:
+    display: "&aInnocent"
+  traitor:
+    display: "&cTraitor"
+  detective:
+    display: "&9Detective"
 game:
   items:
     roleselector:
@@ -24,3 +32,6 @@ game:
       - "&eTimer:"
       - time-line
       - "   "
+  inventory:
+    roleselection:
+      title: "&eRole selection"

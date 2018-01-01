@@ -16,6 +16,7 @@ import de.melays.ettt.listeners.FoodLevelChangeEventListener;
 import de.melays.ettt.listeners.InventoryClickEventListener;
 import de.melays.ettt.listeners.InventoryDragEventListener;
 import de.melays.ettt.listeners.PlayerDropItemEventListener;
+import de.melays.ettt.listeners.PlayerInteractEventListener;
 import de.melays.ettt.listeners.PlayerPickupItemEventListener;
 import de.melays.ettt.listeners.PlayerQuitEventListener;
 import de.melays.ettt.marker.MarkerTool;
@@ -91,6 +92,7 @@ public class Main extends JavaPlugin{
 		
 		//Register Events
 		Bukkit.getPluginManager().registerEvents(new BlockBreakEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerInteractEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new BlockPlaceEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryClickEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryDragEventListener(this), this);

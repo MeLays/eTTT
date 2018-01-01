@@ -130,7 +130,7 @@ public class ItemManager {
 		try {
 			data = (byte) Integer.parseInt(data_str);
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+
 		}
 		ItemStack stack = new ItemStack(material , 1 , data);
 		stack.getData().setData(data);

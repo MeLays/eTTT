@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import de.melays.ettt.Main;
+import de.melays.ettt.game.Arena;
+import de.melays.ettt.game.ArenaState;
 
 public class InventoryClickEventListener implements Listener{
 
@@ -24,7 +26,14 @@ public class InventoryClickEventListener implements Listener{
 	public void onInventoryClick(InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
 		if (main.getArenaManager().isInGame(p)) {
-			e.setCancelled(true);
+			Arena arena = main.getArenaManager().searchPlayer(p);
+			if (arena.state == ArenaState.LOBBY) {
+				e.setCancelled(true);
+				
+				if (e.getClickedInventory().getName().equals(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.roleselection.title")))) {
+					arena.lobby.roleMenus.get(p).click(e.getSlot());
+				}
+			}	
 		}
 	}
 	

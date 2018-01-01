@@ -26,7 +26,7 @@ public class Arena {
 	public int max;
 	
 	//Lobby
-	Lobby lobby;
+	public Lobby lobby;
 	
 	//State
 	public ArenaState state = ArenaState.LOBBY;
@@ -143,7 +143,7 @@ public class Arena {
 		}
 	}
 	
-	public void receiveFromLobby(ArrayList<Player> players) {
+	public void receiveFromLobby(ArrayList<Player> players , RolePackage rolePackage) {
 		this.players.addAll(players);
 		this.state = ArenaState.WARMUP;
 		ArrayList<Location> spawns = Tools.getLocationsCounting(main.getArenaManager().getConfiguration(), name.toLowerCase()+".spawns");

@@ -4,6 +4,31 @@ spacer:
   displayname: " "
   lore: []     
 lobby:
+  inventory:
+    roleselection:
+      selected:
+        displayname: "&aSelected: %role%"
+        lore: []
+      none:
+        material: BARRIER
+        byte: 0
+        displayname: "&2None"
+        lore:
+          - "&aSelect no role"
+      detective:
+        material: STICK
+        byte: 0
+        displayname: "&1Detective"
+        lore:
+          - "&9Use a pass to get a Detective!"
+          - "&aCost: &e1 Pass"
+      traitor:
+        material: REDSTONE
+        byte: 0
+        displayname: "&4Traitor"
+        lore:
+          - "&cUse a pass to get a Traitor!"
+          - "&aCost: &e1 Pass"
   roleselector:
     material: BOOK
     byte: 0
