@@ -59,6 +59,13 @@ game:
         fadein: 0
         show: 60
         fadeout: 20
+    warning:
+      play-area:
+        title: "&4&l&oOUT OF MAP"
+        subtitle: "&cPlease return to the play-arena!"
+        fadein: 0
+        show: 10
+        fadeout: 10
   scoreboard:
     lobby:
       title: "&c- &e&leTTT &c-"

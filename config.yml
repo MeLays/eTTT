@@ -7,6 +7,10 @@ bungeecord:
    players:
      min: 4
      max: 24
+mapreset:
+   items: true
+   arrows: true
+   blocks: true
 gamemodes:
    lobby: ADVENTURE
    game: SURVIVAL
@@ -15,6 +19,10 @@ gamemodes:
 game:
    hunger: false
    itemdrop: false
+   barrier:
+     leave: true
+     leave-damage: 4
+     spectator-leave: false
    countdowns:
      lobby:
        start: 60

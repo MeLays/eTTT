@@ -40,8 +40,8 @@ public class PlayerInteractEventListener implements Listener{
 				if (arena.state == ArenaState.LOBBY) {
 					e.setCancelled(true);
 					//Item Interact Check
-					if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK 
-							|| e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+					if ((e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK 
+							|| e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && e.getItem() != null) {
 						if (main.getItemManager().isItem("lobby.roleselector", e.getItem())) {
 							arena.lobby.roleMenus.get(p).open();
 						}
@@ -65,8 +65,8 @@ public class PlayerInteractEventListener implements Listener{
 		else if (main.getBungeeCordLobby().contains(p)) {
 			e.setCancelled(true);
 			//Item Interact Check
-			if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK 
-					|| e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null) {
+			if ((e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK 
+					|| e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && e.getItem() != null) {
 				if (main.getItemManager().isItem("lobby.roleselector", e.getItem())) {
 					main.getBungeeCordLobby().roleMenus.get(p).open();
 				}

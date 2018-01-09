@@ -2,12 +2,12 @@ package de.melays.ettt;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.melays.ettt.commands.MainCommand;
 import de.melays.ettt.commands.SetupCommand;
+import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.ArenaManager;
 import de.melays.ettt.game.lobby.Lobby;
 import de.melays.ettt.game.lobby.LobbyMode;
@@ -21,6 +21,7 @@ import de.melays.ettt.listeners.InventoryDragEventListener;
 import de.melays.ettt.listeners.PlayerDropItemEventListener;
 import de.melays.ettt.listeners.PlayerInteractEventListener;
 import de.melays.ettt.listeners.PlayerJoinEventListener;
+import de.melays.ettt.listeners.PlayerMoveEventListener;
 import de.melays.ettt.listeners.PlayerPickupItemEventListener;
 import de.melays.ettt.listeners.PlayerQuitEventListener;
 import de.melays.ettt.marker.MarkerTool;
@@ -62,6 +63,8 @@ public class Main extends JavaPlugin{
 		return this.bungeeCordLobby;
 	}
 	
+	public Arena current;
+	
 	public void onEnable() {
 		
 		//Initialize Configuration & Files
@@ -81,17 +84,7 @@ public class Main extends JavaPlugin{
 		this.markerTool = new MarkerTool(this);
 		
 		//Create BungeeCord Lobby
-		try {
-			this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
-			this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
-			if (this.getConfig().getBoolean("bungeecord.voting"))
-				this.bungeeCordLobby.setMode(LobbyMode.VOTING);
-		} catch (Exception e) {
-			this.bungeeCordLobby = new Lobby(this , null);
-			this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
-			if (this.getConfig().getBoolean("bungeecord.voting"))
-				this.bungeeCordLobby.setMode(LobbyMode.VOTING);
-		}
+		resetBungeeLobby();
 		
 		//Register Commands
 		getCommand("tttsetup").setExecutor(new SetupCommand(this));
@@ -110,22 +103,32 @@ public class Main extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new PlayerJoinEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new FoodLevelChangeEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerMoveEventListener(this), this);
 		
 		//BungeeCord Channel
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		
-		if (this.isBungeeMode())
-			for (Player p  : Bukkit.getOnlinePlayers()) {
+		if (this.isBungeeMode()) {
+			for (Player p : Bukkit.getOnlinePlayers()) {
 				this.getBungeeCordLobby().join(p);
 			}
+		}
 
+	}
+	
+	public void resetBungeeLobby() {
+		try {
+			this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
+			this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
+			if (this.getConfig().getBoolean("bungeecord.voting"))
+				this.bungeeCordLobby.setMode(LobbyMode.VOTING);
+			this.bungeeCordLobby.startLoop();
+		} catch (Exception e) {
+		}
 	}
 	
 	public void onDisable() {
 		this.getArenaManager().stopAll();
-		for (Player p : this.bungeeCordLobby.players) {
-			this.bungeeCordLobby.remove(p);
-		}
 	}
 	
 	public static String c (String msg) {

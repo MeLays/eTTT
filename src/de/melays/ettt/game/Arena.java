@@ -26,7 +26,7 @@ public class Arena {
 	Main main;
 	
 	//Data
-	String name;
+	public String name;
 	public String display;
 	public int min;
 	public int max;
@@ -49,6 +49,9 @@ public class Arena {
 	int game_counter;
 	int end_counter;
 	
+	//Map Reset
+	public MapReset mapReset;
+	
 	public Arena (Main main , String name) {
 		this.main = main;
 		
@@ -60,10 +63,15 @@ public class Arena {
 		this.display = main.getArenaManager().getConfiguration().getString(name+".display");
 		this.min = main.getArenaManager().getConfiguration().getInt(name+".players.min");
 		this.max = main.getArenaManager().getConfiguration().getInt(name+".players.max");
-		this.lobby = new Lobby(main , Tools.getLocation(main.getArenaManager().getConfiguration(), name + ".lobby"));
+		if (Tools.isLocationSet(main.getArenaManager().getConfiguration(), name + ".lobby"))
+			this.lobby = new Lobby(main , Tools.getLocation(main.getArenaManager().getConfiguration(), name + ".lobby"));
+		else
+			this.lobby = new Lobby(main , null);
 		this.lobby.setMode(LobbyMode.FIXED);
 		this.lobby.setArena(this);
 		this.lobby.startLoop();
+		
+		this.mapReset = new MapReset();
 		
 		//Load Counters
 		warmup_counter = main.getConfig().getInt("game.countdowns.game.warmup");
@@ -84,11 +92,20 @@ public class Arena {
 		this.spectators = null;
 		Bukkit.getScheduler().cancelTask(id);
 		main.getArenaManager().unregister(this);
+		if (main.isBungeeMode() && main.current == this) {
+			main.resetBungeeLobby();
+		}
 		for (Player p : all) {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 			p.teleport(main.getArenaManager().getGlobalLobby());
 			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 			PlayerTools.resetPlayer(p);
+			if (main.isBungeeMode() && main.current == this) {
+				main.getBungeeCordLobby().join(p);
+			}
+		}
+		if (main.isBungeeMode() && main.current == this) {
+			main.current = null;
 		}
 	}
 	
@@ -130,6 +147,7 @@ public class Arena {
 	//Player methods
 	public boolean join (Player p) {
 		if (main.getArenaManager().isInGame(p)) return false;
+		if (main.isBungeeMode() && main.getBungeeCordLobby().contains(p)) return false;
 		if (this.getAllPlaying().size()+1 > max) return false;
 		if (state == ArenaState.LOBBY) {
 			lobby.join(p);
@@ -217,7 +235,7 @@ public class Arena {
 		p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 		p.teleport(main.getArenaManager().getGlobalLobby());
 		if (state != ArenaState.LOBBY && state != ArenaState.END) {
-			if (this.getAllPlaying().size() <= 1) {
+			if (this.getAllPlaying().size() < 1) {
 				restart();
 			}
 			else {
@@ -301,6 +319,23 @@ public class Arena {
 					}
 					
 					counter -= 1;
+					
+					//LEAVE DAMAGE PUNISHMENT
+					if (main.getConfig().getBoolean("game.barrier.leave")) {
+						Location min = Tools.getLiteLocation(main.getArenaManager().getConfiguration(), name.toLowerCase() + ".arena.min");
+						Location max = Tools.getLiteLocation(main.getArenaManager().getConfiguration(), name.toLowerCase() + ".arena.max");
+						for (Player p : getAllPlaying()) {
+							if (!Tools.isInArea(p.getLocation(), min, max)) {
+								if (p.getHealth() > main.getConfig().getInt("game.barrier.leave-damage")) {
+									p.damage(main.getConfig().getInt("game.barrier.leave-damage"));
+									PlayerTools.sendTitle(main.getSettingsFile().getConfiguration(), "game.titles.warning.play-area", p);
+								}
+								else
+									roleManager.callKill(p);
+							}
+						}
+					}
+					
 				}
 				
 				if (instance.state == ArenaState.END) {

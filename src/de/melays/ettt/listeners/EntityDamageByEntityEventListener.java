@@ -6,6 +6,8 @@
  ******************************************************************************/
 package de.melays.ettt.listeners;
 
+import org.bukkit.Location;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import de.melays.ettt.Main;
 import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.ArenaState;
+import de.melays.ettt.tools.Tools;
 
 public class EntityDamageByEntityEventListener implements Listener{
 
@@ -33,6 +36,16 @@ public class EntityDamageByEntityEventListener implements Listener{
 				//Arena relevant Event stuff
 				if (arena.state != ArenaState.GAME || arena.spectators.contains(damager)) {
 					e.setCancelled(true);
+				}
+			}
+		}
+		else if (e.getEntity() instanceof ItemFrame) {
+			for (Arena arena : main.getArenaManager().arenas.values()) {
+				Location min = Tools.getLiteLocation(main.getArenaManager().getConfiguration(), arena.name.toLowerCase() + ".arena.min");
+				Location max = Tools.getLiteLocation(main.getArenaManager().getConfiguration(), arena.name.toLowerCase() + ".arena.max");
+				if (Tools.isInArea(e.getEntity().getLocation(), min, max)) {
+					e.setCancelled(true);
+					break;
 				}
 			}
 		}

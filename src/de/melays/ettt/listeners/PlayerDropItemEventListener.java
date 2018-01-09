@@ -33,8 +33,11 @@ public class PlayerDropItemEventListener implements Listener{
 			if (arena.state == ArenaState.LOBBY || arena.state == ArenaState.END || !main.getConfig().getBoolean("game.itemdrop")) {
 				e.setCancelled(true);
 			}
-			if (arena.spectators.contains(p)) {
+			else if (arena.spectators.contains(p)) {
 				e.setCancelled(true);
+			}
+			else {
+				arena.mapReset.addEntity(e.getItemDrop());
 			}
 			
 		}

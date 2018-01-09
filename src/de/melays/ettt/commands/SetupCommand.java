@@ -35,7 +35,7 @@ public class SetupCommand implements CommandExecutor {
 		helpSender.addAlias("addspawn", "Add a player spawn", "Add a player spawn where players will spawn ingame" , "/ttt-setup addspawn <name>");
 		helpSender.addAlias("getmarkertool", "Gets the location marker tool", "Gives you an location marker tool" , "/ttt-setup getmarkertool");
 		helpSender.addAlias("savearenaarea", "Saves the selected area", "Saves the selected area of the arena" , "/ttt-setup savearenaarea <name>");
-
+		helpSender.addAlias("leave", "Leaves a game", "Leaves a game (even works in bungee-mode)" , "/ttt-setup leave");
 		
 		if (args.length == 0) {
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;
@@ -168,6 +168,15 @@ public class SetupCommand implements CommandExecutor {
 			sender.sendMessage(main.prefix + " The globallobby-spawn has been set");
 		}
 		
+		else if (args[0].equalsIgnoreCase("leave")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (main.getBungeeCordLobby().contains(p)) main.getBungeeCordLobby().remove(p);
+			if (main.getArenaManager().isInGame(p)) main.getArenaManager().searchPlayer(p).leave(p);
+			sender.sendMessage(main.prefix + " You have left all arenas without leaving the server.");
+		}
+		
 		else if (args[0].equalsIgnoreCase("info")) {
 			if (!(sender instanceof Player)) return true;
 			Player p = (Player) sender;
@@ -287,6 +296,7 @@ public class SetupCommand implements CommandExecutor {
 			Tools.saveLiteLocation(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.min", locs[0]);
 			Tools.saveLiteLocation(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.max", locs[1]);
 			main.getArenaManager().saveFile();
+			sender.sendMessage(main.prefix + " The area has been saved!");
 		}
 		
 		else if (args[0].equalsIgnoreCase("reload")) {

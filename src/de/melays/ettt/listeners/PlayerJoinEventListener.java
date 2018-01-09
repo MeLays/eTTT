@@ -19,8 +19,11 @@ public class PlayerJoinEventListener implements Listener {
 	public void onPlayerJoin (PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		
-		if (main.isBungeeMode() && main.getBungeeCordLobby() != null) {
+		if (main.isBungeeMode() && main.getBungeeCordLobby() != null && main.current == null) {
 			main.getBungeeCordLobby().join(p);
+		}
+		else if (main.isBungeeMode() && main.current != null) {
+			main.current.join(p);
 		}
 		
 		if (!main.getConfig().getBoolean("server.join_leave_messages")) {

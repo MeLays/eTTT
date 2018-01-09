@@ -51,13 +51,13 @@ public class RoleManager {
 		
 		for (Player p : new ArrayList<Player>(all)) {
 			if (rolePackage.getRole(p.getUniqueId()) != null) {
-				if (rolePackage.getRole(p.getUniqueId()) == Role.TRAITOR && !(traitors >= 1)) {
+				if (rolePackage.getRole(p.getUniqueId()) == Role.TRAITOR && !(traitors < 1)) {
 					setRole(p , rolePackage.getRole(p.getUniqueId()));
 					traitors -= 1;
 					all.remove(p);
 					continue;
 				}
-				else if (rolePackage.getRole(p.getUniqueId()) == Role.DETECTIVE && !(detectives >= 1)) {
+				else if (rolePackage.getRole(p.getUniqueId()) == Role.DETECTIVE && !(detectives < 1)) {
 					setRole(p , rolePackage.getRole(p.getUniqueId()));
 					detectives -= 1;
 					all.remove(p);

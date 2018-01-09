@@ -21,7 +21,7 @@ public class ArenaManager {
 	Main main;
 	
 	//Arena Hashmap
-	HashMap<String , Arena> arenas = new HashMap<String , Arena>();
+	public HashMap<String , Arena> arenas = new HashMap<String , Arena>();
 	
 	public ArenaManager (Main main) {
 		this.main = main;

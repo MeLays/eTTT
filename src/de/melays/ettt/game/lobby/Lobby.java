@@ -1,6 +1,7 @@
 package de.melays.ettt.game.lobby;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class Lobby {
 	int full;
 	
 	//Players
-	public ArrayList<Player> players = new ArrayList<Player>();
+	public ArrayList<Player> players;
 	HashMap<Player , ScoreBoardTools> scoreboard = new HashMap<Player , ScoreBoardTools>();
 	public HashMap<Player , RoleChooseMenu> roleMenus = new HashMap<Player , RoleChooseMenu>();
 	RolePackage rolePackage = new RolePackage();
@@ -43,6 +44,7 @@ public class Lobby {
 		start = main.getConfig().getInt("game.countdowns.lobby.start");
 		full = main.getConfig().getInt("game.countdowns.lobby.full");
 		counter = start;
+		this.players = new ArrayList<Player>();
 	}
 	
 	public void setMode (LobbyMode mode) {
@@ -61,33 +63,52 @@ public class Lobby {
 		}
 	}
 	
+	public ArrayList<Player> getPlayers() {
+		
+		return this.players;
+	}
+	
 	//Loop
 	
 	int counter = 0;
 	int id;
+	
+	Lobby instance = this;
 	
 	public void startLoop() {
 		id = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
 
 			@Override
 			public void run() {
-				
-				for (Player p : players) {
+				for (Player p : getPlayers()) {
 					updateScoreBoard(p);
 				}
 				
-				if (counter > full & players.size() >= max) {
+				if (counter > full & getPlayers().size() >= max) {
 					counter = full;
 					broadcast(main.getMessageFetcher().getMessage("game.countdown.lobby.shortend", true));
 				}
-				
-				if (counter <= start && players.size() < min) {
+
+				if (counter <= start && getPlayers().size() < min) {
 					counter = start;
 				}
 				else if (counter == 0) {
 					broadcast(main.getMessageFetcher().getMessage("game.countdown.lobby.start", true));
 					Bukkit.getScheduler().cancelTask(id);
 					counter = start;
+					if (arena == null) {
+						//BUNGEEMODE DETECTED
+						if (mode == LobbyMode.RANDOM) {
+							//RANDOMMAP
+							ArrayList<Arena> arenas = new ArrayList<Arena>(main.getArenaManager().arenas.values());
+							Collections.shuffle(arenas);
+							arena = arenas.get(0);
+						}
+						else {
+							//VOTING
+						}
+						main.current = arena;
+					}
 					moveToArena();
 				}
 				else {
