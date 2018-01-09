@@ -107,6 +107,7 @@ public class Arena {
 		if (main.isBungeeMode() && main.current == this) {
 			main.current = null;
 		}
+		this.mapReset.resetAll();
 	}
 	
 	public void restart() {
