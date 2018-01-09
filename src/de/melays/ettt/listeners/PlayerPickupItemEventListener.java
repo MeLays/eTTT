@@ -38,6 +38,9 @@ public class PlayerPickupItemEventListener implements Listener{
 			}
 			
 		}
+		else if (main.getBungeeCordLobby().contains(p)) {
+			e.setCancelled(true);
+		}
 	}
 	
 }

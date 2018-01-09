@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.PlayerTools;
 import de.melays.ettt.tools.ColorTabAPI;
+import de.melays.ettt.tools.Tools;
 
 public class RoleManager {
 	
@@ -195,6 +197,20 @@ public class RoleManager {
 		for (Player p1 : arena.spectators) {
 			ColorTabAPI.setTabStyle(p1,  main.getSettingsFile().getConfiguration().getString("game.tab.spectators.prefix"), main.getSettingsFile().getConfiguration().getString("game.tab.spectators.suffix"), 9, arena.getAll());
 		}
+	}
+	
+	public void callKill (Player p) {
+		Entity last = Tools.getLastEntityDamager(p);
+		if (last != null) {
+			if (last instanceof Player) {
+				Player killer = (Player) last;
+				if (arena.getAll().contains(killer)) {
+					killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.good", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", "0"));
+				}
+			}
+		}
+		arena.moveToSpectator(p);
+		arena.checkWin();
 	}
 	
 }

@@ -1,3 +1,5 @@
+server:
+   join_leave_messages: false
 bungeecord:
    enabled: false
    voting: true

@@ -23,6 +23,10 @@ already_ingame: "%prefix% You are already ingame!"
 full: "%prefix% The arena you are trying to join is full!"
 join_error: "%prefix% An error occured while joining this arena!"
 game:
+  killed: "%prefix% You have been killed and are now spectating."
+  kill:
+    good: "%prefix% &aYou killed the %role% &a%player%! &e+%karma% Karma!"
+    bad: "%prefix% &cYou killed the %role% &c%player%! &e-%karma% Karma!"
   join: "%prefix% &a%player% &ejoined the game"
   leave: "%prefix% &c%player% &eleft the game"
   leave-ingame: "%prefix% &c%player% &eleft the game. %remaining% players left."
@@ -33,6 +37,27 @@ game:
       start: "%prefix% The game starts ..."
     warmup: "%prefix% The game starts in &a%seconds% &eseconds"
     end: "%prefix% The game ends in &a%seconds% &eseconds"
+    stop: "%prefix% The game stops in &a%seconds% &eseconds"
+  end:
+    player:
+      draw: "%prefix% &6It's a draw!"
+      lost: "%prefix% &cYou lost. :C"
+      won: "%prefix% &aCongratulations! You won!"
+    traitor_win:
+    - ""
+    - "%prefix% The &cTraitors &ewon the game!"
+    - "%prefix% The Traitors were: %traitors%"
+    - ""
+    innocent_win:
+    - ""
+    - "%prefix% The &aInnocents &ewon the game!"
+    - "%prefix% The Traitors were: %traitors%"
+    - ""
+    draw:
+    - ""
+    - "%prefix% The game was a draw!"
+    - "%prefix% The Traitors were: %traitors%"
+    - ""
   role:
     traitor_spacer: "&7, &c"
     traitor:

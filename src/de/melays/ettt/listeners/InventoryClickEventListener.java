@@ -35,6 +35,14 @@ public class InventoryClickEventListener implements Listener{
 				}
 			}	
 		}
+		else if (main.getBungeeCordLobby().contains(p)) {
+			e.setCancelled(true);
+			
+			if (e.getClickedInventory().getName().equals(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.roleselection.title")))) {
+				main.getBungeeCordLobby().roleMenus.get(p).click(e.getSlot());
+			}
+		}
+			
 	}
 	
 }

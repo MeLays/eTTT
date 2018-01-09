@@ -9,6 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class Tools {
 	
@@ -171,6 +175,19 @@ public class Tools {
 		} catch (Exception e) {
 			return locs;
 		}
+	}
+	
+	public static Entity getLastEntityDamager(Entity entity) {
+		EntityDamageEvent event = entity.getLastDamageCause();
+		if (event != null && !event.isCancelled() && (event instanceof EntityDamageByEntityEvent)) {
+			Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+			if (damager instanceof Projectile) {
+				Object shooter = ((Projectile) damager).getShooter();
+				if (shooter != null && (shooter instanceof Entity)) return (Entity) shooter;
+			}
+			return damager;
+		}
+		return null;
 	}
 	
 }

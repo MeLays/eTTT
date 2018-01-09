@@ -25,7 +25,7 @@ public class InventoryDragEventListener implements Listener{
 	@EventHandler
 	public void onInventoryClick(InventoryDragEvent e) {
 		Player p = (Player) e.getWhoClicked();
-		if (main.getArenaManager().isInGame(p)) {
+		if (main.getArenaManager().isInGame(p) || main.getBungeeCordLobby().contains(p)) {
 			if (e.getInventory().getType() == InventoryType.CRAFTING) {
 				e.setCancelled(true);
 			}

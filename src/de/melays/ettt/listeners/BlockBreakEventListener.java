@@ -23,7 +23,7 @@ public class BlockBreakEventListener implements Listener{
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		Player p = e.getPlayer();
-		if (main.getArenaManager().isInGame(p)) {
+		if (main.getArenaManager().isInGame(p) || main.getBungeeCordLobby().contains(p)) {
 			//Arena arena = main.getArenaManager().searchPlayer(p);
 			
 			e.setCancelled(true);

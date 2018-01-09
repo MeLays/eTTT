@@ -23,7 +23,7 @@ public class BlockPlaceEventListener implements Listener{
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
-		if (main.getArenaManager().isInGame(p)) {
+		if (main.getArenaManager().isInGame(p)  || main.getBungeeCordLobby().contains(p)) {
 			//Arena arena = main.getArenaManager().searchPlayer(p);
 			
 			e.setCancelled(true);

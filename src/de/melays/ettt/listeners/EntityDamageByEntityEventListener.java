@@ -9,41 +9,31 @@ package de.melays.ettt.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import de.melays.ettt.Main;
 import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.ArenaState;
 
-public class EntityDamageEventListener implements Listener{
+public class EntityDamageByEntityEventListener implements Listener{
 
 	Main main;
 	
-	public EntityDamageEventListener (Main main) {
+	public EntityDamageByEntityEventListener (Main main) {
 		this.main = main;
 	}
 	
 	@EventHandler
-	public void onEntityDamage(EntityDamageEvent e) {
-		if (e.getEntity() instanceof Player) {
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
 			Player p = (Player) e.getEntity();
+			Player damager = (Player) e.getEntity();
 			if (main.getArenaManager().isInGame(p)) {
 				Arena arena = main.getArenaManager().searchPlayer(p);
 				
 				//Arena relevant Event stuff
-				if (arena.state != ArenaState.GAME || arena.spectators.contains(p)) {
+				if (arena.state != ArenaState.GAME || arena.spectators.contains(damager)) {
 					e.setCancelled(true);
 				}
-				else if (arena.state == ArenaState.GAME) {
-					if (p.getHealth() - e.getDamage() <= 0) {
-						e.setCancelled(true);
-						arena.roleManager.callKill(p);
-					}
-				}
-
-			}
-			else if (main.getBungeeCordLobby().contains(p)) {
-				e.setCancelled(true);
 			}
 		}
 	}

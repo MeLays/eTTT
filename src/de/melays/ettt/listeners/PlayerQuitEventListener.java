@@ -22,6 +22,13 @@ public class PlayerQuitEventListener implements Listener{
 		if (main.getArenaManager().isInGame(p)) {
 			main.getArenaManager().searchPlayer(p).leave(p);
 		}
+		else if (main.isBungeeMode() && main.getBungeeCordLobby() != null) {
+			main.getBungeeCordLobby().remove(p);
+		}
+		
+		if (!main.getConfig().getBoolean("server.join_leave_messages")) {
+			e.setQuitMessage(null);
+		}
 		
 	}
 	

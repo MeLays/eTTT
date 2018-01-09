@@ -43,9 +43,9 @@ public class ArenaScoreboard {
 		int value = lines.size();
 		for (String s : lines) {
 			if (s.equals("time-line")) {
-				String divider = Main.c(arena.main.getSettingsFile().getConfiguration().getString("game.scoreboard.game.spectating.divider"));
-				String minutes = Main.c(arena.main.getSettingsFile().getConfiguration().getString("game.scoreboard.game.spectating.minutes"));
-				String seconds = Main.c(arena.main.getSettingsFile().getConfiguration().getString("game.scoreboard.game.spectating.seconds"));
+				String divider = Main.c(arena.main.getSettingsFile().getConfiguration().getString("game.scoreboard.game.spectating.timer.divider"));
+				String minutes = Main.c(arena.main.getSettingsFile().getConfiguration().getString("game.scoreboard.game.spectating.timer.minutes"));
+				String seconds = Main.c(arena.main.getSettingsFile().getConfiguration().getString("game.scoreboard.game.spectating.timer.seconds"));
 				int sec = (arena.counter) % 60;
 				int min = ((arena.counter) - sec) / 60;
 				minutes = minutes.replaceAll("%minutes%", String.format("%02d", min) + "");

@@ -6,7 +6,9 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.PlayerTools;
@@ -38,7 +40,7 @@ public class Arena {
 	//Players
 	public ArrayList<Player> spectators = new ArrayList<Player>();
 	HashMap<Player , ScoreBoardTools> scoreboard = new HashMap<Player , ScoreBoardTools>();
-	RoleManager roleManager;
+	public RoleManager roleManager;
 	RolePackage rolePackage;
 	
 	//Counter
@@ -73,6 +75,7 @@ public class Arena {
 	
 	public void stop() {
 		ArrayList<Player> all = this.getAll();
+		this.roleManager.resetTabColors();
 		lobby.players = null;
 		this.roleManager.traitors = null;
 		this.roleManager.detectives = null;
@@ -84,6 +87,7 @@ public class Arena {
 		for (Player p : all) {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 			p.teleport(main.getArenaManager().getGlobalLobby());
+			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 			PlayerTools.resetPlayer(p);
 		}
 	}
@@ -160,7 +164,36 @@ public class Arena {
 	}
 	
 	public void checkWin() {
-		//TODO
+		if (this.roleManager.traitors.size() == 0) {
+			for (Player p : this.getAllPlaying()) {
+				if (roleManager.getRole(p) == Role.DETECTIVE || roleManager.getRole(p) == Role.INNOCENT) {
+					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.won", true));
+				}
+				else {
+					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.lost", true));
+				}
+			}
+			String traitors = this.roleManager.listToString(this.roleManager.traitors_beginning , main.getMessageFetcher().getMessage("game.role.traitor_spacer", true));
+			for (String s : main.getMessageFetcher().getMessageFetcher().getStringList("game.end.innocent_win")) {
+				this.broadcast(Main.c(s).replaceAll("%prefix%", main.prefix).replaceAll("%traitors%", traitors));
+			}
+			switchToEnd();
+		}
+		else if (this.roleManager.innocents.size() + this.roleManager.detectives.size() == 0) {
+			for (Player p : this.getAllPlaying()) {
+				if (roleManager.getRole(p) == Role.TRAITOR) {
+					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.won", true));
+				}
+				else {
+					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.lost", true));
+				}
+			}
+			String traitors = this.roleManager.listToString(this.roleManager.traitors_beginning , main.getMessageFetcher().getMessage("game.role.traitor_spacer", true));
+			for (String s : main.getMessageFetcher().getMessageFetcher().getStringList("game.end.traitor_win")) {
+				this.broadcast(Main.c(s).replaceAll("%prefix%", main.prefix).replaceAll("%traitors%", traitors));
+			}
+			switchToEnd();
+		}
 	}
 	
 	public void leave(Player p) {
@@ -210,6 +243,12 @@ public class Arena {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.game").toUpperCase()));
 			ArenaScoreboard.createPlayerScoreboard(this, p);
 			i++;
+			
+			//TEST
+			p.getInventory().addItem(new ItemStack(Material.STONE_SWORD));
+			p.getInventory().addItem(new ItemStack(Material.BOW));
+			p.getInventory().addItem(new ItemStack(Material.ARROW , 8));
+			
 		}
 		this.roleManager.none.addAll(players);
 		updateAll();
@@ -248,12 +287,30 @@ public class Arena {
 				if (instance.state == ArenaState.GAME) {
 					
 					if (counter == 0) {
-						//TODO
+						broadcast(main.getMessageFetcher().getMessage("game.end.player.draw", true));
+						String traitors = roleManager.listToString(roleManager.traitors_beginning , main.getMessageFetcher().getMessage("game.role.traitor_spacer", true));
+						for (String s : main.getMessageFetcher().getMessageFetcher().getStringList("game.end.draw")) {
+							broadcast(Main.c(s).replaceAll("%prefix%", main.prefix).replaceAll("%traitors%", traitors));
+						}
+						switchToEnd();
 						return;
 					}
 					
 					if (((counter >= 30 && counter % 15 == 0) || (counter < 30 && counter % 10 == 0) || counter <= 5) && counter <= 90) {
 						broadcast(main.getMessageFetcher().getMessage("game.countdown.end", true).replaceAll("%seconds%", counter + ""));
+					}
+					
+					counter -= 1;
+				}
+				
+				if (instance.state == ArenaState.END) {
+					
+					if (counter == 0) {
+						restart();
+					}
+					
+					if (((counter >= 30 && counter % 15 == 0) || (counter < 30 && counter % 10 == 0) || counter <= 5) && counter <= 90) {
+						broadcast(main.getMessageFetcher().getMessage("game.countdown.stop", true).replaceAll("%seconds%", counter + ""));
 					}
 					
 					counter -= 1;
@@ -271,6 +328,12 @@ public class Arena {
 		updateAll();
 	}
 	
+	public void switchToEnd() {
+		this.state = ArenaState.END;
+		this.counter = this.end_counter;
+		updateAll();
+	}
+	
 	public void updateAll() {
 		for (Player p : instance.getAll()) {
 			if (this.spectators.contains(p)) {
@@ -281,6 +344,7 @@ public class Arena {
 			}
 		}
 		roleManager.updateTabColors();
+		updateVisibility();
 	}
 	
 	public void updateVisibility() {
@@ -297,11 +361,12 @@ public class Arena {
 				p.showPlayer(p1);
 			}
 		}
-		for (Player p : this.getAllPlaying()) {
-			for (Player p1 : this.spectators) {
-				p.hidePlayer(p1);
+		if (this.state != ArenaState.END)
+			for (Player p : this.getAllPlaying()) {
+				for (Player p1 : this.spectators) {
+					p.hidePlayer(p1);
+				}
 			}
-		}
 	}
 	
 }

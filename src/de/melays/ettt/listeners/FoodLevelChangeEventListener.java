@@ -33,6 +33,9 @@ public class FoodLevelChangeEventListener implements Listener{
 				e.setCancelled(true);
 			}
 		}
+		else if (main.getBungeeCordLobby().contains(p)) {
+			e.setCancelled(true);
+		}
 	}
 	
 }

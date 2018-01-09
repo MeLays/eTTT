@@ -62,6 +62,24 @@ public class PlayerInteractEventListener implements Listener{
 				
 			}
 		}
+		else if (main.getBungeeCordLobby().contains(p)) {
+			e.setCancelled(true);
+			//Item Interact Check
+			if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK 
+					|| e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null) {
+				if (main.getItemManager().isItem("lobby.roleselector", e.getItem())) {
+					main.getBungeeCordLobby().roleMenus.get(p).open();
+				}
+				else if (main.getItemManager().isItem("lobby.leave", e.getItem())) {
+					if (main.isBungeeMode()) {
+						ByteArrayDataOutput out = ByteStreams.newDataOutput();
+						out.writeUTF("Connect");
+						out.writeUTF(main.getConfig().getString("bungeecord.lobbyserver"));
+						p.sendPluginMessage(main, "BungeeCord", out.toByteArray());
+					}
+				}
+			}
+		}
 	}
 	
 }
