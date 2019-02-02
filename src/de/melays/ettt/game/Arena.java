@@ -92,19 +92,21 @@ public class Arena {
 		this.spectators = null;
 		Bukkit.getScheduler().cancelTask(id);
 		main.getArenaManager().unregister(this);
-		if (main.isBungeeMode() && main.current == this) {
+		lobby.destroy();
+		if (main.isBungeeMode()) {
 			main.resetBungeeLobby();
 		}
 		for (Player p : all) {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 			p.teleport(main.getArenaManager().getGlobalLobby());
 			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			p.setFlying(false);
 			PlayerTools.resetPlayer(p);
-			if (main.isBungeeMode() && main.current == this) {
+			if (main.isBungeeMode()) {
 				main.getBungeeCordLobby().join(p);
 			}
 		}
-		if (main.isBungeeMode() && main.current == this) {
+		if (main.isBungeeMode()) {
 			main.current = null;
 		}
 		this.mapReset.resetAll();

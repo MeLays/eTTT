@@ -36,6 +36,8 @@ public class Lobby {
 	public HashMap<Player , RoleChooseMenu> roleMenus = new HashMap<Player , RoleChooseMenu>();
 	RolePackage rolePackage = new RolePackage();
 	
+	boolean destroyed = false;
+	
 	public Lobby (Main main , Location loc) {
 		this.main = main;
 		this.lobby = loc;
@@ -68,6 +70,11 @@ public class Lobby {
 		return this.players;
 	}
 	
+	public void destroy() {
+		Bukkit.getScheduler().cancelTask(id);
+		destroyed = true;
+	}
+	
 	//Loop
 	
 	int counter = 0;
@@ -80,6 +87,9 @@ public class Lobby {
 
 			@Override
 			public void run() {
+				
+				if (destroyed) return;
+				
 				for (Player p : getPlayers()) {
 					updateScoreBoard(p);
 				}
@@ -201,6 +211,11 @@ public class Lobby {
 	}
 	
 	public void moveToArena() {
+		if (arena == null) {
+			ArrayList<Arena> arenas = new ArrayList<Arena>(main.getArenaManager().arenas.values());
+			Collections.shuffle(arenas);
+			arena = arenas.get(0);
+		}
 		@SuppressWarnings("unchecked")
 		ArrayList<Player> all = (ArrayList<Player>) players.clone();
 		players.clear();

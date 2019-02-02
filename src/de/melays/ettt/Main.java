@@ -117,6 +117,9 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void resetBungeeLobby() {
+		if (this.bungeeCordLobby != null) {
+			this.bungeeCordLobby.destroy();
+		}
 		try {
 			this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
 			this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
@@ -124,6 +127,7 @@ public class Main extends JavaPlugin{
 				this.bungeeCordLobby.setMode(LobbyMode.VOTING);
 			this.bungeeCordLobby.startLoop();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
