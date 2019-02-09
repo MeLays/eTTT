@@ -18,6 +18,7 @@ import de.melays.ettt.listeners.EntityDamageEventListener;
 import de.melays.ettt.listeners.FoodLevelChangeEventListener;
 import de.melays.ettt.listeners.InventoryClickEventListener;
 import de.melays.ettt.listeners.InventoryDragEventListener;
+import de.melays.ettt.listeners.PlayerChatEventListener;
 import de.melays.ettt.listeners.PlayerDropItemEventListener;
 import de.melays.ettt.listeners.PlayerInteractEventListener;
 import de.melays.ettt.listeners.PlayerJoinEventListener;
@@ -104,6 +105,7 @@ public class Main extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new FoodLevelChangeEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMoveEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerChatEventListener(this), this);
 		
 		//BungeeCord Channel
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

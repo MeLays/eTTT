@@ -1,5 +1,5 @@
 name: eTTT
-version: 4.0.0.1 indev
+version: 4.0.0.3 indev
 description: eTTT Plugin by melays.de
 author: melays
 website: http://melays.de/
@@ -12,5 +12,5 @@ commands:
     usage: /ttt help
   tttsetup:
     description: Manage the eTTT Plugin
-    aliases: [etttsetup , ttt-setup , ett-setup]
+    aliases: [etttsetup , ttt-setup , ettt-setup]
     usage: /ttt help

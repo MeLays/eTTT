@@ -142,7 +142,7 @@ public class SetupCommand implements CommandExecutor {
 				spawnpoints = missing;
 				canLoad = false;
 			}
-			sender.sendMessage(Main.c("   &8["+spawnpoints+"&8] &eAdd more spawnpoints than maximal players ["+Tools.getLocationsCounting(main.getArenaManager().getConfiguration() , args[1].toLowerCase()+".spawns").size()+" set] (/ttt-setup addpspawn)"));
+			sender.sendMessage(Main.c("   &8["+spawnpoints+"&8] &eAdd more spawnpoints than maximal players ["+Tools.getLocationsCounting(main.getArenaManager().getConfiguration() , args[1].toLowerCase()+".spawns").size()+" set] (/ttt-setup addspawn)"));
 			
 			String arenaarea = done;
 			if (!Tools.isLocationSet(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.min") || !Tools.isLocationSet(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.max")) {

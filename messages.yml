@@ -22,6 +22,13 @@ unknown_arena: "%prefix% Unknown arena!"
 already_ingame: "%prefix% You are already ingame!"
 full: "%prefix% The arena you are trying to join is full!"
 join_error: "%prefix% An error occured while joining this arena!"
+chat:
+  error:
+    inno_traitorchat: "%prefix% &cYou are an innocent and can't talk in the traitorchat."
+  normal: " &8- &e%playername% &a> &7%msg%"
+  normal_detective: " &8- &9%playername% &a> &7%msg%"
+  spectator: " &8- &7&o%playername% > &8%msg%"
+  traitorchat: " &7[&4&lT&7] &c%playername% &4> &c%msg%"
 game:
   killed: "%prefix% You have been killed and are now spectating."
   kill:
