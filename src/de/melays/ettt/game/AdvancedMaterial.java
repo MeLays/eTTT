@@ -9,13 +9,14 @@ package de.melays.ettt.game;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 
 public class AdvancedMaterial {
 	
 	Material m;
-	byte data = 0;
+	BlockData data = null;
 	
-	public AdvancedMaterial (Material m , byte data) {
+	public AdvancedMaterial (Material m , BlockData data) {
 		this.m = m;
 		this.data = data;
 	}
@@ -28,7 +29,7 @@ public class AdvancedMaterial {
 		return m;
 	}
 	
-	public byte getData() {
+	public BlockData getData() {
 		return data;
 	}
 	
@@ -36,9 +37,9 @@ public class AdvancedMaterial {
 		updateBlock(loc.getBlock());
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void updateBlock(Block b) {
 		b.setType(m);
-		b.setData(data);
+		if (data != null)
+			b.setBlockData(data);
 	}
 }

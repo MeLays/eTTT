@@ -36,7 +36,7 @@ public class MarkerTool implements Listener {
 	HashMap<UUID , Location> rightclick = new HashMap<UUID , Location>();
 	
 	public void givePlayer(Player p) {
-		ItemStack stack = new ItemStack(Material.GOLD_AXE);
+		ItemStack stack = new ItemStack(Material.GOLDEN_AXE);
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "eTTT" + ChatColor.GRAY + " Selection Tool");
 		stack.setItemMeta(meta);
@@ -69,7 +69,7 @@ public class MarkerTool implements Listener {
 		if (e.getItem() == null) {
 			return;
 		}
-		if (e.getItem().getType() != Material.GOLD_AXE) {
+		if (e.getItem().getType() != Material.GOLDEN_AXE) {
 			return;
 		}
 		if (!e.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "eTTT" + ChatColor.GRAY + " Selection Tool")) {

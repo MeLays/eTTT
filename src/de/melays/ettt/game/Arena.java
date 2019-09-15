@@ -389,20 +389,20 @@ public class Arena {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (!this.getAll().contains(p)) {
 				for (Player p1 : this.getAll()) {
-					p.hidePlayer(p1);
-					p1.hidePlayer(p);
+					p.hidePlayer(main ,p1);
+					p1.hidePlayer(main ,p);
 				}
 			}
 		}
 		for (Player p : this.getAll()) {
 			for (Player p1 : this.getAll()) {
-				p.showPlayer(p1);
+				p.showPlayer(main ,p1);
 			}
 		}
 		if (this.state != ArenaState.END)
 			for (Player p : this.getAllPlaying()) {
 				for (Player p1 : this.spectators) {
-					p.hidePlayer(p1);
+					p.hidePlayer(main ,p1);
 				}
 			}
 	}

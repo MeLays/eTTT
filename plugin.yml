@@ -5,6 +5,7 @@ author: melays
 website: http://melays.de/
 main: de.melays.ettt.Main
 softdepend: [StatsAPI]
+api-version: 1.14
 commands:
   ttt:
     description: Manage the eTTT Plugin

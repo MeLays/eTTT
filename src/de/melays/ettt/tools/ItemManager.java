@@ -38,16 +38,9 @@ public class ItemManager {
 		String data_str = getItemFile().getString(id + ".data");
 		String displayname = getItemFile().getString(id + ".displayname");
 		
-		Material material = Material.getMaterial(material_str);
+		Material material = Material.getMaterial(material_str.toUpperCase());
 		if (material == null) {
-			try {
-				material = Material.getMaterial(Integer.parseInt(material_str));
-				if (material == null) {
-					material = Material.PAPER;
-				}
-			} catch (NumberFormatException e) {
-				material = Material.PAPER;
-			}
+			material = Material.PAPER;
 		}
 		
 		if (!compare.getType().equals(material)) {
@@ -77,16 +70,9 @@ public class ItemManager {
 		String material_str = getItemFile().getString(id + ".material");
 		String data_str = getItemFile().getString(id + ".data");
 		
-		Material material = Material.getMaterial(material_str);
+		Material material = Material.getMaterial(material_str.toUpperCase());
 		if (material == null) {
-			try {
-				material = Material.getMaterial(Integer.parseInt(material_str));
-				if (material == null) {
-					material = Material.PAPER;
-				}
-			} catch (NumberFormatException e) {
-				material = Material.PAPER;
-			}
+			material = Material.PAPER;
 		}
 		
 		if (!compare.getType().equals(material)) {
@@ -114,16 +100,9 @@ public class ItemManager {
 		String displayname = getItemFile().getString(id + ".displayname");
 		List<String> lore = getItemFile().getStringList(id + ".lore");
 		
-		Material material = Material.getMaterial(material_str);
+		Material material = Material.getMaterial(material_str.toUpperCase());
 		if (material == null) {
-			try {
-				material = Material.getMaterial(Integer.parseInt(material_str));
-				if (material == null) {
-					material = Material.PAPER;
-				}
-			} catch (NumberFormatException e) {
-				material = Material.PAPER;
-			}
+			material = Material.PAPER;
 		}
 		
 		byte data = 0;

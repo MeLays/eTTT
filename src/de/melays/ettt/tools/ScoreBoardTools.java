@@ -29,7 +29,7 @@ public class ScoreBoardTools {
 	
 	public void initialize(String title) {
         board = Bukkit.getScoreboardManager().getNewScoreboard();
-        obj = board.registerNewObjective(title, "dummy");
+        obj = board.registerNewObjective(title, "dummy" , title);
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         obj.setDisplayName(title);
 	}

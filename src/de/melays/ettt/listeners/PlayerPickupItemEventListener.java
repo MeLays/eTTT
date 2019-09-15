@@ -9,7 +9,7 @@ package de.melays.ettt.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.game.Arena;
@@ -24,8 +24,11 @@ public class PlayerPickupItemEventListener implements Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerPickupItem(PlayerPickupItemEvent e) {
-		Player p = e.getPlayer();
+	public void onPlayerPickupItem(EntityPickupItemEvent e) {
+		if (!(e.getEntity() instanceof Player)) {
+			return;
+		}
+		Player p = (Player)e.getEntity();
 		if (main.getArenaManager().isInGame(p)) {
 			Arena arena = main.getArenaManager().searchPlayer(p);
 			

@@ -8,6 +8,8 @@ package de.melays.ettt;
 
 import java.util.ArrayList;
 
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -27,8 +29,11 @@ public class PlayerTools {
 		p.closeInventory();
 		clearInventory(p);
 		p.setFallDistance(0);
-		p.setMaxHealth(20);
-		p.setHealth(p.getMaxHealth());
+		
+		AttributeInstance healthAttribute = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+		healthAttribute.setBaseValue(20);
+		
+		p.setHealth(20);
 		p.setFoodLevel(40);
 		p.setLevel(0);
 		p.setExp(0);
