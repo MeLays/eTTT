@@ -15,119 +15,78 @@
 package io.github.theluca98.textapi;
 
 import com.google.common.base.Preconditions;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONObject;
 
 /**
  * Represents a message displayed above the hotbar.
  *
- * @author Luca
+ * @author Luca modfied by Schwalboss with the help of ConnorLinfoot's ActionBarAPI
+ * https://github.com/ConnorLinfoot/ActionBarAPI/
  */
 public class ActionBar {
+	
+	String title;
+	String nmsver;
 
-    /**
-     * Used to toggle debug messages. Disabled by default.
-     *
-     * @deprecated No longer in use.
-     */
-    @Deprecated
-    public static boolean DEBUG;
-
-    private JSONObject json;
-
-    /**
+	/**
      * Constructs an {@link ActionBar} object based on plain text.
      *
      * @param text Text to display.
      */
     public ActionBar(String text) {
         Preconditions.checkNotNull(text);
-        this.json = Title.convert(text);
+        this.title = text;
+        
+        nmsver = Bukkit.getServer().getClass().getPackage().getName();
+        nmsver = nmsver.substring(nmsver.lastIndexOf(".") + 1);
+        
     }
 
-    /**
-     * Constructs an {@link ActionBar} object based on JSON-formatted text.
-     *
-     * @param json Text to display Must be in /tellraw JSON format.
-     */
-    public ActionBar(JSONObject json) {
-        Preconditions.checkNotNull(json);
-        Preconditions.checkArgument(!json.isEmpty());
-        this.json = json;
-    }
-
-    /**
-     * Sends an action bar message to a specific player.
-     *
-     * @param player The player to send the message to.
-     */
     public void send(Player player) {
-        Preconditions.checkNotNull(player);
+    	String message = this.title;
+        if (!player.isOnline()) {
+            return; // Player may have logged out
+        }
+
         try {
-            Object handle = player.getClass().getMethod("getHandle").invoke(player),
-                    connection = handle.getClass().getField("playerConnection").get(handle),
-                    component = ServerPackage.MINECRAFT.getClass("IChatBaseComponent$ChatSerializer").getMethod("a", String.class).invoke(null, json.toString()),
-                    packet = ServerPackage.MINECRAFT.getClass("PacketPlayOutChat").getConstructor(ServerPackage.MINECRAFT.getClass("IChatBaseComponent"), byte.class).newInstance(component, (byte) 2);
-            connection.getClass().getMethod("sendPacket", ServerPackage.MINECRAFT.getClass("Packet")).invoke(connection, packet);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + nmsver + ".entity.CraftPlayer");
+            Object craftPlayer = craftPlayerClass.cast(player);
+            Object packet;
+            Class<?> packetPlayOutChatClass = Class.forName("net.minecraft.server." + nmsver + ".PacketPlayOutChat");
+            Class<?> packetClass = Class.forName("net.minecraft.server." + nmsver + ".Packet");
+
+            Class<?> chatComponentTextClass = Class.forName("net.minecraft.server." + nmsver + ".ChatComponentText");
+            Class<?> iChatBaseComponentClass = Class.forName("net.minecraft.server." + nmsver + ".IChatBaseComponent");
+            try {
+                Class<?> chatMessageTypeClass = Class.forName("net.minecraft.server." + nmsver + ".ChatMessageType");
+                Object[] chatMessageTypes = chatMessageTypeClass.getEnumConstants();
+                Object chatMessageType = null;
+                for (Object obj : chatMessageTypes) {
+                    if (obj.toString().equals("GAME_INFO")) {
+                        chatMessageType = obj;
+                    }
+                }
+                Object chatCompontentText = chatComponentTextClass.getConstructor(new Class<?>[]{String.class}).newInstance(message);
+                packet = packetPlayOutChatClass.getConstructor(new Class<?>[]{iChatBaseComponentClass, chatMessageTypeClass}).newInstance(chatCompontentText, chatMessageType);
+            } catch (ClassNotFoundException cnfe) {
+                Object chatCompontentText = chatComponentTextClass.getConstructor(new Class<?>[]{String.class}).newInstance(message);
+                packet = packetPlayOutChatClass.getConstructor(new Class<?>[]{iChatBaseComponentClass, byte.class}).newInstance(chatCompontentText, (byte) 2);
+            }
+            
+            Method craftPlayerHandleMethod = craftPlayerClass.getDeclaredMethod("getHandle");
+            Object craftPlayerHandle = craftPlayerHandleMethod.invoke(craftPlayer);
+            Field playerConnectionField = craftPlayerHandle.getClass().getDeclaredField("playerConnection");
+            Object playerConnection = playerConnectionField.get(craftPlayerHandle);
+            Method sendPacketMethod = playerConnection.getClass().getDeclaredMethod("sendPacket", packetClass);
+            sendPacketMethod.invoke(playerConnection, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    /**
-     * Sends an action bar message to all online players.
-     */
-    public void sendToAll() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            send(player);
-        }
-    }
-
-    /**
-     * Changes the text to display.
-     *
-     * @param text Text to display.
-     */
-    public void setText(String text) {
-        Preconditions.checkNotNull(text);
-        this.json = Title.convert(text);
-    }
-
-    /**
-     * Changes the text to display.
-     *
-     * @param json Text to display. Must be in /tellraw JSON format.
-     */
-    public void setJsonText(JSONObject json) {
-        Preconditions.checkNotNull(json);
-        Preconditions.checkArgument(!json.isEmpty());
-        this.json = json;
-    }
-
-    /**
-     * This method has been kept just to ensure backwards compatibility with older versions of TextAPI.
-     * It is not supported and will be removed in a future release.
-     *
-     * @param player  The player to send the message to.
-     * @param message The message to send.
-     * @deprecated Please create a new {@link ActionBar} instance instead.
-     */
-    @Deprecated
-    public static void send(Player player, String message) {
-        new ActionBar(message).send(player);
-    }
-
-    /**
-     * This method has been kept just to ensure backwards compatibility with older versions of TextAPI.
-     * It is not supported and will be removed in a future release.
-     *
-     * @param message The message to send.
-     * @deprecated Please create a new {@link ActionBar} instance instead.
-     */
-    @Deprecated
-    public static void sendToAll(String message) {
-        new ActionBar(message).sendToAll();
     }
 
 }

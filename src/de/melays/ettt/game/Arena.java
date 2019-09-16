@@ -347,7 +347,7 @@ public class Arena {
 						restart();
 					}
 					
-					if (((counter >= 30 && counter % 15 == 0) || (counter < 30 && counter % 10 == 0) || counter <= 5) && counter <= 90) {
+					else if (((counter >= 30 && counter % 15 == 0) || (counter < 30 && counter % 10 == 0) || counter <= 5) && counter <= 90) {
 						broadcast(main.getMessageFetcher().getMessage("game.countdown.stop", true).replaceAll("%seconds%", counter + ""));
 					}
 					

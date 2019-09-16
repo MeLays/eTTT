@@ -38,7 +38,13 @@ public class ItemManager {
 		String data_str = getItemFile().getString(id + ".data");
 		String displayname = getItemFile().getString(id + ".displayname");
 		
-		Material material = Material.getMaterial(material_str.toUpperCase());
+		Material material;
+		try {
+			material = Material.getMaterial(material_str.toUpperCase());
+		}catch(Exception e) {
+			material = Material.PAPER;
+
+		}
 		if (material == null) {
 			material = Material.PAPER;
 		}
@@ -70,7 +76,13 @@ public class ItemManager {
 		String material_str = getItemFile().getString(id + ".material");
 		String data_str = getItemFile().getString(id + ".data");
 		
-		Material material = Material.getMaterial(material_str.toUpperCase());
+		Material material;
+		try {
+			material = Material.getMaterial(material_str.toUpperCase());
+		}catch(Exception e) {
+			material = Material.PAPER;
+
+		}
 		if (material == null) {
 			material = Material.PAPER;
 		}
@@ -100,7 +112,13 @@ public class ItemManager {
 		String displayname = getItemFile().getString(id + ".displayname");
 		List<String> lore = getItemFile().getStringList(id + ".lore");
 		
-		Material material = Material.getMaterial(material_str.toUpperCase());
+		Material material;
+		try {
+			material = Material.getMaterial(material_str.toUpperCase());
+		}catch(Exception e) {
+			material = Material.PAPER;
+
+		}
 		if (material == null) {
 			material = Material.PAPER;
 		}
