@@ -32,10 +32,8 @@ public class ItemManager {
 		saveFile();
 	}
 
-	@SuppressWarnings("deprecation")
 	public boolean isItem (String id , ItemStack compare) {
 		String material_str = getItemFile().getString(id + ".material");
-		String data_str = getItemFile().getString(id + ".data");
 		String displayname = getItemFile().getString(id + ".displayname");
 		
 		Material material;
@@ -53,17 +51,6 @@ public class ItemManager {
 			return false;
 		}
 		
-		byte data = 0;
-		try {
-			data = (byte) Integer.parseInt(data_str);
-		} catch (NumberFormatException e) {
-
-		}
-		
-		if (compare.getData().getData() != data) {
-			return false;
-		}
-		
 		if (!compare.getItemMeta().getDisplayName().equals(Main.c(displayname))) {
 			return false;
 		}
@@ -71,10 +58,8 @@ public class ItemManager {
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean isItemIgnoreName (String id , ItemStack compare) {
 		String material_str = getItemFile().getString(id + ".material");
-		String data_str = getItemFile().getString(id + ".data");
 		
 		Material material;
 		try {
@@ -91,24 +76,11 @@ public class ItemManager {
 			return false;
 		}
 		
-		byte data = 0;
-		try {
-			data = (byte) Integer.parseInt(data_str);
-		} catch (NumberFormatException e) {
-
-		}
-		
-		if (compare.getData().getData() != data) {
-			return false;
-		}
-		
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public ItemStack getItem (String id) {
 		String material_str = getItemFile().getString(id + ".material");
-		String data_str = getItemFile().getString(id + ".byte");
 		String displayname = getItemFile().getString(id + ".displayname");
 		List<String> lore = getItemFile().getStringList(id + ".lore");
 		
@@ -123,14 +95,7 @@ public class ItemManager {
 			material = Material.PAPER;
 		}
 		
-		byte data = 0;
-		try {
-			data = (byte) Integer.parseInt(data_str);
-		} catch (NumberFormatException e) {
-
-		}
-		ItemStack stack = new ItemStack(material , 1 , data);
-		stack.getData().setData(data);
+		ItemStack stack = new ItemStack(material , 1);
 		ItemMeta meta = stack.getItemMeta();
 		try {
 			meta.setDisplayName(Main.c(displayname));

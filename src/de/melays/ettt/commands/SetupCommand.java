@@ -28,14 +28,15 @@ public class SetupCommand implements CommandExecutor {
 		helpSender.addAlias("help [page]", "Shows this overview", "Use 'help <page>' to get to the next help pages" , "/ttt-setup help");
 		helpSender.addAlias("reload", "Reloads all files", "Reloads all files and configuration files" , "/ttt-setup reload");
 		helpSender.addAlias("create ...", "Create an arena", "Use this command to create a new arena" , "/ttt-setup create <name> <minimal players> <maximal players>");
-		helpSender.addAlias("check [arena]", "Checks the setup progress", "Checks the setup progress of an arena" , "/ttt-setup check <arena>");
-		helpSender.addAlias("setgloballobby", "Sets the lobby location", "Sets the location where you will be teleported after the game" , "/ttt-setup setgloballobby");
-		helpSender.addAlias("setlobby", "Sets the arena lobby", "Sets the arena lobby\n&cNot neccessarry in BungeeCord-mode" , "/ttt-setup setlobby <name>");
-		helpSender.addAlias("setspectatorspawn", "Sets the spectator spawn", "Sets the arena spectator spawn" , "/ttt-setup setspectatorspawn <name>");
-		helpSender.addAlias("addspawn", "Add a player spawn", "Add a player spawn where players will spawn ingame" , "/ttt-setup addspawn <name>");
+		helpSender.addAlias("check <arena>", "Checks the setup progress", "Checks the setup progress of an arena" , "/ttt-setup check <arena>");
+		helpSender.addAlias("setgloballobby <arena>", "Sets the lobby location", "Sets the location where you will be teleported after the game" , "/ttt-setup setgloballobby");
+		helpSender.addAlias("setlobby <arena>", "Sets the arena lobby", "Sets the arena lobby\n&cNot neccessarry in BungeeCord-mode" , "/ttt-setup setlobby <name>");
+		helpSender.addAlias("setspectatorspawn <arena>", "Sets the spectator spawn", "Sets the arena spectator spawn" , "/ttt-setup setspectatorspawn <name>");
+		helpSender.addAlias("addspawn <arena>", "Add a player spawn", "Add a player spawn where players will spawn ingame" , "/ttt-setup addspawn <name>");
+		helpSender.addAlias("removespawn <arena> <id>", "Remove a player spawn", "Removes a player spawn" , "/ttt-setup removespawn <name> <id>");
 		helpSender.addAlias("getmarkertool", "Gets the location marker tool", "Gives you an location marker tool" , "/ttt-setup getmarkertool");
-		helpSender.addAlias("savearenaarea", "Saves the selected area", "Saves the selected area of the arena" , "/ttt-setup savearenaarea <name>");
-		helpSender.addAlias("leave", "Leaves a game", "Leaves a game (even works in bungee-mode)" , "/ttt-setup leave");
+		helpSender.addAlias("savearenaarea <arena>", "Saves the selected area", "Saves the selected area of the arena" , "/ttt-setup savearenaarea <name>");
+		helpSender.addAlias("leave", "Leaves a game", "Leaves a game (works in bungee-mode)" , "/ttt-setup leave");
 		
 		if (args.length == 0) {
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;

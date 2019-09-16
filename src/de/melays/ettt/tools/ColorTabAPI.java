@@ -53,7 +53,7 @@ public class ColorTabAPI {
 	private static String listToString( List< String > list ) {
 		String output = "";
 		for( String s : list ) {
-			output += s.replace( "&", "§" ) + "\n";
+			output += s.replace( "&", "ï¿½" ) + "\n";
 		}
 		return output.length() > 0 ? output.substring( 0, output.length() -1 ) : output;
 	}
@@ -75,26 +75,40 @@ public class ColorTabAPI {
 				Constructor< ? > constructor = getNMSClass( "PacketPlayOutScoreboardTeam" ).getConstructor();
 				Object packet = constructor.newInstance();
 				
+				Constructor< ? > ChatComponentTextConstructor = getNMSClass("ChatComponentText").getConstructor();
+				
 				List< String > contents = new ArrayList<>();
 				contents.add( p.getName() );
-				
-	            try {
+				try {
+					//1.13+
 	                setField( packet, "a", teamName );
-	                setField( packet, "b", teamName );
-	                setField( packet, "c", Main.c(prefix));
-	                setField( packet, "d", Main.c(suffix) );
-	                setField( packet, "e", "ALWAYS" );
-	                setField( packet, "h", 0 );
-	                setField( packet, "g", contents );
-	            } catch( Exception ex ) {
-	                setField( packet, "a", teamName );
-	                setField( packet, "b", teamName );
-	                setField( packet, "c", Main.c(prefix) );
-	                setField( packet, "d", Main.c(suffix) );
+	                setField( packet, "b", ChatComponentTextConstructor.newInstance(teamName));//new ChatComponentText("")
+	                setField( packet, "c", ChatComponentTextConstructor.newInstance(Main.c(prefix)) );//new ChatComponentText("")
+	                setField( packet, "d", ChatComponentTextConstructor.newInstance(Main.c(suffix)) );//new ChatComponentText("")
 	                setField( packet, "e", "ALWAYS" );
 	                setField( packet, "i", 0 );
 	                setField( packet, "h", contents );
-	            }
+				} catch( Exception ex ) {
+		            try {
+		            	//1.9+
+		                setField( packet, "a", teamName );
+		                setField( packet, "b", teamName );//new ChatComponentText("")
+		                setField( packet, "c", Main.c(prefix) );//new ChatComponentText("")
+		                setField( packet, "d", Main.c(suffix) );//new ChatComponentText("")
+		                setField( packet, "e", "ALWAYS" );
+		                setField( packet, "i", 0 );
+		                setField( packet, "h", contents );
+		            } catch( Exception ex2 ) {
+		            	//1.8
+		                setField( packet, "a", teamName );
+		                setField( packet, "b", teamName );
+		                setField( packet, "c", Main.c(prefix));
+		                setField( packet, "d", Main.c(suffix) );
+		                setField( packet, "e", "ALWAYS" );
+		                setField( packet, "h", 0 );
+		                setField( packet, "g", contents );
+		            }
+				}
 				for( Player t : receivers ) sendPacket( t, packet );
 				tabTeam.put( p.getUniqueId(), teamName);
 			} catch ( Exception e ) {
@@ -117,23 +131,33 @@ public class ColorTabAPI {
 			try {
 				Constructor< ? > constructor = getNMSClass( "PacketPlayOutScoreboardTeam" ).getConstructor();
 				Object packet = constructor.newInstance();
+				
+				Constructor< ? > ChatComponentTextConstructor = getNMSClass("ChatComponentText").getConstructor();
 	
 				List< String > contents = new ArrayList<>();
 				contents.add( p.getName() );
-				
-	            try {
+				try {
+					//1.13
 	                setField( packet, "a", teamName );
-	                setField( packet, "b", teamName );
-	                setField( packet, "e", "ALWAYS" );
-	                setField( packet, "h", 1 );
-	                setField( packet, "g", contents );
-	            } catch( Exception ex ) {
-	                setField( packet, "a", teamName );
-	                setField( packet, "b", teamName );
+	                setField( packet, "b", ChatComponentTextConstructor.newInstance(teamName) );
 	                setField( packet, "e", "ALWAYS" );
 	                setField( packet, "i", 1 );
 	                setField( packet, "h", contents );
-	            }
+				} catch( Exception ex ) {
+		            try {
+		                setField( packet, "a", teamName );
+		                setField( packet, "b", teamName );
+		                setField( packet, "e", "ALWAYS" );
+		                setField( packet, "h", 1 );
+		                setField( packet, "g", contents );
+		            } catch( Exception ex2 ) {
+		                setField( packet, "a", teamName );
+		                setField( packet, "b", teamName );
+		                setField( packet, "e", "ALWAYS" );
+		                setField( packet, "i", 1 );
+		                setField( packet, "h", contents );
+		            }
+				}
 				for( Player t : receivers ) sendPacket( t, packet );
 				tabTeam.put( p.getUniqueId(), teamName );
 			} catch ( Exception e ) {
