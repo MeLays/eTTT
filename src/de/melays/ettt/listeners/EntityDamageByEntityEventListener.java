@@ -29,7 +29,7 @@ public class EntityDamageByEntityEventListener implements Listener{
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
 			Player p = (Player) e.getEntity();
-			Player damager = (Player) e.getEntity();
+			Player damager = (Player) e.getDamager();
 			if (main.getArenaManager().isInGame(p)) {
 				Arena arena = main.getArenaManager().searchPlayer(p);
 				

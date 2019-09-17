@@ -66,6 +66,7 @@ game:
     - "%prefix% The Traitors were: %traitors%"
     - ""
   role:
+    infomation: "%prefix% There are %t% Traitor(s) and %d% Detective(s)."
     traitor_spacer: "&7, &c"
     traitor:
     - "%prefix% You are a &cTRAITOR&e!"

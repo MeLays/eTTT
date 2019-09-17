@@ -75,7 +75,9 @@ public class ColorTabAPI {
 				Constructor< ? > constructor = getNMSClass( "PacketPlayOutScoreboardTeam" ).getConstructor();
 				Object packet = constructor.newInstance();
 				
-				Constructor< ? > ChatComponentTextConstructor = getNMSClass("ChatComponentText").getConstructor();
+				getNMSClass("ChatComponentText");
+				
+				Constructor< ? > ChatComponentTextConstructor = getNMSClass("ChatComponentText").getConstructor(String.class);
 				
 				List< String > contents = new ArrayList<>();
 				contents.add( p.getName() );
@@ -89,6 +91,8 @@ public class ColorTabAPI {
 	                setField( packet, "i", 0 );
 	                setField( packet, "h", contents );
 				} catch( Exception ex ) {
+					ex.printStackTrace();
+
 		            try {
 		            	//1.9+
 		                setField( packet, "a", teamName );
@@ -112,11 +116,11 @@ public class ColorTabAPI {
 				for( Player t : receivers ) sendPacket( t, packet );
 				tabTeam.put( p.getUniqueId(), teamName);
 			} catch ( Exception e ) {
-				
+				e.printStackTrace();
 			}
 		}
 		catch ( Exception e ) {
-			
+			e.printStackTrace();
 		}
 	}
 	
@@ -132,7 +136,7 @@ public class ColorTabAPI {
 				Constructor< ? > constructor = getNMSClass( "PacketPlayOutScoreboardTeam" ).getConstructor();
 				Object packet = constructor.newInstance();
 				
-				Constructor< ? > ChatComponentTextConstructor = getNMSClass("ChatComponentText").getConstructor();
+				Constructor< ? > ChatComponentTextConstructor = getNMSClass("ChatComponentText").getConstructor(String.class);
 	
 				List< String > contents = new ArrayList<>();
 				contents.add( p.getName() );
@@ -144,6 +148,7 @@ public class ColorTabAPI {
 	                setField( packet, "i", 1 );
 	                setField( packet, "h", contents );
 				} catch( Exception ex ) {
+					ex.printStackTrace();
 		            try {
 		                setField( packet, "a", teamName );
 		                setField( packet, "b", teamName );

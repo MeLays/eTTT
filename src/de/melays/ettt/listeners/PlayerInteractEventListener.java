@@ -6,6 +6,7 @@
  ******************************************************************************/
 package de.melays.ettt.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,6 +59,27 @@ public class PlayerInteractEventListener implements Listener{
 						}
 					}
 				}
+				else if (arena.state == ArenaState.GAME || arena.state == ArenaState.WARMUP) {
+					e.setCancelled(true);
+					if (e.getClickedBlock() != null) {
+						if (e.getClickedBlock().getType() == Material.CHEST) {
+							if (!arena.chests.containsKey(e.getClickedBlock().getLocation())) {
+								arena.chests.put(e.getClickedBlock().getLocation(), main.getLootManager().getChestInventory());
+							}
+							p.openInventory(arena.chests.get(e.getClickedBlock().getLocation()));
+						}
+						else if (e.getClickedBlock().getType() == Material.ENDER_CHEST || arena.state != ArenaState.WARMUP) {
+							if (!arena.chests.containsKey(e.getClickedBlock().getLocation())) {
+								arena.chests.put(e.getClickedBlock().getLocation(), main.getLootManager().getEnderchestInventory());
+							}
+							p.openInventory(arena.chests.get(e.getClickedBlock().getLocation()));
+						}
+					}
+					
+				}
+				else if (arena.state == ArenaState.END) {
+					e.setCancelled(true);
+				}
 			}finally {
 				
 			}
@@ -83,5 +105,4 @@ public class PlayerInteractEventListener implements Listener{
 			}
 		}
 	}
-	
 }

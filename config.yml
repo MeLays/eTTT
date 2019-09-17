@@ -14,11 +14,12 @@ mapreset:
 gamemodes:
    lobby: ADVENTURE
    game: SURVIVAL
-   spectator: ADVENTURE
+   spectator: SPECTATOR
    leave: SURVIVAL
 game:
    hunger: false
-   itemdrop: false
+   itemdrop: true
+   regenerate: false
    barrier:
      leave: true
      leave-damage: 4

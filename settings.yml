@@ -125,3 +125,7 @@ game:
   inventory:
     roleselection:
       title: "&eRole selection"
+    lootchest:
+      title: "&8Chest"
+    enderchest:
+      title: "&8Enderchest"

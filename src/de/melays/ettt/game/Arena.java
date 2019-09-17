@@ -6,9 +6,8 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Inventory;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.PlayerTools;
@@ -48,6 +47,9 @@ public class Arena {
 	int warmup_counter;
 	int game_counter;
 	int end_counter;
+	
+	//Chestmap
+	public HashMap<Location, Inventory> chests = new HashMap<Location, Inventory>();
 	
 	//Map Reset
 	public MapReset mapReset;
@@ -167,6 +169,7 @@ public class Arena {
 		PlayerTools.resetPlayer(p);
 		p.setAllowFlight(true);
 		p.setFlying(true);
+		p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.spectator")));
 		updateAll();
 	}
 	
@@ -181,6 +184,7 @@ public class Arena {
 		PlayerTools.resetPlayer(p);
 		p.setAllowFlight(true);
 		p.setFlying(true);
+		p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.spectator")));
 		updateAll();
 	}
 	
@@ -248,7 +252,7 @@ public class Arena {
 		if (state == ArenaState.END && this.getAllPlaying().size() == 0) {
 			restart();
 		}
-		if (this.state != ArenaState.LOBBY) updateAll();
+		else if (this.state != ArenaState.LOBBY) updateAll();
 	}
 	
 	public void receiveFromLobby(ArrayList<Player> players , RolePackage rolePackage) {
@@ -264,12 +268,6 @@ public class Arena {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.game").toUpperCase()));
 			ArenaScoreboard.createPlayerScoreboard(this, p);
 			i++;
-			
-			//TEST
-			p.getInventory().addItem(new ItemStack(Material.STONE_SWORD));
-			p.getInventory().addItem(new ItemStack(Material.BOW));
-			p.getInventory().addItem(new ItemStack(Material.ARROW , 8));
-			
 		}
 		this.roleManager.none.addAll(players);
 		updateAll();

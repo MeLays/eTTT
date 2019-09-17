@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.PlayerTools;
+import de.melays.ettt.log.Logger;
 import de.melays.ettt.tools.ColorTabAPI;
 import de.melays.ettt.tools.Tools;
 
@@ -38,6 +42,8 @@ public class RoleManager {
 		int traitors = (main.getConfig().getInt("game.ratio.traitor") / 100) * arena.getAllPlaying().size();
 		int detectives = (main.getConfig().getInt("game.ratio.detective") / 100) * arena.getAllPlaying().size();
 		
+		Logger.log(main.prefix + " [RoleManager (arena="+arena.name+")] " + traitors + "traitor and " + detectives + " detectives.");
+				
 		if (traitors == 0) traitors = 1;
 		if (traitors + detectives > arena.getAllPlaying().size()) {
 			for (int i = 0 ; i < (traitors + detectives - arena.getAllPlaying().size()) ; i++) {
@@ -48,6 +54,9 @@ public class RoleManager {
 			}
 		}
 		if (traitors == 0 || arena.getAll().size() == 1) arena.restart();
+		
+		Logger.log(main.prefix + " [RoleManager (arena="+arena.name+")] " + traitors + "traitor and " + detectives + " detectives.");
+
 		
 		for (Player p : new ArrayList<Player>(all)) {
 			if (rolePackage.getRole(p.getUniqueId()) != null) {
@@ -151,6 +160,9 @@ public class RoleManager {
 				}
 			}
 		}
+		arena.broadcast(main.getMessageFetcher().getMessage("game.role.information", true)
+				.replace("%d%", this.detectives.size() + "")
+				.replace("%t%", this.traitors.size() + ""));
 	}
 	
 	public void resetTabColors () {
@@ -208,6 +220,15 @@ public class RoleManager {
 					killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.good", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", "0"));
 				}
 			}
+		}
+		p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_DEATH, 1, 1);
+		p.getLocation().getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 1);
+		if (main.getConfig().getBoolean("boolean.itemdrop")) {
+	        for (ItemStack i : p.getInventory().getContents())
+	        {
+	            p.getWorld().dropItemNaturally(p.getLocation(), i);
+	            p.getInventory().remove(i);
+	        }
 		}
 		arena.moveToSpectator(p);
 		arena.checkWin();

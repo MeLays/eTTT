@@ -1,0 +1,88 @@
+loot:
+   items_per_chest: 3
+   chest:
+      wooden_sword: 4
+      stone_sword: 3
+      arrow: 5
+      bow_1: 3
+      heal_1: 1
+   items_per_enderchest: 1
+   enderchest:
+      iron_sword: 5
+      diamond_sword: 2
+      bow_2: 3
+      heal_2: 1
+items:
+   wooden_sword:
+      type: WOODEN_SWORD
+      amount: 1
+      displayname: "&cSword &8- &7Level &cI"
+      lore:
+       - "&7The weakest sword"
+      enchantments: []
+      itemflags: []
+   stone_sword:
+      type: STONE_SWORD
+      amount: 1
+      displayname: "&cSword &8- &7Level &6II"
+      lore:
+       - "&7The better sword"
+      enchantments: []
+      itemflags: []
+   iron_sword:
+      type: IRON_SWORD
+      amount: 1
+      displayname: "&cSword &8- &7Level &aIII"
+      lore:
+       - "&7The nicer sword"
+      enchantments: []
+      itemflags: []
+   diamond_sword:
+      type: DIAMOND_SWORD
+      amount: 1
+      displayname: "&cSword &8- &7Level &5IV"
+      lore:
+       - "&7The epic sword"
+      enchantments: []
+      itemflags: []
+   arrow:
+      type: ARROW
+      amount: 4
+      displayname: "&7Arrow"
+      enchantments: []
+      itemflags: []
+   bow_1:
+      type: BOW
+      amount: 1
+      displayname: "&cBow &8- &7Level &cI"
+      enchantments: []
+      itemflags: []  
+   bow_2:
+      type: BOW
+      amount: 1
+      displayname: "&cBow &8- &7Level &6II"
+      enchantments:
+         ARROW_DAMAGE: 1
+      itemflags: []  
+   heal_1:
+      type: POTION
+      data: 0
+      amount: 1
+      displayname: "&cHeal &8- &7Level &cI"
+      enchantments: []
+      potion:
+         HEAL:
+            level: 1
+            time: 1
+      itemflags: []
+   heal_2:
+      type: POTION
+      data: 0
+      amount: 1
+      displayname: "&cHeal &8- &7Level &6II"
+      enchantments: []
+      potion:
+         HEAL:
+            level: 2
+            time: 1
+      itemflags: []

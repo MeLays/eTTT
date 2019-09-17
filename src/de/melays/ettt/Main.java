@@ -15,6 +15,7 @@ import de.melays.ettt.listeners.BlockBreakEventListener;
 import de.melays.ettt.listeners.BlockPlaceEventListener;
 import de.melays.ettt.listeners.EntityDamageByEntityEventListener;
 import de.melays.ettt.listeners.EntityDamageEventListener;
+import de.melays.ettt.listeners.EntityRegainHealthEventListener;
 import de.melays.ettt.listeners.FoodLevelChangeEventListener;
 import de.melays.ettt.listeners.InventoryClickEventListener;
 import de.melays.ettt.listeners.InventoryDragEventListener;
@@ -27,6 +28,7 @@ import de.melays.ettt.listeners.PlayerPickupItemEventListener;
 import de.melays.ettt.listeners.PlayerQuitEventListener;
 import de.melays.ettt.marker.MarkerTool;
 import de.melays.ettt.tools.ItemManager;
+import de.melays.ettt.tools.LootManager;
 import de.melays.ettt.tools.MessageFetcher;
 import de.melays.ettt.tools.SettingsFile;
 
@@ -50,6 +52,10 @@ public class Main extends JavaPlugin{
 	ItemManager itemManager;
 	public ItemManager getItemManager() {
 		return itemManager;
+	}
+	LootManager lootManager;
+	public LootManager getLootManager() {
+		return lootManager;
 	}
 	
 	//Tools
@@ -80,6 +86,7 @@ public class Main extends JavaPlugin{
 		this.arenaManager = new ArenaManager(this);
 		this.arenaManager.loadAll();
 		this.itemManager = new ItemManager(this);
+		this.lootManager = new LootManager(this);
 		
 		//Initialize Tools
 		this.markerTool = new MarkerTool(this);
@@ -106,6 +113,7 @@ public class Main extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new FoodLevelChangeEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMoveEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerChatEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new EntityRegainHealthEventListener(this), this);
 		
 		//BungeeCord Channel
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
