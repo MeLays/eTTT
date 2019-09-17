@@ -1,6 +1,7 @@
 package de.melays.ettt.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -41,6 +42,7 @@ public class Arena {
 	HashMap<Player , ScoreBoardTools> scoreboard = new HashMap<Player , ScoreBoardTools>();
 	public RoleManager roleManager;
 	RolePackage rolePackage;
+	HashMap<Player ,Integer> points = new HashMap<Player ,Integer>();
 	
 	//Counter
 	int counter = 0;
@@ -115,6 +117,11 @@ public class Arena {
 	}
 	
 	public void restart() {
+		
+		if (this.roleManager != null && main.addonCorpseReborn) {
+			this.roleManager.corpseContainer.removeAll();
+		}
+		
 		stop();
 		main.getArenaManager().load(name);
 	}
@@ -193,9 +200,16 @@ public class Arena {
 			for (Player p : this.getAllPlaying()) {
 				if (roleManager.getRole(p) == Role.DETECTIVE || roleManager.getRole(p) == Role.INNOCENT) {
 					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.won", true));
+					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.innocent"),
+							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_won")
+							, 0, 60, 20);
 				}
 				else {
 					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.lost", true));
+					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.innocent"),
+							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_lost")
+							, 0, 60, 20);
+
 				}
 			}
 			String traitors = this.roleManager.listToString(this.roleManager.traitors_beginning , main.getMessageFetcher().getMessage("game.role.traitor_spacer", true));
@@ -208,9 +222,15 @@ public class Arena {
 			for (Player p : this.getAllPlaying()) {
 				if (roleManager.getRole(p) == Role.TRAITOR) {
 					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.won", true));
+					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.traitor"),
+							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_won")
+							, 0, 60, 20);
 				}
 				else {
 					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.lost", true));
+					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.traitor"),
+							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_lost")
+							, 0, 60, 20);
 				}
 			}
 			String traitors = this.roleManager.listToString(this.roleManager.traitors_beginning , main.getMessageFetcher().getMessage("game.role.traitor_spacer", true));
@@ -259,6 +279,7 @@ public class Arena {
 		this.rolePackage = rolePackage;
 		this.state = ArenaState.WARMUP;
 		ArrayList<Location> spawns = Tools.getLocationsCounting(main.getArenaManager().getConfiguration(), name.toLowerCase()+".spawns");
+		Collections.shuffle(spawns);
 		int i = 0;
 		for (Player p : players) {
 			if (i >= spawns.size()) i = 0;
@@ -285,6 +306,7 @@ public class Arena {
 				
 				for (Player p : instance.getAll()) {
 					ArenaScoreboard.updateScoreBoard(instance , p);
+					roleManager.updateTabColors();
 					if (instance.state == ArenaState.GAME)
 						new ActionBar(Main.c(main.getSettingsFile().getConfiguration().getString("game.actionbar.game").replaceAll("%role%", roleManager.roleToDisplayname(roleManager.getRole(p))))).send(p);
 				}

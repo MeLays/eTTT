@@ -56,7 +56,7 @@ public class PlayerTools {
 	}
 	
 	public static void sendTitle (Player player , String title , String subtitle, int fadeInTime, int showTime, int fadeOutTime) {
-		new Title(title , subtitle , fadeInTime , showTime , fadeOutTime).send(player);
+		new Title(Main.c(title) , Main.c(subtitle) , fadeInTime , showTime , fadeOutTime).send(player);
 	}
 	
 	public static void sendTitle (Configuration config , String path ,Player p) {

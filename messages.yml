@@ -29,6 +29,10 @@ chat:
   normal_detective: " &8- &9%playername% &a> &7%msg%"
   spectator: " &8- &7&o%playername% > &8%msg%"
   traitorchat: " &7[&4&lT&7] &c%playername% &4> &c%msg%"
+addons:
+  corpse_reborn:
+    corpse_found: "%prefix% %player% &ehas found the corpse of the %role% %dead_player%!"
+    corpse_info: "%prefix% This is the corpse of %role% %dead_player%"
 game:
   killed: "%prefix% You have been killed and are now spectating."
   kill:
@@ -53,20 +57,20 @@ game:
     traitor_win:
     - ""
     - "%prefix% The &cTraitors &ewon the game!"
-    - "%prefix% The Traitors were: %traitors%"
+    - "%prefix% The Traitors were: &c%traitors%"
     - ""
     innocent_win:
     - ""
     - "%prefix% The &aInnocents &ewon the game!"
-    - "%prefix% The Traitors were: %traitors%"
+    - "%prefix% The Traitors were: &c%traitors%"
     - ""
     draw:
     - ""
     - "%prefix% The game was a draw!"
-    - "%prefix% The Traitors were: %traitors%"
+    - "%prefix% The Traitors were: &c%traitors%"
     - ""
   role:
-    infomation: "%prefix% There are %t% Traitor(s) and %d% Detective(s)."
+    information: "%prefix% There are %t% Traitor(s) and %d% Detective(s)."
     traitor_spacer: "&7, &c"
     traitor:
     - "%prefix% You are a &cTRAITOR&e!"

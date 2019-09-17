@@ -7,6 +7,9 @@ roles:
     display: "&cTraitor"
   detective:
     display: "&9Detective"
+addons:
+  corpse_reborn:
+    corpse_name: "&7Dead Body"
 game:
   items:
     roleselector:
@@ -40,6 +43,11 @@ game:
       prefix: "&9"
       suffix: ""
   titles:
+    win:
+      traitor: "&cTraitors won!"
+      innocent: "&aInnocent won!"
+      you_won: "&aCongratulations!"
+      you_lost: "&cBetter luck next time!"
     roles:
       traitor:
         title: "&c&lTRAITOR"
@@ -49,7 +57,7 @@ game:
         fadeout: 20
       detective:
         title: "&9&lDETECTIVE"
-        subtitle: "&eFind out who is are the Traitors!"
+        subtitle: "&eFind out who are the Traitors!"
         fadein: 0
         show: 60
         fadeout: 20

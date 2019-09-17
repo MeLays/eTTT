@@ -1,18 +1,39 @@
 loot:
-   items_per_chest: 3
+   items_per_chest: 5
    chest:
       wooden_sword: 4
       stone_sword: 3
       arrow: 5
       bow_1: 3
       heal_1: 1
+      leather_chestplate: 4
+      chainmail_chestplate: 1
    items_per_enderchest: 1
    enderchest:
       iron_sword: 5
       diamond_sword: 2
       bow_2: 3
       heal_2: 1
+      iron_chestplate: 5
 items:
+   leather_chestplate:
+      type: LEATHER_CHESTPLATE
+      amount: 1
+      displayname: "&cChestplate &8- &7Level &cI"
+      enchantments: []
+      itemflags: []
+   chainmail_chestplate:
+      type: CHAINMAIL_CHESTPLATE
+      amount: 1
+      displayname: "&cChestplate &8- &7Level &6II"
+      enchantments: []
+      itemflags: []
+   iron_chestplate:
+      type: IRON_CHESTPLATE
+      amount: 1
+      displayname: "&cChestplate &8- &7Level &aIII"
+      enchantments: []
+      itemflags: []
    wooden_sword:
       type: WOODEN_SWORD
       amount: 1

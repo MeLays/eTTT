@@ -7,8 +7,12 @@ import java.util.Random;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import org.golde.bukkit.corpsereborn.CorpseAPI.CorpseAPI;
+import org.golde.bukkit.corpsereborn.nms.Corpses.CorpseData;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.PlayerTools;
@@ -21,9 +25,14 @@ public class RoleManager {
 	Main main;
 	Arena arena;
 	
+	//CorpseContainer for CorpseReborn
+	public CorpseContainer corpseContainer;
+	
 	public RoleManager (Main main , Arena arena) {
 		this.main = main;
 		this.arena = arena;
+		
+		this.corpseContainer = new CorpseContainer(this);
 	}
 	
 	ArrayList<Player> traitors = new ArrayList<Player>();
@@ -31,18 +40,18 @@ public class RoleManager {
 	ArrayList<Player> innocents = new ArrayList<Player>();
 	ArrayList<Player> none = new ArrayList<Player>();
 	
-	ArrayList<String> traitors_beginning = new ArrayList<String>();
-	ArrayList<String> detectives_beginning = new ArrayList<String>();
+	public ArrayList<String> traitors_beginning = new ArrayList<String>();
+	public ArrayList<String> detectives_beginning = new ArrayList<String>();
 
 	public void giveRoles(RolePackage rolePackage) {
 		
 		ArrayList<Player> all = arena.getAllPlaying();
 		Collections.shuffle(all , new Random(System.currentTimeMillis()));
 		
-		int traitors = (main.getConfig().getInt("game.ratio.traitor") / 100) * arena.getAllPlaying().size();
-		int detectives = (main.getConfig().getInt("game.ratio.detective") / 100) * arena.getAllPlaying().size();
+		int traitors = (int)((main.getConfig().getInt("game.ratio.traitor") / 100.0) * arena.getAllPlaying().size());
+		int detectives = (int)((main.getConfig().getInt("game.ratio.detective") / 100.0) * arena.getAllPlaying().size());
 		
-		Logger.log(main.prefix + " [RoleManager (arena="+arena.name+")] " + traitors + "traitor and " + detectives + " detectives.");
+		Logger.log(main.prefix + " [RoleManager (arena="+arena.name+")] " + traitors + " traitors and " + detectives + " detectives.");
 				
 		if (traitors == 0) traitors = 1;
 		if (traitors + detectives > arena.getAllPlaying().size()) {
@@ -55,7 +64,7 @@ public class RoleManager {
 		}
 		if (traitors == 0 || arena.getAll().size() == 1) arena.restart();
 		
-		Logger.log(main.prefix + " [RoleManager (arena="+arena.name+")] " + traitors + "traitor and " + detectives + " detectives.");
+		Logger.log(main.prefix + " [RoleManager (arena="+arena.name+")] " + traitors + " traitors and " + detectives + " detectives.");
 
 		
 		for (Player p : new ArrayList<Player>(all)) {
@@ -223,13 +232,31 @@ public class RoleManager {
 		}
 		p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_DEATH, 1, 1);
 		p.getLocation().getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 1);
-		if (main.getConfig().getBoolean("boolean.itemdrop")) {
+		
+		//ONLY with CorpseReborn installed: Spawn a corpse
+		if (main.addonCorpseReborn) {
+			try {
+				CorpseData playerCorpse = CorpseAPI.spawnCorpse(p, Main.c(main.getSettingsFile().getConfiguration().getString("addons.corpse_reborn.corpse_name")), p.getLocation()
+						, null, p.getInventory().getHelmet(), p.getInventory().getChestplate(), p.getInventory().getLeggings(), p.getInventory().getBoots(), null);
+				playerCorpse.setTicksLeft(arena.counter * 20);
+				this.corpseContainer.connectCorpse(playerCorpse, p);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		//------------------------------------------------
+		
+		
+		if (main.getConfig().getBoolean("game.itemdrop")) {
 	        for (ItemStack i : p.getInventory().getContents())
 	        {
-	            p.getWorld().dropItemNaturally(p.getLocation(), i);
+	        	if (i == null) continue;
+	            Item j = p.getWorld().dropItemNaturally(p.getLocation(), i);
+	            arena.mapReset.addEntity(j);
 	            p.getInventory().remove(i);
 	        }
 		}
+		
 		arena.moveToSpectator(p);
 		arena.checkWin();
 	}

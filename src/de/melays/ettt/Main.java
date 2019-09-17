@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.golde.bukkit.corpsereborn.CorpseAPI.CorpseAPI;
 
 import de.melays.ettt.commands.MainCommand;
 import de.melays.ettt.commands.SetupCommand;
@@ -11,6 +12,7 @@ import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.ArenaManager;
 import de.melays.ettt.game.lobby.Lobby;
 import de.melays.ettt.game.lobby.LobbyMode;
+import de.melays.ettt.listeners.AddonCorpseClickEventListener;
 import de.melays.ettt.listeners.BlockBreakEventListener;
 import de.melays.ettt.listeners.BlockPlaceEventListener;
 import de.melays.ettt.listeners.EntityDamageByEntityEventListener;
@@ -26,6 +28,7 @@ import de.melays.ettt.listeners.PlayerJoinEventListener;
 import de.melays.ettt.listeners.PlayerMoveEventListener;
 import de.melays.ettt.listeners.PlayerPickupItemEventListener;
 import de.melays.ettt.listeners.PlayerQuitEventListener;
+import de.melays.ettt.log.Logger;
 import de.melays.ettt.marker.MarkerTool;
 import de.melays.ettt.tools.ItemManager;
 import de.melays.ettt.tools.LootManager;
@@ -35,6 +38,9 @@ import de.melays.ettt.tools.SettingsFile;
 public class Main extends JavaPlugin{
 	
 	public String prefix;
+	
+	//Addon plugins found and enabled
+	public boolean addonCorpseReborn = false;
 	
 	//Managers
 	MessageFetcher messageFetcher;
@@ -114,6 +120,24 @@ public class Main extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new PlayerMoveEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerChatEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new EntityRegainHealthEventListener(this), this);
+		
+		//Search for Addons
+		if (Bukkit.getPluginManager().isPluginEnabled("CorpseReborn") && this.getConfig().getBoolean("addons.corpse_reborn.enabled")) {
+			Logger.log(this.prefix + " [Addons] Hooking into CorpseReborn (you can disable this in the config) ...");
+			this.addonCorpseReborn = true;
+			try {
+				@SuppressWarnings("unused")
+				Class<CorpseAPI> x = CorpseAPI.class;
+			}catch(Exception ex){
+				ex.printStackTrace();
+				Logger.log(this.prefix + " [Addons] Hooking failed.");
+				this.addonCorpseReborn = false;
+			}
+			Logger.log(this.prefix + " [Addons] Hooking done.");
+			
+			//Register Events
+			Bukkit.getPluginManager().registerEvents(new AddonCorpseClickEventListener(this), this);
+		}
 		
 		//BungeeCord Channel
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

@@ -1,5 +1,8 @@
 server:
    join_leave_messages: false
+addons:
+   corpse_reborn:
+      enabled: true
 bungeecord:
    enabled: false
    voting: true
@@ -20,6 +23,24 @@ game:
    hunger: false
    itemdrop: true
    regenerate: false
+   interact:
+     potions: true
+     bow: true
+     pressure_plates: true
+     blocks:
+       - ACACIA_DOOR
+       - BIRCH_DOOR
+       - DARK_OAK_DOOR
+       - JUNGLE_DOOR
+       - OAK_DOOR
+       - SPRUCE_DOOR
+       - ACACIA_BUTTON
+       - BIRCH_BUTTON
+       - DARK_OAK_BUTTON
+       - JUNGLE_BUTTON
+       - OAK_BUTTON
+       - SPRUCE_BUTTON
+       - LEVER
    barrier:
      leave: true
      leave-damage: 4
