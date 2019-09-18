@@ -34,6 +34,7 @@ import de.melays.ettt.tools.ItemManager;
 import de.melays.ettt.tools.LootManager;
 import de.melays.ettt.tools.MessageFetcher;
 import de.melays.ettt.tools.SettingsFile;
+import de.melays.ettt.tools.StatsManager;
 
 public class Main extends JavaPlugin{
 	
@@ -62,6 +63,10 @@ public class Main extends JavaPlugin{
 	LootManager lootManager;
 	public LootManager getLootManager() {
 		return lootManager;
+	}
+	StatsManager statsManager;
+	public StatsManager getStatsManager() {
+		return statsManager;
 	}
 	
 	//Tools
@@ -93,6 +98,7 @@ public class Main extends JavaPlugin{
 		this.arenaManager.loadAll();
 		this.itemManager = new ItemManager(this);
 		this.lootManager = new LootManager(this);
+		this.statsManager = new StatsManager(this);
 		
 		//Initialize Tools
 		this.markerTool = new MarkerTool(this);

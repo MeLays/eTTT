@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/seelo/Downloads/spigot-1.14.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/seelo/Downloads/CorpseReborn.jar"/>
+	<classpathentry kind="lib" path="C:/Users/seelo/Downloads/statsapi_1-8-0_release.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

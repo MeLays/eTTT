@@ -34,6 +34,7 @@ addons:
     corpse_found: "%prefix% %player% &ehas found the corpse of the %role% %dead_player%!"
     corpse_info: "%prefix% This is the corpse of %role% %dead_player%"
 game:
+  points_added: "%prefix% &aYou received &c%points% &apoint(s)!"
   killed: "%prefix% You have been killed and are now spectating."
   kill:
     good: "%prefix% &aYou killed the %role% &a%player%! &e+%karma% Karma!"

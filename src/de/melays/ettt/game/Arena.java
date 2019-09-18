@@ -203,14 +203,16 @@ public class Arena {
 					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.innocent"),
 							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_won")
 							, 0, 60, 20);
+					main.getStatsManager().addWin(p);
 				}
 				else {
 					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.lost", true));
 					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.innocent"),
 							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_lost")
 							, 0, 60, 20);
-
+					main.getStatsManager().addLost(p);
 				}
+				main.getStatsManager().addGame(p);
 			}
 			String traitors = this.roleManager.listToString(this.roleManager.traitors_beginning , main.getMessageFetcher().getMessage("game.role.traitor_spacer", true));
 			for (String s : main.getMessageFetcher().getMessageFetcher().getStringList("game.end.innocent_win")) {
@@ -225,13 +227,16 @@ public class Arena {
 					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.traitor"),
 							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_won")
 							, 0, 60, 20);
+					main.getStatsManager().addWin(p);
 				}
 				else {
 					p.sendMessage(main.getMessageFetcher().getMessage("game.end.player.lost", true));
 					PlayerTools.sendTitle(p, main.getSettingsFile().getConfiguration().getString("game.titles.win.traitor"),
 							main.getSettingsFile().getConfiguration().getString("game.titles.win.you_lost")
 							, 0, 60, 20);
+					main.getStatsManager().addLost(p);
 				}
+				main.getStatsManager().addGame(p);
 			}
 			String traitors = this.roleManager.listToString(this.roleManager.traitors_beginning , main.getMessageFetcher().getMessage("game.role.traitor_spacer", true));
 			for (String s : main.getMessageFetcher().getMessageFetcher().getStringList("game.end.traitor_win")) {
@@ -251,6 +256,8 @@ public class Arena {
 					.replaceAll("%player%", p.getName())
 					.replaceAll("%remaining%", this.getAllPlaying().size()-1 + ""));
 		}
+		main.getStatsManager().addGame(p);
+		main.getStatsManager().addLost(p);
 		if (this.roleManager.traitors.contains(p)) this.roleManager.traitors.remove(p);
 		if (this.roleManager.detectives.contains(p)) this.roleManager.detectives.remove(p);
 		if (this.roleManager.innocents.contains(p)) this.roleManager.innocents.remove(p);

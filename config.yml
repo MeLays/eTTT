@@ -1,3 +1,4 @@
+stats: STATSAPI
 server:
    join_leave_messages: false
 addons:
@@ -20,6 +21,25 @@ gamemodes:
    spectator: SPECTATOR
    leave: SURVIVAL
 game:
+   points:
+     traitor:
+       kill_innocent: 1
+       kill_detective: 3
+     detective:
+       kill_traitor: 2
+   karma:
+     INNOCENT:
+       kill_innocent: -50
+       kill_detective: -150
+       kill_traitor: 30
+     DETECTIVE:
+       kill_innocent: -50
+       kill_detective: -150
+       kill_traitor: 30
+     TRAITOR:
+       kill_innocent: 20
+       kill_detective: 50
+       kill_traitor: -150     
    hunger: false
    itemdrop: true
    regenerate: false
