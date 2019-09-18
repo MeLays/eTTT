@@ -73,12 +73,14 @@ public class RoleManager {
 					setRole(p , rolePackage.getRole(p.getUniqueId()));
 					traitors -= 1;
 					all.remove(p);
+					main.getStatsManager().removePass(p);
 					continue;
 				}
 				else if (rolePackage.getRole(p.getUniqueId()) == Role.DETECTIVE && !(detectives < 1)) {
 					setRole(p , rolePackage.getRole(p.getUniqueId()));
 					detectives -= 1;
 					all.remove(p);
+					main.getStatsManager().removePass(p);
 					continue;
 				}
 			}

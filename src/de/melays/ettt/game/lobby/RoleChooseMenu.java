@@ -22,6 +22,12 @@ public class RoleChooseMenu {
 	}
 	
 	public void open () {
+		
+		if (main.getStatsManager().getPasses(p) <= 0) {
+			p.sendMessage(main.getMessageFetcher().getMessage("points.cant_open_menu", true));
+			return;
+		}
+		
 		Inventory inv = Bukkit.createInventory(null, 18, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.roleselection.title")));
 		
 		inv.setItem(10, main.getItemManager().getItem("lobby.inventory.roleselection.none"));

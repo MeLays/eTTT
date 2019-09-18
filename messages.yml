@@ -22,6 +22,8 @@ unknown_arena: "%prefix% Unknown arena!"
 already_ingame: "%prefix% You are already ingame!"
 full: "%prefix% The arena you are trying to join is full!"
 join_error: "%prefix% An error occured while joining this arena!"
+points:
+  cant_open_menu: "%prefix% &cYou don't have any passes."
 chat:
   error:
     inno_traitorchat: "%prefix% &cYou are an innocent and can't talk in the traitorchat."
