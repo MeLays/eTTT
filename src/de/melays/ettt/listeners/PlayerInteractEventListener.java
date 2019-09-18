@@ -34,7 +34,10 @@ public class PlayerInteractEventListener implements Listener{
 			Arena arena = main.getArenaManager().searchPlayer(p);
 			
 			if (e.getAction() == Action.PHYSICAL) {
-				if (main.getConfig().getBoolean("game.interact.pressure_plates")) {
+				//Protect farmland
+			    if(e.getClickedBlock().getType() == Material.FARMLAND)
+			        e.setCancelled(true);
+			    else if (main.getConfig().getBoolean("game.interact.pressure_plates")) {
 					e.setCancelled(true);
 				}
 				return;

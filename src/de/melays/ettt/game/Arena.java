@@ -43,6 +43,8 @@ public class Arena {
 	public RoleManager roleManager;
 	RolePackage rolePackage;
 	HashMap<Player ,Integer> points = new HashMap<Player ,Integer>();
+	//Karma at the beginning of the game
+	HashMap<Player ,Integer> karma_at_start = new HashMap<Player ,Integer>();
 	
 	//Counter
 	int counter = 0;
@@ -390,6 +392,12 @@ public class Arena {
 		this.roleManager.giveRoles(this.rolePackage);
 		this.roleManager.sendRoleMessages();
 		this.counter = this.game_counter;
+		
+		//Load karma into map
+		for (Player p : this.getAllPlaying()) {
+			karma_at_start.put(p, main.getStatsManager().getKarma(p));
+		}
+		
 		updateAll();
 	}
 	

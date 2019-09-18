@@ -37,6 +37,9 @@ public class SetupCommand implements CommandExecutor {
 		helpSender.addAlias("getmarkertool", "Gets the location marker tool", "Gives you an location marker tool" , "/ttt-setup getmarkertool");
 		helpSender.addAlias("savearenaarea <arena>", "Saves the selected area", "Saves the selected area of the arena" , "/ttt-setup savearenaarea <name>");
 		helpSender.addAlias("leave", "Leaves a game", "Leaves a game (works in bungee-mode)" , "/ttt-setup leave");
+		helpSender.addAlias("load", "Loads an arena", "Loads an arena" , "/ttt-setup load <name>");
+		helpSender.addAlias("unload", "Unloads an arena", "Unloads an arena" , "/ttt-setup unload <name>");
+		helpSender.addAlias("reload", "Reloads an arena", "Reloads an arena" , "/ttt-setup reload <name>");
 		
 		if (args.length == 0) {
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;
@@ -298,6 +301,99 @@ public class SetupCommand implements CommandExecutor {
 			Tools.saveLiteLocation(main.getArenaManager().getConfiguration(), args[1].toLowerCase() + ".arena.max", locs[1]);
 			main.getArenaManager().saveFile();
 			sender.sendMessage(main.prefix + " The area has been saved!");
+		}
+		
+		else if (args[0].equalsIgnoreCase("load")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 2) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup load <name>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			try {
+				if (main.getArenaManager().isLoaded(args[1].toLowerCase())) {
+					p.sendMessage(main.prefix + " This arena has already been loaded. Use /ttt-setup arenareload");
+					return true;				
+				}
+				if (!main.getArenaManager().canLoad(args[1].toLowerCase())) {
+					p.sendMessage(main.prefix + " This arena cannot be loaded. Please check using /ttt-setup check " + args[1].toLowerCase());
+					return true;				
+				}
+				main.getArenaManager().load(args[1].toLowerCase());
+				if (main.getArenaManager().isLoaded(args[1].toLowerCase())) {
+					p.sendMessage(main.prefix + " The arena has been successfully loaded.");
+					return true;				
+				}
+			}finally {
+				
+			}
+			p.sendMessage(main.prefix + " An error occurred loading this arena.");
+			return true;				
+		}
+		
+		else if (args[0].equalsIgnoreCase("unload")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 2) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup unload <name>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			try {
+				if (!main.getArenaManager().isLoaded(args[1].toLowerCase())) {
+					p.sendMessage(main.prefix + " This arena is not loaded. Use /ttt-setup load");
+					return true;				
+				}
+				main.getArenaManager().unload(args[1].toLowerCase());
+				if (!main.getArenaManager().isLoaded(args[1].toLowerCase())) {
+					p.sendMessage(main.prefix + " The arena has been successfully unloaded.");
+					return true;				
+				}
+			}finally {
+				
+			}
+			p.sendMessage(main.prefix + " An error occurred unloading this arena.");
+			return true;				
+		}
+		
+		else if (args[0].equalsIgnoreCase("arenareload")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 2) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup arenareload <name>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			try {
+				if (!main.getArenaManager().canLoad(args[1].toLowerCase())) {
+					p.sendMessage(main.prefix + " This arena cannot be loaded. Please check using /ttt-setup check " + args[1].toLowerCase());
+					return true;				
+				}
+				if (main.getArenaManager().isLoaded(args[1].toLowerCase()))
+					main.getArenaManager().unload(args[1].toLowerCase());
+				main.getArenaManager().load(args[1].toLowerCase());
+				if (main.getArenaManager().isLoaded(args[1].toLowerCase())) {
+					p.sendMessage(main.prefix + " The arena has been successfully reloaded.");
+					return true;				
+				}
+			}finally {
+				
+			}
+			p.sendMessage(main.prefix + " An error occurred reloading this arena.");
+			return true;
 		}
 		
 		else if (args[0].equalsIgnoreCase("reload")) {

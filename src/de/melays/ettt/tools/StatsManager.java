@@ -189,6 +189,10 @@ public class StatsManager {
 	}
 	
 	public int getKarma (Player p) {
+		return this.getKey(p.getUniqueId(), "karma");
+	}
+	
+	public int getDisplayKarma (Player p) {
 		//Karma must ALWAYS be shown +100!
 		return this.getKey(p.getUniqueId(), "karma") + 100;
 	}
