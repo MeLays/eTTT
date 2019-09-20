@@ -87,7 +87,7 @@ public class Arena {
 			else {
 				this.displayitem = m;
 			}
-		}finally {
+		}catch(Exception e) {
 			
 		}
 		if (Tools.isLocationSet(main.getArenaManager().getConfiguration(), name + ".lobby"))
@@ -121,7 +121,11 @@ public class Arena {
 		main.getArenaManager().unregister(this);
 		lobby.destroy();
 		if (main.isBungeeMode()) {
-			main.resetBungeeLobby();
+			try {
+				main.resetBungeeLobby();
+			}catch(Exception ex) {
+				
+			}
 		}
 		for (Player p : all) {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));

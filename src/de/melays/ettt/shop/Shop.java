@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import de.melays.ettt.Main;
 import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.Role;
+import de.melays.ettt.log.Logger;
 import de.melays.ettt.shop.items.CorpseRemover;
 import de.melays.ettt.shop.items.Defibrillator;
 import de.melays.ettt.shop.items.HealStation;
@@ -94,6 +95,8 @@ public class Shop {
 			
 			current_slot_detective ++;
 		}
+		
+		Logger.log(main.prefix + " [Shop] Loaded " + this.items.size() + " item(s) , " + this.traitor_items.size() + " traitoritem(s) and " + this.detective_items.size() + " detectiveitem(s).");
 	}
 	
 	public void openShop(Player p, Arena arena) {
