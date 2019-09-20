@@ -50,9 +50,7 @@ public class RoleManager {
 		
 		int traitors = (int)((main.getConfig().getInt("game.ratio.traitor") / 100.0) * arena.getAllPlaying().size());
 		int detectives = (int)((main.getConfig().getInt("game.ratio.detective") / 100.0) * arena.getAllPlaying().size());
-		
-		Logger.log(main.prefix + " [RoleManager (arena="+arena.name+")] " + traitors + " traitors and " + detectives + " detectives.");
-				
+						
 		if (traitors == 0) traitors = 1;
 		if (traitors + detectives > arena.getAllPlaying().size()) {
 			for (int i = 0 ; i < (traitors + detectives - arena.getAllPlaying().size()) ; i++) {

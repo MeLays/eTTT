@@ -140,7 +140,8 @@ public class Main extends JavaPlugin{
 				this.addonCorpseReborn = false;
 			}
 			Logger.log(this.prefix + " [Addons] Hooking done.");
-			
+			Logger.log(this.prefix + " [Addons] NOTE: If you only installed CorpseReborn for this plugin, you can disable 'on-death' in the config of CorpseReborn so the plugin wont spawn corpses everytime someone dies on your server.");
+
 			//Register Events
 			Bukkit.getPluginManager().registerEvents(new AddonCorpseClickEventListener(this), this);
 		}
