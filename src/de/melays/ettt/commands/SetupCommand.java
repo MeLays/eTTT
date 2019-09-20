@@ -3,6 +3,7 @@ package de.melays.ettt.commands;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,6 +41,9 @@ public class SetupCommand implements CommandExecutor {
 		helpSender.addAlias("load", "Loads an arena", "Loads an arena" , "/ttt-setup load <name>");
 		helpSender.addAlias("unload", "Unloads an arena", "Unloads an arena" , "/ttt-setup unload <name>");
 		helpSender.addAlias("reload", "Reloads an arena", "Reloads an arena" , "/ttt-setup reload <name>");
+		helpSender.addAlias("setdisplayitem", "Sets the display item", "The displayitem is shown in the vote menu" , "/ttt-setup setdisplayitem <name> <material>");
+		helpSender.addAlias("setdisplayname", "Sets the display name", "The displayname is shown instead of the arenaname" , "/ttt-setup setdisplayname <name> <material>");
+
 		
 		if (args.length == 0) {
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;
@@ -133,13 +137,11 @@ public class SetupCommand implements CommandExecutor {
 			}
 			
 			String spectatorspawn = done;
-			if (!main.isBungeeMode()) {
-				if (!Tools.isLocationSet(main.getArenaManager().getConfiguration(), args[1].toLowerCase()+".spectator")) {
-					canLoad = false;
-					spectatorspawn = missing;
-				}
-				sender.sendMessage(Main.c("   &8["+spectatorspawn+"&8] &eSet the spectatorspawn (/ttt-setup setspectatorspawn)"));
+			if (!Tools.isLocationSet(main.getArenaManager().getConfiguration(), args[1].toLowerCase()+".spectator")) {
+				canLoad = false;
+				spectatorspawn = missing;
 			}
+			sender.sendMessage(Main.c("   &8["+spectatorspawn+"&8] &eSet the spectatorspawn (/ttt-setup setspectatorspawn)"));
 			
 			String spawnpoints = done;
 			if (!(Tools.getLocationsCounting(main.getArenaManager().getConfiguration() , args[1].toLowerCase()+".spawns").size() >= main.getArenaManager().getConfiguration().getInt(args[1].toLowerCase()+".players.max"))) {
@@ -393,6 +395,67 @@ public class SetupCommand implements CommandExecutor {
 				
 			}
 			p.sendMessage(main.prefix + " An error occurred reloading this arena.");
+			return true;
+		}
+		
+		else if (args[0].equalsIgnoreCase("setdisplayname")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length <= 3) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup arenareload <name> <name>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			
+			String msg = "";
+			for (int i = 2 ; i < args.length ; i++) {
+				if (i == args.length - 1) {
+					msg += args[i];
+				}
+				else {
+					msg += args[i] + " ";
+				}
+			}
+			
+			main.getArenaManager().getConfiguration().set(args[1].toLowerCase() + ".display", msg);
+			main.getArenaManager().saveFile();
+			
+			p.sendMessage(main.prefix + " The displayname has been set to '" + msg + "'");
+
+			return true;
+		}
+		
+		else if (args[0].equalsIgnoreCase("setdisplayitem")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 3) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup setdisplayitem <name> <material>"));
+				return true;
+			}
+			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			
+			Material m = Material.getMaterial(args[2].toUpperCase());
+			if (m == null) {
+				m = Material.getMaterial(args[2].toUpperCase(), true);
+				if (m == null) {
+					p.sendMessage(main.prefix + " Unknown material '" + args[2].toUpperCase() + "'");
+					return true;
+				}
+			}
+			
+			main.getArenaManager().getConfiguration().set(args[1].toLowerCase() + ".display_item", m.toString());
+			main.getArenaManager().saveFile();
+			
+			p.sendMessage(main.prefix + " The displayitem has been set to '" + m.toString() + "'");
+
 			return true;
 		}
 		

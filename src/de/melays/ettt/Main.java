@@ -22,6 +22,7 @@ import de.melays.ettt.listeners.FoodLevelChangeEventListener;
 import de.melays.ettt.listeners.InventoryClickEventListener;
 import de.melays.ettt.listeners.InventoryDragEventListener;
 import de.melays.ettt.listeners.PlayerChatEventListener;
+import de.melays.ettt.listeners.PlayerCommandPreprocessEventListener;
 import de.melays.ettt.listeners.PlayerDropItemEventListener;
 import de.melays.ettt.listeners.PlayerInteractEventListener;
 import de.melays.ettt.listeners.PlayerJoinEventListener;
@@ -30,6 +31,7 @@ import de.melays.ettt.listeners.PlayerPickupItemEventListener;
 import de.melays.ettt.listeners.PlayerQuitEventListener;
 import de.melays.ettt.log.Logger;
 import de.melays.ettt.marker.MarkerTool;
+import de.melays.ettt.tools.InventorySaver;
 import de.melays.ettt.tools.ItemManager;
 import de.melays.ettt.tools.LootManager;
 import de.melays.ettt.tools.MessageFetcher;
@@ -67,6 +69,10 @@ public class Main extends JavaPlugin{
 	StatsManager statsManager;
 	public StatsManager getStatsManager() {
 		return statsManager;
+	}
+	InventorySaver inventorySaver;
+	public InventorySaver getInventorySaver() {
+		return inventorySaver;
 	}
 	
 	//Tools
@@ -126,7 +132,8 @@ public class Main extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new PlayerMoveEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerChatEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new EntityRegainHealthEventListener(this), this);
-		
+		Bukkit.getPluginManager().registerEvents(new PlayerCommandPreprocessEventListener(this), this);
+
 		//Search for Addons
 		if (Bukkit.getPluginManager().isPluginEnabled("CorpseReborn") && this.getConfig().getBoolean("addons.corpse_reborn.enabled")) {
 			Logger.log(this.prefix + " [Addons] Hooking into CorpseReborn (you can disable this in the config) ...");

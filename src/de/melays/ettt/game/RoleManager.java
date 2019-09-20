@@ -307,6 +307,16 @@ public class RoleManager {
 	public int manageKarma(Player p , Role killed) {
 		int karma = main.getConfig().getInt("game.karma." + getRole(p) + ".kill_" + killed.toString().toLowerCase());
 		main.getStatsManager().addToKarma(p, karma);
+		
+		if (!arena.current_karma.containsKey(p)) {
+			arena.current_karma.put(p, main.getStatsManager().getDisplayKarma(p));
+		}
+		arena.current_karma.put(p, arena.current_karma.get(p));
+		
+		//Update player Level
+		p.setExp(0);
+		p.setLevel(arena.current_karma.get(p));
+		
 		return karma; 
 	}
 	

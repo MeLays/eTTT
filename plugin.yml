@@ -4,7 +4,7 @@ description: eTTT Plugin by melays.de
 author: melays
 website: http://melays.de/
 main: de.melays.ettt.Main
-softdepend: [StatsAPI , CorpseReborn]
+softdepend: [StatsAPI , CorpseReborn, Multiverse-Core]
 api-version: 1.14
 commands:
   ttt:

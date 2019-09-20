@@ -20,7 +20,7 @@ public class Lobby {
 
 	Main main;
 	
-	LobbyMode mode;
+	public LobbyMode mode;
 	Arena arena = null;
 	Location lobby;
 	
@@ -35,6 +35,8 @@ public class Lobby {
 	HashMap<Player , ScoreBoardTools> scoreboard = new HashMap<Player , ScoreBoardTools>();
 	public HashMap<Player , RoleChooseMenu> roleMenus = new HashMap<Player , RoleChooseMenu>();
 	RolePackage rolePackage = new RolePackage();
+	
+	public VotingManager voteManager;
 	
 	boolean destroyed = false;
 	
@@ -51,6 +53,10 @@ public class Lobby {
 	
 	public void setMode (LobbyMode mode) {
 		this.mode = mode;
+		
+		if (this.mode == LobbyMode.VOTING) {
+			voteManager = new VotingManager(this);
+		}
 	}
 	
 	public void setArena (Arena arena) {
@@ -108,6 +114,10 @@ public class Lobby {
 					counter = start;
 					if (arena == null) {
 						//BUNGEEMODE DETECTED
+						
+						//This arena has no lobby - that means that this is a header lobby and not a lobby that has been created together with
+						//an arena by the ArenaManager. The Lobbymode now decides which lobby to use.
+						
 						if (mode == LobbyMode.RANDOM) {
 							//RANDOMMAP
 							ArrayList<Arena> arenas = new ArrayList<Arena>(main.getArenaManager().arenas.values());
@@ -115,7 +125,8 @@ public class Lobby {
 							arena = arenas.get(0);
 						}
 						else {
-							//VOTING
+							arena = voteManager.winner();
+							broadcast(main.getMessageFetcher().getMessage("game.vote.won", true).replace("%display%", arena.display));
 						}
 						main.current = arena;
 					}
@@ -181,6 +192,10 @@ public class Lobby {
 		if (!this.contains(p)) {
 			players.add(p);
 			roleMenus.put(p, new RoleChooseMenu(main , this , p));
+			
+			//Save Inventory
+			main.getInventorySaver().saveInventory(p);
+			
 			PlayerTools.resetPlayer(p);
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.lobby").toUpperCase()));
 			p.teleport(lobby);

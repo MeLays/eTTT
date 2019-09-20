@@ -14,13 +14,16 @@ Stuff eTTT is missing to MTTT:
 - Add passes via command
 - stopserver for bungee networks
 - Chat Ranks related to karma
-- Inventory restore for multiarena servers
 - Traitor only redstone curcuits
 - Detective Chestplate
-- disable all commands for normal players ingame (except given)
-- Add Multiverse-Core to softdepend
-- show karma in level bar
 
 Test:
 - crop trampeling
 - reload/load/unload command
+- karma in levelbar
+- disable all commands for normal players ingame (except given)
+- Inventory restore for multiarena servers
+- Display name + display item
+
+Done:
+- Add Multiverse-Core to softdepend

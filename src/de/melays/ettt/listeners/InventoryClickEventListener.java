@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import de.melays.ettt.Main;
 import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.ArenaState;
+import de.melays.ettt.game.lobby.LobbyMode;
 
 public class InventoryClickEventListener implements Listener{
 
@@ -40,6 +41,11 @@ public class InventoryClickEventListener implements Listener{
 			
 			if (e.getView().getTitle().equals(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.roleselection.title")))) {
 				main.getBungeeCordLobby().roleMenus.get(p).click(e.getSlot());
+			}
+			else if (e.getView().getTitle().equals(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.voting.title")))) {
+				if (main.getBungeeCordLobby().mode == LobbyMode.VOTING) {
+					main.getBungeeCordLobby().voteManager.click(p , e.getSlot());
+				}
 			}
 		}
 			

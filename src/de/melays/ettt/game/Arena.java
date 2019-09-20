@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -28,6 +29,7 @@ public class Arena {
 	//Data
 	public String name;
 	public String display;
+	public Material displayitem = Material.PAPER;
 	public int min;
 	public int max;
 	
@@ -43,8 +45,12 @@ public class Arena {
 	public RoleManager roleManager;
 	RolePackage rolePackage;
 	HashMap<Player ,Integer> points = new HashMap<Player ,Integer>();
-	//Karma at the beginning of the game
-	HashMap<Player ,Integer> karma_at_start = new HashMap<Player ,Integer>();
+	
+	//Karma at the beginning of the game (to show to other players)
+	public HashMap<Player ,Integer> karma_at_start = new HashMap<Player ,Integer>();
+	//Current karma to prevent database spam
+	public HashMap<Player ,Integer> current_karma = new HashMap<Player ,Integer>();
+
 	
 	//Counter
 	int counter = 0;
@@ -69,6 +75,21 @@ public class Arena {
 		this.display = main.getArenaManager().getConfiguration().getString(name+".display");
 		this.min = main.getArenaManager().getConfiguration().getInt(name+".players.min");
 		this.max = main.getArenaManager().getConfiguration().getInt(name+".players.max");
+		try {
+			String itemname = main.getArenaManager().getConfiguration().getString(name+".display_item");
+			Material m = Material.getMaterial(itemname.toUpperCase());
+			if (m == null) {
+				m = Material.getMaterial(itemname.toUpperCase(), true);
+				if (m != null) {
+					this.displayitem = m;
+				}
+			}
+			else {
+				this.displayitem = m;
+			}
+		}finally {
+			
+		}
 		if (Tools.isLocationSet(main.getArenaManager().getConfiguration(), name + ".lobby"))
 			this.lobby = new Lobby(main , Tools.getLocation(main.getArenaManager().getConfiguration(), name + ".lobby"));
 		else
@@ -175,6 +196,10 @@ public class Arena {
 	public void addSpectator(Player p) {
 		this.spectators.add(p);
 		p.teleport(Tools.getLocation(main.getArenaManager().getConfiguration(), name.toLowerCase()+".spectator"));
+		
+		//Save Inventory
+		main.getInventorySaver().saveInventory(p);
+		
 		PlayerTools.resetPlayer(p);
 		p.setAllowFlight(true);
 		p.setFlying(true);
@@ -265,6 +290,8 @@ public class Arena {
 		if (this.roleManager.innocents.contains(p)) this.roleManager.innocents.remove(p);
 		if (this.roleManager.none.contains(p)) this.roleManager.none.remove(p);
 		if (this.spectators.contains(p)) this.spectators.remove(p);
+		//Save Inventory
+		main.getInventorySaver().restoreInventory(p);
 		PlayerTools.resetPlayer(p);
 		ColorTabAPI.clearTabStyle(p, this.getAll());
 		p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
@@ -299,6 +326,18 @@ public class Arena {
 			ArenaScoreboard.createPlayerScoreboard(this, p);
 			i++;
 		}
+		
+		//Load karma into map
+		for (Player p : this.getAllPlaying()) {
+			int karma = main.getStatsManager().getDisplayKarma(p);
+			karma_at_start.put(p, karma);
+			current_karma.put(p, karma);
+			
+			//Update player Level
+			p.setExp(0);
+			p.setLevel(karma);
+		}
+		
 		this.roleManager.none.addAll(players);
 		updateAll();
 		startLoop();
@@ -392,12 +431,6 @@ public class Arena {
 		this.roleManager.giveRoles(this.rolePackage);
 		this.roleManager.sendRoleMessages();
 		this.counter = this.game_counter;
-		
-		//Load karma into map
-		for (Player p : this.getAllPlaying()) {
-			karma_at_start.put(p, main.getStatsManager().getKarma(p));
-		}
-		
 		updateAll();
 	}
 	

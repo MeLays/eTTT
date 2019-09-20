@@ -133,6 +133,10 @@ game:
   inventory:
     roleselection:
       title: "&eRole selection"
+    voting:
+      title: "&eMap Voting"
+      item-title: "&a%display%"
+      item-lore: "&a%votes% &evotes"
     lootchest:
       title: "&8Chest"
     enderchest:

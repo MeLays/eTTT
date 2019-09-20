@@ -21,6 +21,12 @@ gamemodes:
    spectator: SPECTATOR
    leave: SURVIVAL
 game:
+   allowed_commands:
+     - ttt
+     - start
+     - shop
+     - traitor
+     - leave
    points:
      traitor:
        kill_innocent: 1

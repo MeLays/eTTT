@@ -18,6 +18,7 @@ import com.google.common.io.ByteStreams;
 import de.melays.ettt.Main;
 import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.ArenaState;
+import de.melays.ettt.game.lobby.LobbyMode;
 
 public class PlayerInteractEventListener implements Listener{
 
@@ -123,6 +124,11 @@ public class PlayerInteractEventListener implements Listener{
 						|| e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && e.getItem() != null) {
 					if (main.getItemManager().isItem("lobby.roleselector", e.getItem())) {
 						main.getBungeeCordLobby().roleMenus.get(p).open();
+					}
+					else if (main.getItemManager().isItem("lobby.vote", e.getItem())) {
+						if (main.getBungeeCordLobby().mode == LobbyMode.VOTING) {
+							main.getBungeeCordLobby().voteManager.openInventory(p);
+						}
 					}
 					else if (main.getItemManager().isItem("lobby.leave", e.getItem())) {
 						if (main.isBungeeMode()) {
