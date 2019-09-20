@@ -90,8 +90,13 @@ public class PlayerInteractEventListener implements Listener{
 							}
 							else if (!main.getConfig().getStringList("game.interact.blocks").contains(e.getClickedBlock().getType().toString())) {
 								if (p.getInventory().getItemInMainHand() != null) {
+									String item_in_hand = p.getInventory().getItemInMainHand().getType().toString();
 									if ((p.getInventory().getItemInMainHand().getType().toString().contains("POTION") && main.getConfig().getBoolean("game.interact.potions")) ||
 											(p.getInventory().getItemInMainHand().getType() == Material.BOW && main.getConfig().getBoolean("game.interact.bow"))) {
+										
+									}
+									else if ((item_in_hand.contains("CHESTPLATE") || item_in_hand.contains("HELMET") || item_in_hand.contains("LEGGINGS") || item_in_hand.contains("BOOTS"))
+											&& main.getConfig().getBoolean("game.interact.armor")) {
 										
 									}
 									else {

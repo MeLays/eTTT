@@ -20,6 +20,55 @@ gamemodes:
    game: SURVIVAL
    spectator: SPECTATOR
    leave: SURVIVAL
+shop:
+   price_lore: "&a%points% &ePoints"
+   items:
+     speed_potion:
+       enabled: true
+       price: 1
+       display: "&9Speed Potion"
+     health_potion:
+       enabled: true
+       price: 1
+       display: "&aHealth Potion"
+     defibrillator:
+       enabled: true
+       price: 3
+       material: COMPARATOR
+       display: "&aDefibrillator"
+       info:
+         - "&eRightclick a corpse to revive it."
+         - "&e(50% Chance of success)"
+   traitor:
+     enabled: true
+     items:
+       tnt_arrows:
+         enabled: true
+         price: 2
+         material: ARROW
+         display: "&cTNT Arrow"
+         amount: 4
+         info:
+           - "&eCreates an explosion when hitting an target."
+       corpse_remover:
+         enabled: true
+         price: 2
+         material: BARRIER
+         display: "&cCorpse remover"
+         info:
+           - "&eRightclick a corpse to remove it."
+   detective:
+     enabled: true
+     items:
+       heal_station:
+         enabled: true
+         price: 2
+         material: BEACON
+         display: "&aHealing Station"
+         info:
+           - "&eRightclick to place."
+           - "&ePlayers can heal themselves by rightlicking it."
+           - "&eHeals a total of 35 hearts."
 game:
    allowed_commands:
      - ttt
@@ -29,9 +78,11 @@ game:
      - leave
    points:
      traitor:
+       start: 1
        kill_innocent: 1
        kill_detective: 3
      detective:
+       start: 2
        kill_traitor: 2
    karma:
      INNOCENT:
@@ -53,6 +104,7 @@ game:
      potions: true
      bow: true
      pressure_plates: true
+     armor: true
      blocks:
        - ACACIA_DOOR
        - BIRCH_DOOR

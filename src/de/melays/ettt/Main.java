@@ -31,6 +31,7 @@ import de.melays.ettt.listeners.PlayerPickupItemEventListener;
 import de.melays.ettt.listeners.PlayerQuitEventListener;
 import de.melays.ettt.log.Logger;
 import de.melays.ettt.marker.MarkerTool;
+import de.melays.ettt.shop.Shop;
 import de.melays.ettt.tools.InventorySaver;
 import de.melays.ettt.tools.ItemManager;
 import de.melays.ettt.tools.LootManager;
@@ -74,6 +75,10 @@ public class Main extends JavaPlugin{
 	public InventorySaver getInventorySaver() {
 		return inventorySaver;
 	}
+	Shop shop;
+	public Shop getShop() {
+		return shop;
+	}
 	
 	//Tools
 	MarkerTool markerTool;
@@ -105,6 +110,7 @@ public class Main extends JavaPlugin{
 		this.itemManager = new ItemManager(this);
 		this.lootManager = new LootManager(this);
 		this.statsManager = new StatsManager(this);
+		this.shop = new Shop(this);
 		
 		//Initialize Tools
 		this.markerTool = new MarkerTool(this);

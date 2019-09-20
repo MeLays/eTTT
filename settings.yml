@@ -131,6 +131,9 @@ game:
         - time-line
         - "    "
   inventory:
+    shop:
+      traitor_title: "&cTraitorshop"
+      detective_shop: "&9Detectiveshop"
     roleselection:
       title: "&eRole selection"
     voting:

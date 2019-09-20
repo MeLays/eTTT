@@ -99,9 +99,11 @@ public class RoleManager {
 		none = new ArrayList<Player>();
 		for (Player p : this.traitors) {
 			traitors_beginning.add(p.getName());
+			arena.points.put(p, main.getConfig().getInt("game.points.traitor.start"));
 		}
 		for (Player p : this.detectives) {
 			this.detectives_beginning.add(p.getName());
+			arena.points.put(p, main.getConfig().getInt("game.points.detective.start"));
 		}
 	}
 	

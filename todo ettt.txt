@@ -1,7 +1,6 @@
 Stuff eTTT is missing to MTTT:
 - tester
 - shop
-- voting
 - Premium join
 - Nick support
 - rewards
@@ -15,15 +14,19 @@ Stuff eTTT is missing to MTTT:
 - stopserver for bungee networks
 - Chat Ranks related to karma
 - Traitor only redstone curcuits
-- Detective Chestplate
 
 Test:
+- voting
 - crop trampeling
 - reload/load/unload command
 - karma in levelbar
 - disable all commands for normal players ingame (except given)
 - Inventory restore for multiarena servers
 - Display name + display item
+- armor interaction
 
 Done:
 - Add Multiverse-Core to softdepend
+
+WONT do:
+- Detective Chestplate

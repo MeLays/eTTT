@@ -35,6 +35,12 @@ addons:
   corpse_reborn:
     corpse_found: "%prefix% %player% &ehas found the corpse of the %role% %dead_player%!"
     corpse_info: "%prefix% This is the corpse of %role% %dead_player%"
+shop_items:
+  defibrillator:
+    left: "%prefix% &cThe player you tried to revive already left the game."
+    used: "%prefix% &aYou successfully revived %player%!"
+  corpse_remover:
+    used: "%prefix% &aYou successfully removed the corpse."
 game:
   vote:
     voted: "%prefix% You voted for the arena '%display%'"
