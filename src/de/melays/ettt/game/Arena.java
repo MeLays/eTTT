@@ -44,7 +44,7 @@ public class Arena {
 	HashMap<Player , ScoreBoardTools> scoreboard = new HashMap<Player , ScoreBoardTools>();
 	public RoleManager roleManager;
 	RolePackage rolePackage;
-	HashMap<Player ,Integer> points = new HashMap<Player ,Integer>();
+	public HashMap<Player ,Integer> points = new HashMap<Player ,Integer>();
 	
 	//Karma at the beginning of the game (to show to other players)
 	public HashMap<Player ,Integer> karma_at_start = new HashMap<Player ,Integer>();

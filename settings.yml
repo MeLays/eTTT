@@ -133,7 +133,7 @@ game:
   inventory:
     shop:
       traitor_title: "&cTraitorshop"
-      detective_shop: "&9Detectiveshop"
+      detective_title: "&9Detectiveshop"
     roleselection:
       title: "&eRole selection"
     voting:

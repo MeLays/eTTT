@@ -35,6 +35,16 @@ public class InventoryClickEventListener implements Listener{
 					arena.lobby.roleMenus.get(p).click(e.getSlot());
 				}
 			}	
+			if (arena.state == ArenaState.GAME) {
+				if (e.getView().getTitle().equals(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.detective_title")))) {
+					main.getShop().clickDetectiveshop(p, e.getSlot());
+					e.setCancelled(true);
+				}
+				else if (e.getView().getTitle().equals(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.traitor_title")))) {
+					main.getShop().clickTraitorshop(p, e.getSlot());
+					e.setCancelled(true);
+				}
+			}
 		}
 		else if (main.getBungeeCordLobby().contains(p)) {
 			e.setCancelled(true);

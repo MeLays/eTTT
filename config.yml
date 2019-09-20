@@ -70,6 +70,7 @@ shop:
            - "&ePlayers can heal themselves by rightlicking it."
            - "&eHeals a total of 35 hearts."
 game:
+   shop_command: shop
    allowed_commands:
      - ttt
      - start

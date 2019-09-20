@@ -33,7 +33,6 @@ public class AddonCorpseClickEventListener implements Listener{
 			return;
 		
 		Arena arena = main.getArenaManager().searchPlayer(p);
-		
 		//A corpse has been clicked
 		UUID playerUUID = arena.roleManager.corpseContainer.getPlayer(e.getCorpse().getEntityId());
 		Player deadPlayer = Bukkit.getPlayer(playerUUID);
@@ -42,6 +41,23 @@ public class AddonCorpseClickEventListener implements Listener{
 		if (arena.roleManager.detectives_beginning.contains(deadPlayer.getName())) oldRole = Role.DETECTIVE;
 		if (arena.roleManager.traitors_beginning.contains(deadPlayer.getName())) oldRole = Role.TRAITOR;
 		
+		
+		if (p.getInventory().getItemInMainHand().getType() == main.getShop().defibrillator.getDisplayStack().getType()) {
+			if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == main.getShop().defibrillator.getDisplayStack().getItemMeta().getDisplayName()) {
+				//defibrillator used
+				main.getShop().defibrillator.use(p, e.getCorpse(), deadPlayer, oldRole);
+				return;
+			}
+		}
+		
+		if (p.getInventory().getItemInMainHand().getType() == main.getShop().corpseRemover.getDisplayStack().getType()) {
+			if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == main.getShop().corpseRemover.getDisplayStack().getItemMeta().getDisplayName()) {
+				//corpseremover used
+				main.getShop().corpseRemover.use(p, e.getCorpse());
+				return;
+			}
+		}
+
 		if (!arena.roleManager.corpseContainer.isFound(deadPlayer)) {
 			arena.roleManager.corpseContainer.setFound(true, deadPlayer);
 			String found = main.getMessageFetcher().getMessage("addons.corpse_reborn.corpse_found", true);

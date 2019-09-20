@@ -36,6 +36,9 @@ addons:
     corpse_found: "%prefix% %player% &ehas found the corpse of the %role% %dead_player%!"
     corpse_info: "%prefix% This is the corpse of %role% %dead_player%"
 shop_items:
+  cannot_use_shop: "%prefix% &cInnocent can't use the shop."
+  not_enought: "%prefix% &cYou don't have enought points to buy this item."
+  bought: "%prefix% &aYou successfully bought that item."
   defibrillator:
     left: "%prefix% &cThe player you tried to revive already left the game."
     used: "%prefix% &aYou successfully revived %player%!"

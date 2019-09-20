@@ -25,12 +25,12 @@ public class Shop {
 	
 	Main main;
 	
-	SpeedPotion speedPotion;
-	HealthPotion healthPotion;
-	Defibrillator defibrillator;
-	TNTArrow tntArrow;
-	CorpseRemover corpseRemover;
-	HealStation healStation;
+	public SpeedPotion speedPotion;
+	public HealthPotion healthPotion;
+	public Defibrillator defibrillator;
+	public TNTArrow tntArrow;
+	public CorpseRemover corpseRemover;
+	public HealStation healStation;
 	
 	HashMap<ShopItem , Integer> slots_traitor = new HashMap<ShopItem , Integer>();
 	HashMap<ShopItem , Integer> slots_detective = new HashMap<ShopItem , Integer>();
@@ -102,7 +102,7 @@ public class Shop {
 	public void openShop(Player p, Arena arena) {
 		Inventory inv;
 		if (arena.roleManager.getRole(p) == Role.DETECTIVE) {
-			inv = Bukkit.createInventory(null, 8, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.detective_shop")));
+			inv = Bukkit.createInventory(null, 8, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.detective_title")));
 		}
 		else if (arena.roleManager.getRole(p) == Role.TRAITOR){
 			 inv = Bukkit.createInventory(null, 8, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.traitor_title")));
@@ -141,6 +141,41 @@ public class Shop {
 		meta.setLore(new_lore);
 		stack.setItemMeta(meta);
 		return stack;
+	}
+	
+	public void clickTraitorshop(Player p , int slot) {
+		for (ShopItem i : this.slots_traitor.keySet()) {
+			if (this.slots_traitor.get(i) == slot) {
+				this.buy(p,i);
+				return;
+			}
+		}
+	}
+	
+	public void clickDetectiveshop(Player p , int slot) {
+		for (ShopItem i : this.slots_detective.keySet()) {
+			if (this.slots_detective.get(i) == slot) {
+				this.buy(p,i);
+				return;
+			}
+		}
+	}
+	
+	public void buy(Player p , ShopItem item) {
+		Arena arena = main.getArenaManager().searchPlayer(p);
+		int price = item.getPrice();
+		if (arena.points.containsKey(p)) {
+			int has = arena.points.get(p);
+			if (has >= price) {
+				has -= price;
+				arena.points.put(p, has);
+				item.boughtItem(p);
+				p.sendMessage(main.getMessageFetcher().getMessage("shop_items.bought", true));
+			}
+			else {
+				p.sendMessage(main.getMessageFetcher().getMessage("shop_items.not_enought", true));
+			}
+		}
 	}
 
 }
