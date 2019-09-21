@@ -72,15 +72,14 @@ public class Defibrillator implements ShopItem{
 		}
 		p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount()-1);
 		arena.spectators.remove(revive);
-		if (role == Role.TRAITOR) {
-			arena.roleManager.setRole(revive, role);
-		}
-		PlayerTools.resetPlayer(p);
-		p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.game").toUpperCase()));
-		ArenaScoreboard.createPlayerScoreboard(arena, p);
+		arena.roleManager.setRole(revive, role);
+		PlayerTools.resetPlayer(revive);
+		revive.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		revive.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.game").toUpperCase()));
+		ArenaScoreboard.createPlayerScoreboard(arena, revive);
 		arena.updateAll();
 		arena.updateVisibility();
+		System.out.print(arena.getAll().size());
 		revive.teleport(p);
 		CorpseAPI.removeCorpse(corpse);
 		p.sendMessage(main.getMessageFetcher().getMessage("shop_items.defibrillator.used", true).replace("%player%", revive.getName()));

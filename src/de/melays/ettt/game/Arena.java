@@ -77,15 +77,17 @@ public class Arena {
 		this.max = main.getArenaManager().getConfiguration().getInt(name+".players.max");
 		try {
 			String itemname = main.getArenaManager().getConfiguration().getString(name+".display_item");
-			Material m = Material.getMaterial(itemname.toUpperCase());
-			if (m == null) {
-				m = Material.getMaterial(itemname.toUpperCase(), true);
-				if (m != null) {
+			if (itemname != null) {
+				Material m = Material.getMaterial(itemname.toUpperCase());
+				if (m == null) {
+					m = Material.getMaterial(itemname.toUpperCase(), true);
+					if (m != null) {
+						this.displayitem = m;
+					}
+				}
+				else {
 					this.displayitem = m;
 				}
-			}
-			else {
-				this.displayitem = m;
 			}
 		}catch(Exception e) {
 			
@@ -294,13 +296,13 @@ public class Arena {
 		if (this.roleManager.innocents.contains(p)) this.roleManager.innocents.remove(p);
 		if (this.roleManager.none.contains(p)) this.roleManager.none.remove(p);
 		if (this.spectators.contains(p)) this.spectators.remove(p);
-		//Save Inventory
-		main.getInventorySaver().restoreInventory(p);
 		PlayerTools.resetPlayer(p);
 		ColorTabAPI.clearTabStyle(p, this.getAll());
 		p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 		p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 		p.teleport(main.getArenaManager().getGlobalLobby());
+		//Restore Inventory
+		main.getInventorySaver().restoreInventory(p);
 		if (state != ArenaState.LOBBY && state != ArenaState.END) {
 			if (this.getAllPlaying().size() < 1) {
 				restart();
@@ -331,6 +333,8 @@ public class Arena {
 			i++;
 		}
 		
+		this.roleManager.none.addAll(players);
+		
 		//Load karma into map
 		for (Player p : this.getAllPlaying()) {
 			int karma = main.getStatsManager().getDisplayKarma(p);
@@ -342,7 +346,6 @@ public class Arena {
 			p.setLevel(karma);
 		}
 		
-		this.roleManager.none.addAll(players);
 		updateAll();
 		startLoop();
 	}
@@ -350,6 +353,7 @@ public class Arena {
 	//LOOP
 	int id;
 	Arena instance = this;
+	int updateCounter = 0;
 	public void startLoop() {
 		id = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
 
@@ -358,9 +362,12 @@ public class Arena {
 				
 				for (Player p : instance.getAll()) {
 					ArenaScoreboard.updateScoreBoard(instance , p);
-					roleManager.updateTabColors();
+					if (updateCounter % 5 == 0)
+						roleManager.updateTabColors();
+					updateCounter ++;
 					if (instance.state == ArenaState.GAME)
 						new ActionBar(Main.c(main.getSettingsFile().getConfiguration().getString("game.actionbar.game").replaceAll("%role%", roleManager.roleToDisplayname(roleManager.getRole(p))))).send(p);
+				
 				}
 				
 				if (instance.state == ArenaState.WARMUP) {

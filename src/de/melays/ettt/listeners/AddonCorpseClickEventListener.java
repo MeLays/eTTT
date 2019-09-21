@@ -43,7 +43,7 @@ public class AddonCorpseClickEventListener implements Listener{
 		
 		
 		if (p.getInventory().getItemInMainHand().getType() == main.getShop().defibrillator.getDisplayStack().getType()) {
-			if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == main.getShop().defibrillator.getDisplayStack().getItemMeta().getDisplayName()) {
+			if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(main.getShop().defibrillator.getDisplayStack().getItemMeta().getDisplayName())) {
 				//defibrillator used
 				main.getShop().defibrillator.use(p, e.getCorpse(), deadPlayer, oldRole);
 				return;
@@ -51,14 +51,14 @@ public class AddonCorpseClickEventListener implements Listener{
 		}
 		
 		if (p.getInventory().getItemInMainHand().getType() == main.getShop().corpseRemover.getDisplayStack().getType()) {
-			if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == main.getShop().corpseRemover.getDisplayStack().getItemMeta().getDisplayName()) {
+			if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(main.getShop().corpseRemover.getDisplayStack().getItemMeta().getDisplayName())) {
 				//corpseremover used
 				main.getShop().corpseRemover.use(p, e.getCorpse());
 				return;
 			}
 		}
 
-		if (!arena.roleManager.corpseContainer.isFound(deadPlayer)) {
+		if (!arena.roleManager.corpseContainer.isFound(deadPlayer) && !arena.spectators.contains(p)) {
 			arena.roleManager.corpseContainer.setFound(true, deadPlayer);
 			String found = main.getMessageFetcher().getMessage("addons.corpse_reborn.corpse_found", true);
 			found = found.replace("%player%", p.getName());

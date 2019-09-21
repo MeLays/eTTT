@@ -226,52 +226,54 @@ public class RoleManager {
 		Entity last = Tools.getLastEntityDamager(p);
 		if (last != null) {
 			if (last instanceof Player) {
-				Player killer = (Player) last;
-				main.getStatsManager().addLost(p);
-				main.getStatsManager().addGame(p);
-				if (arena.getAll().contains(killer)) {
-					int karma = manageKarma(killer , getRole(p));
-					if (karma < 0) karma *= -1;
-					if (this.getRole(killer) == Role.INNOCENT || this.getRole(killer) == Role.DETECTIVE) {
-						if (getRole(p) == Role.TRAITOR) {
-							killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.good", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+				if (last.getUniqueId() != p.getUniqueId()) {
+					Player killer = (Player) last;
+					main.getStatsManager().addLost(p);
+					main.getStatsManager().addGame(p);
+					if (arena.getAll().contains(killer)) {
+						int karma = manageKarma(killer , getRole(p));
+						if (karma < 0) karma *= -1;
+						if (this.getRole(killer) == Role.INNOCENT || this.getRole(killer) == Role.DETECTIVE) {
+							if (getRole(p) == Role.TRAITOR) {
+								killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.good", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+							}
+							else {
+								killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.bad", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+							}
 						}
-						else {
-							killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.bad", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+						if (this.getRole(killer) == Role.TRAITOR) {
+							if (getRole(p) == Role.TRAITOR) {
+								killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.bad", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+							}
+							else {
+								killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.good", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+							}
 						}
-					}
+					}				
+					//Give Points
+					int added = 0;
 					if (this.getRole(killer) == Role.TRAITOR) {
-						if (getRole(p) == Role.TRAITOR) {
-							killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.bad", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+						if (this.getRole(p) == Role.INNOCENT) {
+							if (!arena.points.containsKey(killer)) arena.points.put(killer, 0);
+							added = main.getConfig().getInt("game.points.traitor.kill_innocent");
+							arena.points.put(killer, arena.points.get(killer) + added);
 						}
-						else {
-							killer.sendMessage(main.getMessageFetcher().getMessage("game.kill.good", true).replaceAll("%player%", p.getName()).replaceAll("%role%", this.roleToDisplayname(getRole(p))).replaceAll("%karma%", karma + ""));
+						else if (this.getRole(p) == Role.DETECTIVE) {
+							if (!arena.points.containsKey(killer)) arena.points.put(killer, 0);
+							added = main.getConfig().getInt("game.points.traitor.kill_detective");
+							arena.points.put(killer, arena.points.get(killer) + added);
 						}
 					}
-				}				
-				//Give Points
-				int added = 0;
-				if (this.getRole(killer) == Role.TRAITOR) {
-					if (this.getRole(p) == Role.INNOCENT) {
-						if (!arena.points.containsKey(killer)) arena.points.put(killer, 0);
-						added = main.getConfig().getInt("game.points.traitor.kill_innocent");
-						arena.points.put(killer, arena.points.get(killer) + added);
+					else if (this.getRole(killer) == Role.DETECTIVE) {
+						if (this.getRole(p) == Role.TRAITOR) {
+							if (!arena.points.containsKey(killer)) arena.points.put(killer, 0);
+							added = main.getConfig().getInt("game.points.detective.kill_traitor");
+							arena.points.put(killer, arena.points.get(killer) + added);
+						}
 					}
-					else if (this.getRole(p) == Role.DETECTIVE) {
-						if (!arena.points.containsKey(killer)) arena.points.put(killer, 0);
-						added = main.getConfig().getInt("game.points.traitor.kill_detective");
-						arena.points.put(killer, arena.points.get(killer) + added);
+					if (added > 0) {
+						killer.sendMessage(main.getMessageFetcher().getMessage("game.points_added", true).replace("%points%", added + ""));
 					}
-				}
-				else if (this.getRole(killer) == Role.DETECTIVE) {
-					if (this.getRole(p) == Role.TRAITOR) {
-						if (!arena.points.containsKey(killer)) arena.points.put(killer, 0);
-						added = main.getConfig().getInt("game.points.detective.kill_traitor");
-						arena.points.put(killer, arena.points.get(killer) + added);
-					}
-				}
-				if (added > 0) {
-					killer.sendMessage(main.getMessageFetcher().getMessage("game.points_added", true).replace("%points%", added + ""));
 				}
 			}			
 		}
@@ -313,7 +315,7 @@ public class RoleManager {
 		if (!arena.current_karma.containsKey(p)) {
 			arena.current_karma.put(p, main.getStatsManager().getDisplayKarma(p));
 		}
-		arena.current_karma.put(p, arena.current_karma.get(p));
+		arena.current_karma.put(p, arena.current_karma.get(p) + karma);
 		
 		//Update player Level
 		p.setExp(0);

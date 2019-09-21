@@ -102,10 +102,10 @@ public class Shop {
 	public void openShop(Player p, Arena arena) {
 		Inventory inv;
 		if (arena.roleManager.getRole(p) == Role.DETECTIVE) {
-			inv = Bukkit.createInventory(null, 8, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.detective_title")));
+			inv = Bukkit.createInventory(null, 9, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.detective_title")));
 		}
 		else if (arena.roleManager.getRole(p) == Role.TRAITOR){
-			 inv = Bukkit.createInventory(null, 8, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.traitor_title")));
+			 inv = Bukkit.createInventory(null, 9, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.traitor_title")));
 		}
 		else {
 			return;
@@ -136,7 +136,7 @@ public class Shop {
 		if (lore ==  null)
 			lore = new ArrayList<String>();
 		ArrayList<String> new_lore = new ArrayList<String>();
-		new_lore.add(Main.c(main.getConfig().getString("shop.price_lore")));
+		new_lore.add(Main.c(main.getConfig().getString("shop.price_lore").replace("%points%", item.getPrice() + "")));
 		new_lore.addAll(lore);
 		meta.setLore(new_lore);
 		stack.setItemMeta(meta);

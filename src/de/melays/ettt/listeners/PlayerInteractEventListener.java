@@ -18,6 +18,7 @@ import com.google.common.io.ByteStreams;
 import de.melays.ettt.Main;
 import de.melays.ettt.game.Arena;
 import de.melays.ettt.game.ArenaState;
+import de.melays.ettt.game.Role;
 import de.melays.ettt.game.lobby.LobbyMode;
 
 public class PlayerInteractEventListener implements Listener{
@@ -97,6 +98,9 @@ public class PlayerInteractEventListener implements Listener{
 									}
 									else if ((item_in_hand.contains("CHESTPLATE") || item_in_hand.contains("HELMET") || item_in_hand.contains("LEGGINGS") || item_in_hand.contains("BOOTS"))
 											&& main.getConfig().getBoolean("game.interact.armor")) {
+										
+									}
+									else if (arena.roleManager.getRole(p) == Role.TRAITOR && main.getConfig().getStringList("game.interact.only_traitor").contains(e.getClickedBlock().getType().toString())) {
 										
 									}
 									else {

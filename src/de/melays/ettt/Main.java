@@ -106,12 +106,13 @@ public class Main extends JavaPlugin{
 		this.messageFetcher = new MessageFetcher(this);
 		this.prefix = this.getMessageFetcher().getMessage("prefix", false);
 		this.arenaManager = new ArenaManager(this);
-		this.arenaManager.loadAll();
 		this.itemManager = new ItemManager(this);
 		this.lootManager = new LootManager(this);
 		this.statsManager = new StatsManager(this);
-		this.shop = new Shop(this);
+		this.inventorySaver = new InventorySaver(this);
 		
+		this.arenaManager.loadAll();
+
 		//Initialize Tools
 		this.markerTool = new MarkerTool(this);
 		
@@ -159,6 +160,9 @@ public class Main extends JavaPlugin{
 			Bukkit.getPluginManager().registerEvents(new AddonCorpseClickEventListener(this), this);
 		}
 		
+		//Shop must load after all addons
+		this.shop = new Shop(this);
+
 		//BungeeCord Channel
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		
@@ -186,6 +190,9 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void onDisable() {
+		if (this.addonCorpseReborn) {
+			CorpseAPI.removeAllCorpses();
+		}
 		this.getArenaManager().stopAll();
 	}
 	

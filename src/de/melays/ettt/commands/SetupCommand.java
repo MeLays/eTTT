@@ -2,8 +2,10 @@ package de.melays.ettt.commands;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -457,6 +459,44 @@ public class SetupCommand implements CommandExecutor {
 			p.sendMessage(main.prefix + " The displayitem has been set to '" + m.toString() + "'");
 
 			return true;
+		}
+		
+		else if (args[0].equalsIgnoreCase("passes")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 4) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup passes <add/set> <player> <amount>"));
+				return true;
+			}
+			@SuppressWarnings("deprecation")
+			OfflinePlayer player = Bukkit.getOfflinePlayer(args[2]);
+			if (player == null) {
+				p.sendMessage(main.prefix + " Unknown player '"+args[2]+"'");
+				return true;
+			}
+			int amount = 0;
+			try {
+				String number = args[3];
+				amount = Integer.parseInt(number);	
+			}catch(Exception e) {
+				p.sendMessage(main.prefix + " '"+args[3]+"' is not a valid number.");
+				return true;
+			}
+			if (args[1].equalsIgnoreCase("add")){
+				main.getStatsManager().addToKey(player.getUniqueId(), "passes", amount);
+				p.sendMessage(main.prefix + " "+args[3]+" passes have been added to " + args[2] + " account.");
+				return true;
+			}
+			if (args[1].equalsIgnoreCase("set")){
+				main.getStatsManager().setKey(player.getUniqueId(), "passes", amount);
+				p.sendMessage(main.prefix + " "+args[2]+" has now " + args[2] + " passes.");
+				return true;
+			}
+			else{
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup passes <add/set> <player> <amount>"));
+				return true;
+			}
 		}
 		
 		else if (args[0].equalsIgnoreCase("reload")) {

@@ -47,7 +47,7 @@ shop_items:
 game:
   vote:
     voted: "%prefix% You voted for the arena '%display%'"
-    won: "%prefix% &a%display% &e won the map vote!"
+    won: "%prefix% &a%display% &ewon the map vote!"
   forbidden_command: "%prefix% &cYou are not allowed to use this command while being ingame!"
   points_added: "%prefix% &aYou received &c%points% &apoint(s)!"
   killed: "%prefix% You have been killed and are now spectating."

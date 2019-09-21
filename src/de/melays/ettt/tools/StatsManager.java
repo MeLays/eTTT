@@ -1,7 +1,6 @@
 package de.melays.ettt.tools;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.UUID;
@@ -61,7 +60,6 @@ public class StatsManager {
 				channel.setKey(uuid, key, i);
 			}
 			else if (mode == StatsMode.YAML) {
-				Logger.log(uuid + " " + key + " " + i);
 				getFile().set(uuid.toString() + "." + key, i);
 				this.saveFile();			}
 		} catch (Exception e) {
@@ -234,7 +232,8 @@ public class StatsManager {
 	    }
 	    try {
 	        configuration.save(configurationFile);
-	    } catch (IOException ex) {
+	    } catch (Exception ex) {
+	    	
 	    }
 	}
 

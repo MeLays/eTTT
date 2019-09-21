@@ -38,14 +38,13 @@ public class VotingManager {
 			vote2 = arenas.get(1);
 		}
 		if (arenas.size() >= 3) {
-			vote2 = arenas.get(2);
+			vote3 = arenas.get(2);
 		}
 	}
 	
 	public void openInventory (Player p) {
 		if (vote1 == null) return;
-		
-		Inventory inv = Bukkit.createInventory(null, 8, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.voting.title")));
+		Inventory inv = Bukkit.createInventory(null, 9, Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.voting.title")));
 		
 		ItemStack votestack1 = new ItemStack(vote1.displayitem);
 		ItemMeta meta1 = votestack1.getItemMeta();
@@ -57,7 +56,7 @@ public class VotingManager {
 		inv.setItem(2, votestack1);
 		
 		if (vote2 != null) {
-			ItemStack votestack2 = new ItemStack(vote1.displayitem);
+			ItemStack votestack2 = new ItemStack(vote2.displayitem);
 			ItemMeta meta2 = votestack2.getItemMeta();
 			meta2.setDisplayName(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.voting.item-title").replace("%display%", vote2.display)));
 			ArrayList<String> lore2 = new ArrayList<String>();
@@ -68,7 +67,7 @@ public class VotingManager {
 		}
 		
 		if (vote3 != null) {
-			ItemStack votestack3 = new ItemStack(vote1.displayitem);
+			ItemStack votestack3 = new ItemStack(vote3.displayitem);
 			ItemMeta meta3 = votestack3.getItemMeta();
 			meta3.setDisplayName(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.voting.item-title").replace("%display%", vote3.display)));
 			ArrayList<String> lore3 = new ArrayList<String>();
@@ -121,6 +120,7 @@ public class VotingManager {
 		if (slot == 2) vote(p , 1);
 		if (slot == 4) vote(p , 2);
 		if (slot == 6) vote(p , 3);
+		p.closeInventory();
 	}
 
 	

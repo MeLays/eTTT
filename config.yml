@@ -38,18 +38,17 @@ shop:
        display: "&aDefibrillator"
        info:
          - "&eRightclick a corpse to revive it."
-         - "&e(50% Chance of success)"
    traitor:
      enabled: true
      items:
        tnt_arrows:
          enabled: true
          price: 2
-         material: ARROW
+         material: TNT
          display: "&cTNT Arrow"
          amount: 4
          info:
-           - "&eCreates an explosion when hitting an target."
+           - "&eExplodes after 3 seconds."
        corpse_remover:
          enabled: true
          price: 2
@@ -106,6 +105,8 @@ game:
      bow: true
      pressure_plates: true
      armor: true
+     only_traitor:
+       - STONE_BUTTON
      blocks:
        - ACACIA_DOOR
        - BIRCH_DOOR
