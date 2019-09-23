@@ -69,7 +69,13 @@ shop:
            - "&ePlayers can heal themselves by rightlicking it."
            - "&eHeals a total of 35 hearts."
 game:
+   repeat_game: 1
    shop_command: shop
+   traitorpass_command: traitor
+   detectivepass_command: detective
+   leave_command: leave
+   start_command: start
+   stats_command: stats
    allowed_commands:
      - ttt
      - start

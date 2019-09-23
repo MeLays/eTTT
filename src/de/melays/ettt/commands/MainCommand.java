@@ -72,6 +72,21 @@ public class MainCommand implements CommandExecutor {
 			}
 			main.getArenaManager().searchPlayer(p).leave(p);
 		}
+		
+		else if (args[0].equalsIgnoreCase("stats")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.play"))return true;
+			if (args.length <= 1) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt stats [Player]"));
+				return true;
+			}
+			String about = null;
+			if (args.length >= 2) {
+				about = args[1];
+			}
+			main.getStatsManager().sendStatsMessage(p, about);
+		}
 
 		else {
 			sender.sendMessage(main.getMessageFetcher().getMessage("help.unknown", true).replaceAll("%help%", "/ttt help"));

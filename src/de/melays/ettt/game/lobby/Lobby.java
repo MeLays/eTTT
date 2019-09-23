@@ -34,7 +34,7 @@ public class Lobby {
 	public ArrayList<Player> players;
 	HashMap<Player , ScoreBoardTools> scoreboard = new HashMap<Player , ScoreBoardTools>();
 	public HashMap<Player , RoleChooseMenu> roleMenus = new HashMap<Player , RoleChooseMenu>();
-	RolePackage rolePackage = new RolePackage();
+	public RolePackage rolePackage = new RolePackage();
 	
 	public VotingManager voteManager;
 	
@@ -81,9 +81,20 @@ public class Lobby {
 		destroyed = true;
 	}
 	
+	public boolean startEarly() {
+		if (this.getPlayers().size() >= this.min) {
+			if (this.counter > 3) {
+				this.counter = 3;
+				this.broadcast(main.getMessageFetcher().getMessage("game.countdown.lobby.start", true));
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	//Loop
 	
-	int counter = 0;
+	public int counter = 0;
 	int id;
 	
 	Lobby instance = this;

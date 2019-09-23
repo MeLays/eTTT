@@ -32,6 +32,7 @@ public class Arena {
 	public Material displayitem = Material.PAPER;
 	public int min;
 	public int max;
+	int repeatGame = 1;
 	
 	//Lobby
 	public Lobby lobby;
@@ -66,6 +67,9 @@ public class Arena {
 	
 	public Arena (Main main , String name) {
 		this.main = main;
+		
+		//Load the repeation time
+		this.repeatGame = main.getConfig().getInt("game.repeat_game");
 		
 		Logger.log(main.prefix + " [Arena (name="+name+")] Loading...");
 		
@@ -145,14 +149,90 @@ public class Arena {
 		this.mapReset.resetAll();
 	}
 	
+	public void restartKeepPlayers() {
+		
+		//Cancle old loop
+		Bukkit.getScheduler().cancelTask(id);
+		
+		//Create and fill a new role manager
+		
+		@SuppressWarnings("unchecked")
+		ArrayList<Player> all = (ArrayList<Player>) this.getAll().clone();
+		
+		this.roleManager.resetTabColors();
+		lobby.players = null;
+		this.roleManager.traitors = null;
+		this.roleManager.detectives = null;
+		this.roleManager.innocents = null;
+		this.roleManager.none = null;
+		this.spectators = null;
+		
+		this.roleManager = new RoleManager (main , this);
+		
+		for (Player p : all) {
+			this.roleManager.none.add(p);
+		}
+		
+		//Load Counters
+		warmup_counter = main.getConfig().getInt("game.countdowns.game.warmup");
+		game_counter = main.getConfig().getInt("game.countdowns.game.game");
+		end_counter = main.getConfig().getInt("game.countdowns.game.end");
+		counter = this.warmup_counter;
+		
+		//Set arena state and create new RolePackage
+		
+		this.state = ArenaState.WARMUP;		
+		this.rolePackage = new RolePackage();
+		
+		//Teleport Players to new spawnpoints
+		
+		ArrayList<Location> spawns = Tools.getLocationsCounting(main.getArenaManager().getConfiguration(), name.toLowerCase()+".spawns");
+		Collections.shuffle(spawns);
+		int i = 0;
+		
+		for (Player p : this.getAll()) {
+			if (i >= spawns.size()) i = 0;
+			p.teleport(spawns.get(i));
+			PlayerTools.resetPlayer(p);
+			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.game").toUpperCase()));
+			ArenaScoreboard.createPlayerScoreboard(this, p);
+			i++;
+		}
+		
+		//Load karma into map
+		for (Player p : this.getAllPlaying()) {
+			int karma = main.getStatsManager().getDisplayKarma(p);
+			karma_at_start.put(p, karma);
+			current_karma.put(p, karma);
+			
+			//Update player Level
+			p.setExp(0);
+			p.setLevel(karma);
+		}
+		
+		//Start new loop
+		updateAll();
+		startLoop();
+	}
+	
 	public void restart() {
+		
 		
 		if (this.roleManager != null && main.addonCorpseReborn) {
 			this.roleManager.corpseContainer.removeAll();
 		}
 		
-		stop();
-		main.getArenaManager().load(name);
+		this.repeatGame --;
+		
+		if (this.repeatGame <= 0) {
+			stop();
+			main.getArenaManager().load(name);
+		}
+		else {
+			//Prepeare the arena for another game.
+			restartKeepPlayers();
+		}
 	}
 	
 	public void broadcast (String msg) {

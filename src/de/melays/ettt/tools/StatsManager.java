@@ -3,6 +3,7 @@ package de.melays.ettt.tools;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -13,6 +14,8 @@ import org.bukkit.entity.Player;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.Utf8YamlConfiguration;
+import de.melays.ettt.game.Arena;
+import de.melays.ettt.game.ArenaState;
 import de.melays.ettt.log.Logger;
 import de.melays.statsAPI.Channel;
 import de.melays.statsAPI.StatsAPI;
@@ -193,6 +196,46 @@ public class StatsManager {
 	public int getDisplayKarma (Player p) {
 		//Karma must ALWAYS be shown +100!
 		return this.getKey(p.getUniqueId(), "karma") + 100;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void sendStatsMessage(Player p, String about) {
+		
+		if (main.getArenaManager().isInGame(p)) {
+			Arena arena = main.getArenaManager().searchPlayer(p);
+			if (arena.state == ArenaState.GAME && about != null) {
+				p.sendMessage(main.getMessageFetcher().getMessage("stats.only_own_stats_ingame", true));
+				return;
+			}
+		}
+		
+		UUID aboutPlayer = p.getUniqueId();
+		if (about != null) {
+			aboutPlayer = Bukkit.getOfflinePlayer(about).getUniqueId();
+			if (aboutPlayer == null) {
+				p.sendMessage(main.getMessageFetcher().getMessage("stats.unknown_player", true));
+				return;
+			}
+		}
+		else {
+			about = p.getName();
+		}
+		
+		int karma = this.getKey(aboutPlayer, "karma") + 100;
+		int won = this.getKey(aboutPlayer, "wins");
+		int lost = this.getKey(aboutPlayer, "lost");
+		int games = this.getKey(aboutPlayer, "games");
+
+		List<String> message = main.getMessageFetcher().getMessageFetcher().getStringList("stats.message");
+		
+		for (String msg : message) {
+			msg = msg.replaceAll("%player%", about);
+			msg = msg.replaceAll("%karma%", karma + "");
+			msg = msg.replaceAll("%won%", won + "");
+			msg = msg.replaceAll("%lost%", lost + "");
+			msg = msg.replaceAll("%games%", games + "");
+			p.sendMessage(Main.c(msg));
+		}
 	}
 	
 	//Team File Managment

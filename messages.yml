@@ -1,6 +1,16 @@
 prefix: "&c-&6eTTT &8-&e"
 no_permission: "%prefix% You don't have the permission to use this command!"
 not_ingame: "%prefix% You are not ingame!"
+only_in_lobby_or_warmup: "%prefix% You can run this command only in the lobby or during warmup!"
+only_in_lobby: "%prefix% You can run this command only in the lobby!"
+stats:
+  message:
+  - "%prefix% TTT Stats of player &a%player%:"
+  - "    &eKarma&7: &a&l%karma%"
+  - "    &eGames played&7: &a%games%"
+  - "    &ewon&7: &a%won% &8- &elost&7: &c%lost%"
+  only_own_stats_ingame: "%prefix% You can only view your own stats while being ingame."
+  unknown_player: "%prefix% &cWe can't find the stats of this player."
 help:
   header: "%prefix% &e%command%-help: (&a%page%&e/&a%max_pages%&e)"
   command: "    &a%alias% &7- &e%short_descr%"
@@ -8,10 +18,16 @@ help:
   hover_body_color: "&e"
   footer: "&e&m--------------------"
   unknown: "%prefix% &cUnknown Command! Get help using '%help%'"
+command:
+  no_passes: "%prefix% &cYou don't have any passes."
+  pass_used: "%prefix% You used a pass. We try to give you the selected role, otherwise you will get your pass back."
+  start: "%prefix% &aYou started the game."
+  start_failed: "%prefix% &cThe early start failed. Maybe there are not enough players or the game is already starting very soon."
 user-help:
 - "%prefix% TTT Plugin - Help-Overview:"
 - "    &8- &a/ttt join <Arena> &8- &7Join an Arena"
 - "    &8- &a/ttt leave &8- &7Leave an Arena"
+- "    &8- &a/ttt stats [Player] &8- &7Shows the stats"
 list:
   header: "%prefix% &e%list%: (&a%page%&e/&a%max_pages%&e)"
   command: "    %entry%"
@@ -59,6 +75,7 @@ game:
   leave-ingame: "%prefix% &c%player% &eleft the game. %remaining% players left."
   countdown:
     lobby:
+      start: "%prefix% Someone started this arena. The game will start very soon."
       shortend: "%prefix% The arena is full. The countdown has been shortened!"
       lobby: "%prefix% The game starts in &a%seconds% &eseconds"
       start: "%prefix% The game starts ..."

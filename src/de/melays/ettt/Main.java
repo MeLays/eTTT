@@ -37,6 +37,7 @@ import de.melays.ettt.tools.ItemManager;
 import de.melays.ettt.tools.LootManager;
 import de.melays.ettt.tools.MessageFetcher;
 import de.melays.ettt.tools.SettingsFile;
+import de.melays.ettt.tools.SignManager;
 import de.melays.ettt.tools.StatsManager;
 
 public class Main extends JavaPlugin{
@@ -70,6 +71,10 @@ public class Main extends JavaPlugin{
 	StatsManager statsManager;
 	public StatsManager getStatsManager() {
 		return statsManager;
+	}
+	SignManager signManager;
+	public SignManager getSignManager() {
+		return signManager;
 	}
 	InventorySaver inventorySaver;
 	public InventorySaver getInventorySaver() {
@@ -112,6 +117,8 @@ public class Main extends JavaPlugin{
 		this.inventorySaver = new InventorySaver(this);
 		
 		this.arenaManager.loadAll();
+		
+		this.signManager = new SignManager(this);
 
 		//Initialize Tools
 		this.markerTool = new MarkerTool(this);

@@ -10,6 +10,32 @@ roles:
 addons:
   corpse_reborn:
     corpse_name: "&7Dead Body"
+sign:
+  lobby:
+  - "&8 - &a&lTTT &8-"
+  - "&aLOBBY"
+  - "&a%current%&7/&9%max%"
+  - "&a%countdown% &7seconds"
+  lobby_full:
+  - "&8 - &c&lTTT &8-"
+  - "&cFULL LOBBY"
+  - "&c%current%&7/&c%max%"
+  - "&a%countdown% &7seconds"
+  warmup:
+  - "&8 - &c&lTTT &8-"
+  - "&cWARMUP"
+  - "&a%current%&7/&9%max%"
+  - "&a%game%&7/&a%repeated%"
+  ingame:
+  - "&8 - &c&lTTT &8-"
+  - "&cRUNNING"
+  - "&a%current%&7/&9%max%"
+  - "&a%game%&7/&a%repeated%"
+  ending:
+  - "&8 - &c&lTTT &8-"
+  - "&9ENDING"
+  - "&a%current%&7/&9%max%"
+  - "&a%game%&7/&a%repeated%"
 game:
   items:
     roleselector:

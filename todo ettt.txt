@@ -1,18 +1,23 @@
-Stuff eTTT is missing to MTTT:
+Before release:
 - tester
+- signs
+- heal station and tnt arrows
+- One use detective stick
+- fix yaml file resets
+
+Stuff eTTT is missing to MTTT:
 - Premium join
 - Nick support
 - rewards
-- statscommand
 - crackshot compatibility
-- signs
-- start/traitgor/hub/leave/detective commands
 - PlaceholderAPI for Stats hook
-- One use detective stick
 - stopserver for bungee networks
 - Chat Ranks related to karma
 
 Test:
+- multiple games per round
+- statscommand
+- start/traitgor/hub/leave/detective commands
 - loose karma when killing yourself
 - Traitor only redstone curcuits
 - Add passes via command
