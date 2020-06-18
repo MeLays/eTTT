@@ -42,6 +42,9 @@ public class EntityDamageEventListener implements Listener{
 				}
 
 			}
+			
+			if (main.getBungeeCordLobby() == null) return;
+			
 			else if (main.getBungeeCordLobby().contains(p)) {
 				e.setCancelled(true);
 			}

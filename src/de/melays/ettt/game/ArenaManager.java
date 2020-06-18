@@ -50,7 +50,7 @@ public class ArenaManager {
 	@SuppressWarnings("unchecked")
 	public void stopAll() {
 		for (Arena a : ((HashMap<String, Arena>) this.arenas.clone()).values()) {
-			a.stop();
+			a.stop(false);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class ArenaManager {
 		if (!isLoaded(arena)) {
 			return false;
 		}
-		this.getArena(arena).stop();
+		this.getArena(arena).stop(false);
 		arenas.remove(arena.toLowerCase());
 		return true;
 	}

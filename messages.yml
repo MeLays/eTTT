@@ -81,6 +81,7 @@ game:
       start: "%prefix% The game starts ..."
     warmup: "%prefix% The game starts in &a%seconds% &eseconds"
     end: "%prefix% The game ends in &a%seconds% &eseconds"
+    restart: "%prefix% The next game starts in &a%seconds% &eseconds"
     stop: "%prefix% The game stops in &a%seconds% &eseconds"
   end:
     player:

@@ -229,6 +229,7 @@ public class StatsManager {
 		List<String> message = main.getMessageFetcher().getMessageFetcher().getStringList("stats.message");
 		
 		for (String msg : message) {
+			msg = msg.replaceAll("%prefix%", main.getMessageFetcher().getMessage("prefix" , false));
 			msg = msg.replaceAll("%player%", about);
 			msg = msg.replaceAll("%karma%", karma + "");
 			msg = msg.replaceAll("%won%", won + "");

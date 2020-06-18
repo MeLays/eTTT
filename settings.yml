@@ -25,17 +25,22 @@ sign:
   - "&8 - &c&lTTT &8-"
   - "&cWARMUP"
   - "&a%current%&7/&9%max%"
-  - "&a%game%&7/&a%repeated%"
+  - "&aGame %game%&7 of &a%repeated%"
   ingame:
   - "&8 - &c&lTTT &8-"
   - "&cRUNNING"
   - "&a%current%&7/&9%max%"
-  - "&a%game%&7/&a%repeated%"
+  - "&aGame %game%&7 of &a%repeated%"
   ending:
   - "&8 - &c&lTTT &8-"
   - "&9ENDING"
   - "&a%current%&7/&9%max%"
-  - "&a%game%&7/&a%repeated%"
+  - "&aGame %game%&7 of &a%repeated%"
+  not_loaded:
+  - "&8 - &c&lTTT &8-"
+  - "&4MAINTENANCE"
+  - "&7The arena"
+  - "&7isn't loaded."
 game:
   items:
     roleselector:
@@ -89,7 +94,7 @@ game:
         fadeout: 20
       innocent:
         title: "&a&lINNOCENT"
-        subtitle: "&eFind out who is are the Traitors!"
+        subtitle: "&eFind out who are the Traitors!"
         fadein: 0
         show: 60
         fadeout: 20

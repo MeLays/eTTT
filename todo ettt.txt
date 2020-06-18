@@ -1,28 +1,29 @@
 Before release:
+- fix yaml file resets (maybe no need to fix in eTTT?)
 - tester
-- signs
-- heal station and tnt arrows
+- heal station and tnt arrows (defibrilator ?)
 - One use detective stick
-- fix yaml file resets
-
-Stuff eTTT is missing to MTTT:
-- Premium join
-- Nick support
-- rewards
 - crackshot compatibility
 - PlaceholderAPI for Stats hook
-- stopserver for bungee networks
 - Chat Ranks related to karma
 
+Stuff eTTT is missing to MTTT:
+- Premium join (may be thrown because thats the server owners own stuff)
+- Nick support
+- rewards
+- stopserver for bungee networks
+
 Test:
-- multiple games per round
-- statscommand
 - start/traitgor/hub/leave/detective commands
 - loose karma when killing yourself
 - Traitor only redstone curcuits
 - Add passes via command
 
 Done:
+- multiple games per round
+- statscommand
+- signs
+- conflicting commands for reload in setup
 - Add Multiverse-Core to softdepend
 - Inventory restore for multiarena servers
 - armor interaction

@@ -29,6 +29,7 @@ import de.melays.ettt.listeners.PlayerJoinEventListener;
 import de.melays.ettt.listeners.PlayerMoveEventListener;
 import de.melays.ettt.listeners.PlayerPickupItemEventListener;
 import de.melays.ettt.listeners.PlayerQuitEventListener;
+import de.melays.ettt.listeners.SignChangeEventListener;
 import de.melays.ettt.log.Logger;
 import de.melays.ettt.marker.MarkerTool;
 import de.melays.ettt.shop.Shop;
@@ -147,6 +148,7 @@ public class Main extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new PlayerChatEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new EntityRegainHealthEventListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerCommandPreprocessEventListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new SignChangeEventListener(this), this);
 
 		//Search for Addons
 		if (Bukkit.getPluginManager().isPluginEnabled("CorpseReborn") && this.getConfig().getBoolean("addons.corpse_reborn.enabled")) {
@@ -186,7 +188,15 @@ public class Main extends JavaPlugin{
 			this.bungeeCordLobby.destroy();
 		}
 		try {
-			this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
+			
+			//Try catch for message
+			try {
+				this.bungeeCordLobby = new Lobby(this , this.getArenaManager().getGlobalLobby());
+			}catch(IllegalArgumentException e) {
+				Logger.log(this.prefix + " [ERROR] "+ChatColor.DARK_RED+"No global lobby set. This is needed for the plugin to work.");
+				return;
+			}
+			
 			this.bungeeCordLobby.setMode(LobbyMode.RANDOM);
 			if (this.getConfig().getBoolean("bungeecord.voting"))
 				this.bungeeCordLobby.setMode(LobbyMode.VOTING);

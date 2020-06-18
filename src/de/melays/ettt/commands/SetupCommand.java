@@ -29,10 +29,10 @@ public class SetupCommand implements CommandExecutor {
 		
 		helpSender.addAlias("info", "All about this plugin", "See the author, website, version and more of this plugin" , "/ttt-setup info");
 		helpSender.addAlias("help [page]", "Shows this overview", "Use 'help <page>' to get to the next help pages" , "/ttt-setup help");
-		helpSender.addAlias("reload", "Reloads all files", "Reloads all files and configuration files" , "/ttt-setup reload");
+		helpSender.addAlias("configreload", "Reloads all files", "Reloads all files and configuration files" , "/ttt-setup configreload");
 		helpSender.addAlias("create ...", "Create an arena", "Use this command to create a new arena" , "/ttt-setup create <name> <minimal players> <maximal players>");
 		helpSender.addAlias("check <arena>", "Checks the setup progress", "Checks the setup progress of an arena" , "/ttt-setup check <arena>");
-		helpSender.addAlias("setgloballobby <arena>", "Sets the lobby location", "Sets the location where you will be teleported after the game" , "/ttt-setup setgloballobby");
+		helpSender.addAlias("setgloballobby", "Sets the lobby location", "Sets the location where you will be teleported after the game" , "/ttt-setup setgloballobby");
 		helpSender.addAlias("setlobby <arena>", "Sets the arena lobby", "Sets the arena lobby\n&cNot neccessarry in BungeeCord-mode" , "/ttt-setup setlobby <name>");
 		helpSender.addAlias("setspectatorspawn <arena>", "Sets the spectator spawn", "Sets the arena spectator spawn" , "/ttt-setup setspectatorspawn <name>");
 		helpSender.addAlias("addspawn <arena>", "Add a player spawn", "Add a player spawn where players will spawn ingame" , "/ttt-setup addspawn <name>");
@@ -45,8 +45,8 @@ public class SetupCommand implements CommandExecutor {
 		helpSender.addAlias("reload", "Reloads an arena", "Reloads an arena" , "/ttt-setup reload <name>");
 		helpSender.addAlias("setdisplayitem", "Sets the display item", "The displayitem is shown in the vote menu" , "/ttt-setup setdisplayitem <name> <material>");
 		helpSender.addAlias("setdisplayname", "Sets the display name", "The displayname is shown instead of the arenaname" , "/ttt-setup setdisplayname <name> <material>");
-
-		
+		helpSender.addAlias("passes", "Give or set role passes", "Give or set role passes" , "/ttt-setup passes <add/set> <player> <amount>");
+				
 		if (args.length == 0) {
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;
 			helpSender.sendHelp(sender, 1);
@@ -369,12 +369,12 @@ public class SetupCommand implements CommandExecutor {
 			return true;				
 		}
 		
-		else if (args[0].equalsIgnoreCase("arenareload")) {
+		else if (args[0].equalsIgnoreCase("reload")) {
 			if (!(sender instanceof Player)) return true;
 			Player p = (Player) sender;
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
 			if (args.length != 2) {
-				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup arenareload <name>"));
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup reload <name>"));
 				return true;
 			}
 			if (!main.getArenaManager().isCreated(args[1].toLowerCase())) {
@@ -499,7 +499,7 @@ public class SetupCommand implements CommandExecutor {
 			}
 		}
 		
-		else if (args[0].equalsIgnoreCase("reload")) {
+		else if (args[0].equalsIgnoreCase("configreload")) {
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.reload"))return true;
 			main.reloadAll();
 			sender.sendMessage(main.prefix + "Reloaded all configuration files");

@@ -32,7 +32,8 @@ public class Arena {
 	public Material displayitem = Material.PAPER;
 	public int min;
 	public int max;
-	int repeatGame = 1;
+	public int repeatGame = 1;
+	public int repeatGameTotal = 1;
 	
 	//Lobby
 	public Lobby lobby;
@@ -70,6 +71,7 @@ public class Arena {
 		
 		//Load the repeation time
 		this.repeatGame = main.getConfig().getInt("game.repeat_game");
+		this.repeatGameTotal = this.repeatGame;
 		
 		Logger.log(main.prefix + " [Arena (name="+name+")] Loading...");
 		
@@ -114,7 +116,7 @@ public class Arena {
 		
 	}
 	
-	public void stop() {
+	public void stop(boolean load) {
 		ArrayList<Player> all = this.getAll();
 		this.roleManager.resetTabColors();
 		lobby.players = null;
@@ -126,6 +128,15 @@ public class Arena {
 		Bukkit.getScheduler().cancelTask(id);
 		main.getArenaManager().unregister(this);
 		lobby.destroy();
+		
+		this.mapReset.resetAll();
+
+		//Reload arena again so its ready for the bungeelobby
+		
+		if (load) {
+			main.getArenaManager().load(name);
+		}
+		
 		if (main.isBungeeMode()) {
 			try {
 				main.resetBungeeLobby();
@@ -133,6 +144,7 @@ public class Arena {
 				
 			}
 		}
+		
 		for (Player p : all) {
 			p.setGameMode(GameMode.valueOf(main.getConfig().getString("gamemodes.leave").toUpperCase()));
 			p.teleport(main.getArenaManager().getGlobalLobby());
@@ -146,7 +158,6 @@ public class Arena {
 		if (main.isBungeeMode()) {
 			main.current = null;
 		}
-		this.mapReset.resetAll();
 	}
 	
 	public void restartKeepPlayers() {
@@ -160,12 +171,12 @@ public class Arena {
 		ArrayList<Player> all = (ArrayList<Player>) this.getAll().clone();
 		
 		this.roleManager.resetTabColors();
-		lobby.players = null;
-		this.roleManager.traitors = null;
-		this.roleManager.detectives = null;
-		this.roleManager.innocents = null;
-		this.roleManager.none = null;
-		this.spectators = null;
+		lobby.players = new ArrayList<Player>();
+		this.roleManager.traitors = new ArrayList<Player>();
+		this.roleManager.detectives = new ArrayList<Player>();
+		this.roleManager.innocents = new ArrayList<Player>();
+		this.roleManager.none = new ArrayList<Player>();
+		this.spectators = new ArrayList<Player>();
 		
 		this.roleManager = new RoleManager (main , this);
 		
@@ -211,6 +222,8 @@ public class Arena {
 			p.setLevel(karma);
 		}
 		
+		this.mapReset.resetAll();
+		
 		//Start new loop
 		updateAll();
 		startLoop();
@@ -226,8 +239,7 @@ public class Arena {
 		this.repeatGame --;
 		
 		if (this.repeatGame <= 0) {
-			stop();
-			main.getArenaManager().load(name);
+			stop(true);
 		}
 		else {
 			//Prepeare the arena for another game.
@@ -477,7 +489,13 @@ public class Arena {
 					}
 					
 					if (((counter >= 30 && counter % 15 == 0) || (counter < 30 && counter % 10 == 0) || counter <= 5) && counter <= 90) {
-						broadcast(main.getMessageFetcher().getMessage("game.countdown.end", true).replaceAll("%seconds%", counter + ""));
+						
+						//Check for restart
+						if (repeatGame > 0) {
+							broadcast(main.getMessageFetcher().getMessage("game.countdown.restart", true).replaceAll("%seconds%", counter + ""));
+						}
+						else
+							broadcast(main.getMessageFetcher().getMessage("game.countdown.end", true).replaceAll("%seconds%", counter + ""));
 					}
 					
 					counter -= 1;
@@ -507,7 +525,12 @@ public class Arena {
 					}
 					
 					else if (((counter >= 30 && counter % 15 == 0) || (counter < 30 && counter % 10 == 0) || counter <= 5) && counter <= 90) {
-						broadcast(main.getMessageFetcher().getMessage("game.countdown.stop", true).replaceAll("%seconds%", counter + ""));
+						//Check for restart
+						if (repeatGame > 1) {
+							broadcast(main.getMessageFetcher().getMessage("game.countdown.restart", true).replaceAll("%seconds%", counter + ""));
+						}
+						else
+							broadcast(main.getMessageFetcher().getMessage("game.countdown.stop", true).replaceAll("%seconds%", counter + ""));
 					}
 					
 					counter -= 1;

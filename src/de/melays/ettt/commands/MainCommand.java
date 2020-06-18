@@ -32,7 +32,7 @@ public class MainCommand implements CommandExecutor {
 		else if (args[0].equalsIgnoreCase("join")) {
 			if (!(sender instanceof Player)) return true;
 			Player p = (Player) sender;
-			if (!main.getMessageFetcher().checkPermission(sender, "ttt.play"))return true;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.play")) return true;
 			if (args.length != 2) {
 				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt join <arena>"));
 				return true;

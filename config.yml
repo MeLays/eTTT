@@ -38,6 +38,7 @@ shop:
        display: "&aDefibrillator"
        info:
          - "&eRightclick a corpse to revive it."
+         - "&eThis only works if the player you are trying to revive is spectating!"
    traitor:
      enabled: true
      items:
@@ -66,7 +67,7 @@ shop:
          display: "&aHealing Station"
          info:
            - "&eRightclick to place."
-           - "&ePlayers can heal themselves by rightlicking it."
+           - "&ePlayers can heal themselves by rightclicking it."
            - "&eHeals a total of 35 hearts."
 game:
    repeat_game: 1
