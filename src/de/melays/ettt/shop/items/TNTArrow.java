@@ -7,8 +7,13 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Arrow.PickupStatus;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -68,14 +73,39 @@ public class TNTArrow implements ShopItem{
 	
 	public void arrowShoot(Player p, Arrow arrow) {
 		
-		int count = 0;
+		boolean found = false;
 		
-		int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+		for (ItemStack stack : p.getInventory().getContents()) {
+			if (stack.getItemMeta().getDisplayName().equals(Main.c(main.getConfig().getString("shop.traitor.items.tnt_arrows.display")))) {
+				if (stack.getType() == Material.getMaterial(main.getConfig().getString("shop.traitor.items.tnt_arrows.material"))) {
+					stack.setAmount(stack.getAmount() - 1);
+					found = true;
+					break;
+				}
+			}
+		}
+		if (!found) return;
+		
+		int count = 0;
+		arrow.setPickupStatus(PickupStatus.DISALLOWED);
+		
+		int id = Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
 		    @Override
 		    public void run() {
-		    	p.getWorld().playEffect(p.getLocation(), Effect.BLAZE_SHOOT, 10);
+		    	p.getWorld().playSound(arrow.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+		    	p.getWorld().playEffect(arrow.getLocation(), Effect.MOBSPAWNER_FLAMES, 4);
+		    	
+		    	for (Entity e : arrow.getLocation().getWorld().getNearbyEntities(arrow.getLocation(), 3.5, 3.5, 3.5)) {
+		    		if (e instanceof Player) {
+		    			Player p2 = ((Player) e);
+		    			p2.damage(9);
+		    			EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.ENTITY_ATTACK, 9);
+		    			p2.setLastDamageCause(event);
+		    		}
+		    	}
+		    	
 		    }
-		}, 1L, 2L);
+		}, 60L);
 		
 		counters.put(id, count);
 	}

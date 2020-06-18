@@ -8,6 +8,8 @@ loot:
       heal_1: 1
       leather_chestplate: 4
       chainmail_chestplate: 1
+      python: 1
+      grenade: 1
    items_per_enderchest: 1
    enderchest:
       iron_sword: 5
@@ -107,3 +109,6 @@ items:
             level: 2
             time: 1
       itemflags: []
+items_crackshot:
+   python: "Python"
+   grenade: "Grenade"

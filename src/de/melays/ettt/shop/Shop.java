@@ -69,7 +69,7 @@ public class Shop {
 			this.slots_detective.put(this.defibrillator , current_slot);
 			this.slots_traitor.put(this.defibrillator , current_slot);
 			items.add(this.defibrillator);
-
+			
 			current_slot ++;
 		}
 		
@@ -92,7 +92,7 @@ public class Shop {
 		if (this.healStation.isEnabled()) {
 			this.slots_detective.put(this.healStation , current_slot_detective);
 			this.detective_items.add(this.healStation);
-			
+
 			current_slot_detective ++;
 		}
 		

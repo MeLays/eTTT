@@ -61,6 +61,9 @@ shop_items:
   corpse_remover:
     used: "%prefix% &aYou successfully removed the corpse."
 game:
+  tester:
+    entered: "%prefix% %player% entered the tester!"
+    disabled: "%prefix% &cThe tester is currently disabled! You need to play with more players!"
   vote:
     voted: "%prefix% You voted for the arena '%display%'"
     won: "%prefix% &a%display% &ewon the map vote!"

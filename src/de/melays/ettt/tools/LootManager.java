@@ -26,6 +26,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import de.melays.ettt.Main;
 import de.melays.ettt.Utf8YamlConfiguration;
+import de.melays.ettt.log.Logger;
 
 public class LootManager {
 	
@@ -34,7 +35,12 @@ public class LootManager {
 	public LootManager(Main main) {
 		this.main = main;
 		
-		getLootFile().options().copyDefaults(true);
+		boolean exists = new File(main.getDataFolder(), filenname).exists();
+		
+		if (!exists) {
+			getLootFile().options().copyDefaults(true);
+			Logger.log(main.prefix + " Creating loot.yml ...");
+		}
 		saveFile();
 	}
 	
@@ -51,7 +57,12 @@ public class LootManager {
 		for (String item : this.getLootFile().getConfigurationSection("loot.chest").getKeys(false)) {
 			int amount = this.getLootFile().getInt("loot.chest."+item);
 			for (int j = 0 ; j < amount ; j++) {
-				items_to_find.add(item);
+				if (this.getLootFile().contains("items_crackshot." + item) && !main.addonCrackShot) {
+					Logger.log(main.prefix + " CrachShot Weapon " + item + " found in chest but CrackShot isn't loaded/enabled.");
+				}
+				else {
+					items_to_find.add(item);
+				}
 			}
 		}
 		
@@ -61,7 +72,12 @@ public class LootManager {
 			int slot = LootManager.randInt(0, 26);
 			int item_index = LootManager.randInt(0 , items_to_find.size()-1);
 			String item = items_to_find.get(item_index);
-			ItemStack stack = LootManager.loadItemStack(this.getLootFile().getConfigurationSection("items."+item));
+			ItemStack stack;
+			if (this.getLootFile().contains("items_crackshot." + item) && main.addonCrackShot) {
+				stack = main.getCrackShotLayer().getWeapon(this.getLootFile().getString("items_crackshot." + item));
+			}
+			else 
+				stack = LootManager.loadItemStack(this.getLootFile().getConfigurationSection("items."+item));
 			inv.setItem(slot, stack);
 		}
 		
@@ -74,7 +90,12 @@ public class LootManager {
 		for (String item : this.getLootFile().getConfigurationSection("loot.enderchest").getKeys(false)) {
 			int amount = this.getLootFile().getInt("loot.enderchest."+item);
 			for (int j = 0 ; j < amount ; j++) {
-				items_to_find.add(item);
+				if (this.getLootFile().contains("items_crackshot." + item) && !main.addonCrackShot) {
+					Logger.log(main.prefix + " CrachShot Weapon " + item + " found in chest but CrackShot isn't loaded/enabled.");
+				}
+				else {
+					items_to_find.add(item);
+				}
 			}
 		}
 		
@@ -84,7 +105,12 @@ public class LootManager {
 			int slot = LootManager.randInt(0, 26);
 			int item_index = LootManager.randInt(0 , items_to_find.size()-1);
 			String item = items_to_find.get(item_index);
-			ItemStack stack = LootManager.loadItemStack(this.getLootFile().getConfigurationSection("items."+item));
+			ItemStack stack;
+			if (this.getLootFile().contains("items_crackshot." + item) && main.addonCrackShot) {
+				stack = main.getCrackShotLayer().getWeapon(this.getLootFile().getString("items_crackshot." + item));
+			}
+			else 
+				stack = LootManager.loadItemStack(this.getLootFile().getConfigurationSection("items."+item));
 			inv.setItem(slot, stack);
 		}
 		

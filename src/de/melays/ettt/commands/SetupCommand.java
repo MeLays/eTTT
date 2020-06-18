@@ -46,7 +46,10 @@ public class SetupCommand implements CommandExecutor {
 		helpSender.addAlias("setdisplayitem", "Sets the display item", "The displayitem is shown in the vote menu" , "/ttt-setup setdisplayitem <name> <material>");
 		helpSender.addAlias("setdisplayname", "Sets the display name", "The displayname is shown instead of the arenaname" , "/ttt-setup setdisplayname <name> <material>");
 		helpSender.addAlias("passes", "Give or set role passes", "Give or set role passes" , "/ttt-setup passes <add/set> <player> <amount>");
-				
+		helpSender.addAlias("tester tools <arena>", "Get the tester setup tools", "Get the tester setup tools" , "/ttt-setup tester tools <arena>");
+		helpSender.addAlias("tester setinner <arena>", "Set the inner location of the tester", "Set the inner location of the tester" , "/ttt-setup tester setinner <arena>");
+		helpSender.addAlias("tester setouter <arena>", "Set the outer location of the tester", "Set the outer location of the tester" , "/ttt-setup tester setouter <arena>");
+		
 		if (args.length == 0) {
 			if (!main.getMessageFetcher().checkPermission(sender, "ttt.help"))return true;
 			helpSender.sendHelp(sender, 1);
@@ -458,6 +461,36 @@ public class SetupCommand implements CommandExecutor {
 			
 			p.sendMessage(main.prefix + " The displayitem has been set to '" + m.toString() + "'");
 
+			return true;
+		}
+		
+		else if (args[0].equalsIgnoreCase("tester")) {
+			if (!(sender instanceof Player)) return true;
+			Player p = (Player) sender;
+			if (!main.getMessageFetcher().checkPermission(sender, "ttt.setup"))return true;
+			if (args.length != 3) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("command_usage", true).replaceAll("%command%", "/ttt-setup tester tools/setinner/setouter <arena>"));
+				return true;
+			}
+			String arena = args[2];
+			if (!main.getArenaManager().isCreated(arena)) {
+				sender.sendMessage(main.getMessageFetcher().getMessage("unknown_arena", true));
+				return true;				
+			}
+			if (args[1].equalsIgnoreCase("tools")) {
+				main.getTesterSetup().giveTools(p, arena);
+				return true;
+			}
+			else if (args[1].equalsIgnoreCase("setinner")) {
+				Tools.saveLocation(main.getArenaManager().getConfiguration(), arena + ".tester.inner" , p.getLocation());
+				main.getArenaManager().saveFile();
+				p.sendMessage(main.prefix + " Location saved.");
+			}
+			else if (args[1].equalsIgnoreCase("setouter")) {
+				Tools.saveLocation(main.getArenaManager().getConfiguration(), arena + ".tester.outer" , p.getLocation());
+				main.getArenaManager().saveFile();
+				p.sendMessage(main.prefix + " Location saved.");
+			}
 			return true;
 		}
 		

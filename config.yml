@@ -4,6 +4,10 @@ server:
 addons:
    corpse_reborn:
       enabled: true
+   crackshot:
+      enabled: true
+   placeholderapi:
+      enabled: true
 bungeecord:
    enabled: false
    voting: true
@@ -77,6 +81,8 @@ game:
    leave_command: leave
    start_command: start
    stats_command: stats
+   tester:
+     min: 4
    allowed_commands:
      - ttt
      - start

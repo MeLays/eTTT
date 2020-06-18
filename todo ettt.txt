@@ -1,25 +1,31 @@
 Before release:
-- fix yaml file resets (maybe no need to fix in eTTT?)
-- tester
-- heal station and tnt arrows (defibrilator ?)
 - One use detective stick
-- crackshot compatibility
-- PlaceholderAPI for Stats hook
-- Chat Ranks related to karma
+- stopserver for bungee networks
 
 Stuff eTTT is missing to MTTT:
 - Premium join (may be thrown because thats the server owners own stuff)
 - Nick support
 - rewards
-- stopserver for bungee networks
+- Chat Ranks related to karma
+
+TODo larter:
+- Nicer TNT Arrows
 
 Test:
-- start/traitgor/hub/leave/detective commands
-- loose karma when killing yourself
-- Traitor only redstone curcuits
-- Add passes via command
+- PlaceholderAPI for Stats hook
 
 Done:
+- disable arrow pickup
+- heal station and tnt arrows (defibrilator ?)
+- BUG you can buy in shop when clicking slot 1-3 in the bottom inv
+- start/traitgor/hub/leave/detective commands
+- Traitor only redstone curcuits
+- Add passes via command
+- loose karma when killing yourself
+- fix yaml file resets
+- crackshot compatibility
+- refill chests in repeating games
+- tester
 - multiple games per round
 - statscommand
 - signs

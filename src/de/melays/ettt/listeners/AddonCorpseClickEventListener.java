@@ -3,6 +3,7 @@ package de.melays.ettt.listeners;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +36,7 @@ public class AddonCorpseClickEventListener implements Listener{
 		Arena arena = main.getArenaManager().searchPlayer(p);
 		//A corpse has been clicked
 		UUID playerUUID = arena.roleManager.corpseContainer.getPlayer(e.getCorpse().getEntityId());
-		Player deadPlayer = Bukkit.getPlayer(playerUUID);
+		OfflinePlayer deadPlayer = Bukkit.getOfflinePlayer(playerUUID);
 		
 		Role oldRole = Role.INNOCENT;
 		if (arena.roleManager.detectives_beginning.contains(deadPlayer.getName())) oldRole = Role.DETECTIVE;

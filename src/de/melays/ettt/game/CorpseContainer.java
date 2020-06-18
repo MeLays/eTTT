@@ -3,7 +3,7 @@ package de.melays.ettt.game;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.golde.bukkit.corpsereborn.CorpseAPI.CorpseAPI;
 import org.golde.bukkit.corpsereborn.nms.Corpses.CorpseData;
 
@@ -18,11 +18,11 @@ public class CorpseContainer {
 		this.roleManager = roleManager;
 	}
 	
-	public void connectCorpse(CorpseData data , Player p) {
+	public void connectCorpse(CorpseData data , OfflinePlayer p) {
 		corpses.put(p.getUniqueId(), data);
 	}
 	
-	public CorpseData getCorpse (Player p) {
+	public CorpseData getCorpse (OfflinePlayer p) {
 		if (corpses.containsKey(p.getUniqueId())) {
 			return corpses.get(p.getUniqueId());
 		}
@@ -45,11 +45,11 @@ public class CorpseContainer {
 		}
 	}
 	
-	public void setFound (boolean found , Player p) {
+	public void setFound (boolean found , OfflinePlayer p) {
 		this.found.put(p.getUniqueId(), found);
 	}
 	
-	public boolean isFound (Player p) {
+	public boolean isFound (OfflinePlayer p) {
 		if (found.containsKey(p.getUniqueId())) {
 			return found.get(p.getUniqueId());
 		}

@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -64,8 +65,13 @@ public class Defibrillator implements ShopItem{
 		return main.getConfig().getStringList("shop.items.defibrillator.info");
 	}
 	
-	public void use(Player p , CorpseData corpse , Player revive , Role role) {
+	public void use(Player p , CorpseData corpse , OfflinePlayer reviveo , Role role) {
 		Arena arena = main.getArenaManager().searchPlayer(p);
+		if (!reviveo.isOnline()) {
+			p.sendMessage(main.getMessageFetcher().getMessage("shop_items.defibrillator.left", true));
+			return;
+		}
+		Player revive = reviveo.getPlayer();
 		if (!arena.spectators.contains(revive)) {
 			p.sendMessage(main.getMessageFetcher().getMessage("shop_items.defibrillator.left", true));
 			return;

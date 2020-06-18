@@ -15,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
@@ -35,6 +37,9 @@ public class PlayerInteractEventListener implements Listener{
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
+		
+		if (e.getHand() == null) return;
+		if (e.getHand() != EquipmentSlot.HAND) return;
 		
 		//Sign interact
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -89,6 +94,19 @@ public class PlayerInteractEventListener implements Listener{
 				}
 				else if (arena.state == ArenaState.GAME || arena.state == ArenaState.WARMUP && e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 					if (e.getClickedBlock() != null) {
+						if (e.getClickedBlock().getType() == Material.STONE_BUTTON && arena.tester.isButton(e.getClickedBlock().getLocation())) {
+							if (!arena.tester.enabled) return;
+							arena.tester.testPlayer(p);
+						}
+						if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(main.getConfig().getString("shop.detective.items.heal_station.material"))
+								&& e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(Main.c(main.getConfig().getString("shop.detective.items.heal_station.display")))) {
+							
+							e.setCancelled(false);
+							return;
+						}
+						if (e.getClickedBlock().getType() == Material.getMaterial(main.getConfig().getString("shop.detective.items.heal_station.material"))) {
+							main.getShop().healStation.interact(p, e.getClickedBlock());
+						}
 						if (e.getClickedBlock().getType() == Material.CHEST) {
 							if (!arena.chests.containsKey(e.getClickedBlock().getLocation())) {
 								arena.chests.put(e.getClickedBlock().getLocation(), main.getLootManager().getChestInventory());

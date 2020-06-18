@@ -36,6 +36,7 @@ public class InventoryClickEventListener implements Listener{
 				}
 			}	
 			if (arena.state == ArenaState.GAME) {
+				if (e.getClickedInventory() == p.getInventory()) return;
 				if (e.getView().getTitle().equals(Main.c(main.getSettingsFile().getConfiguration().getString("game.inventory.shop.detective_title")))) {
 					main.getShop().clickDetectiveshop(p, e.getSlot());
 					e.setCancelled(true);

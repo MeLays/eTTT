@@ -61,6 +61,7 @@ public class CorpseRemover implements ShopItem{
 	public void use(Player p , CorpseData corpse) {
 		p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount()-1);
 		CorpseAPI.removeCorpse(corpse);
+		p.sendMessage(main.getMessageFetcher().getMessage("shop_items.corpse_remover.used", true));
 	}
 
 }

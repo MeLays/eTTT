@@ -101,7 +101,7 @@ game:
     warning:
       play-area:
         title: "&4&l&oOUT OF MAP"
-        subtitle: "&cPlease return to the play-arena!"
+        subtitle: "&cPlease return to the arena!"
         fadein: 0
         show: 10
         fadeout: 10

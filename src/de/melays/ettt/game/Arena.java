@@ -15,6 +15,7 @@ import de.melays.ettt.Main;
 import de.melays.ettt.PlayerTools;
 import de.melays.ettt.game.lobby.Lobby;
 import de.melays.ettt.game.lobby.LobbyMode;
+import de.melays.ettt.game.tester.ArenaTester;
 import de.melays.ettt.log.Logger;
 import de.melays.ettt.tools.ColorTabAPI;
 import de.melays.ettt.tools.ScoreBoardTools;
@@ -32,6 +33,7 @@ public class Arena {
 	public Material displayitem = Material.PAPER;
 	public int min;
 	public int max;
+	public int started_players = 0;
 	public int repeatGame = 1;
 	public int repeatGameTotal = 1;
 	
@@ -66,6 +68,9 @@ public class Arena {
 	//Map Reset
 	public MapReset mapReset;
 	
+	//Tester
+	public ArenaTester tester;
+	
 	public Arena (Main main , String name) {
 		this.main = main;
 		
@@ -74,10 +79,12 @@ public class Arena {
 		this.repeatGameTotal = this.repeatGame;
 		
 		Logger.log(main.prefix + " [Arena (name="+name+")] Loading...");
+		this.name = name;
 		
 		this.roleManager = new RoleManager (main , this);
+		this.tester = new ArenaTester(main, this);
+		this.tester.load();
 		
-		this.name = name;
 		this.display = main.getArenaManager().getConfiguration().getString(name+".display");
 		this.min = main.getArenaManager().getConfiguration().getInt(name+".players.min");
 		this.max = main.getArenaManager().getConfiguration().getInt(name+".players.max");
@@ -195,6 +202,9 @@ public class Arena {
 		this.state = ArenaState.WARMUP;		
 		this.rolePackage = new RolePackage();
 		
+		//Reset Chest Inventories
+		chests = new HashMap<Location, Inventory>();
+		
 		//Teleport Players to new spawnpoints
 		
 		ArrayList<Location> spawns = Tools.getLocationsCounting(main.getArenaManager().getConfiguration(), name.toLowerCase()+".spawns");
@@ -250,6 +260,19 @@ public class Arena {
 	public void broadcast (String msg) {
 		for (Player p : this.getAll()) {
 			p.sendMessage(Main.c(msg));
+		}
+	}
+	
+	public void sendRadiusMessage(Player p , String msg){
+		double maxDist = 10;
+		for (Player other : Bukkit.getOnlinePlayers()) {
+			if (other.getWorld().equals(p.getWorld())) {
+				if (other.getLocation().distance(p.getLocation()) <= maxDist) {
+					if (getAllPlaying().contains(other) || this.spectators.contains(other)){
+						other.sendMessage(msg);
+					}
+				}
+			}
 		}
 	}
 	
@@ -545,6 +568,7 @@ public class Arena {
 		this.roleManager.giveRoles(this.rolePackage);
 		this.roleManager.sendRoleMessages();
 		this.counter = this.game_counter;
+		this.started_players = this.getAllPlaying().size();
 		updateAll();
 	}
 	
